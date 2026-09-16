@@ -4,12 +4,35 @@ import joblib
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from ml.preprocessing import (
-    PROJECT_TO_SKILLS, ROLE_SKILLS, ROLE_WEIGHTS, ALL_SKILLS,
-    derive_skills_from_projects, build_unified_skill_list
-)
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-ARTIFACTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'ml', 'model_artifacts')
+try:
+    from ml.preprocessing import (
+        PROJECT_TO_SKILLS, ROLE_SKILLS, ROLE_WEIGHTS, ALL_SKILLS,
+        derive_skills_from_projects, build_unified_skill_list
+    )
+except ImportError:
+    from backend.ml.preprocessing import (
+        PROJECT_TO_SKILLS, ROLE_SKILLS, ROLE_WEIGHTS, ALL_SKILLS,
+        derive_skills_from_projects, build_unified_skill_list
+    )
+
+
+def _get_artifacts_dir():
+    candidates = [
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'ml', 'model_artifacts'),
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ml_artifacts'),
+        os.path.join(os.path.dirname(__file__), '..', 'ml_artifacts'),
+        os.path.join(os.getcwd(), 'ml', 'model_artifacts'),
+        os.path.join(os.getcwd(), 'ml_artifacts'),
+    ]
+    for c in candidates:
+        if os.path.exists(os.path.join(c, 'random_forest_model.pkl')):
+            return c
+    return candidates[0]
+
+
+ARTIFACTS_DIR = _get_artifacts_dir()
 
 _model = None
 _skill_mlb = None

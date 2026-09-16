@@ -1,7 +1,15 @@
 from fastapi import APIRouter, HTTPException
-from backend.schemas import StudentProfile, SkillGapResponse, MissingSkill
-from backend.services import prediction_service, recommendation_service
-from ml.preprocessing import ROLES
+try:
+    from backend.schemas import StudentProfile, SkillGapResponse, MissingSkill
+    from backend.services import prediction_service, recommendation_service
+except ImportError:
+    from schemas import StudentProfile, SkillGapResponse, MissingSkill
+    from services import prediction_service, recommendation_service
+
+try:
+    from ml.preprocessing import ROLES
+except ImportError:
+    from backend.ml.preprocessing import ROLES
 
 router = APIRouter()
 

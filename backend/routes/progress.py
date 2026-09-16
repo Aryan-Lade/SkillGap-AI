@@ -1,7 +1,10 @@
 import os
 import sqlite3
 from fastapi import APIRouter
-from backend.schemas import ProgressUpdate, ProgressResponse
+try:
+    from backend.schemas import ProgressUpdate, ProgressResponse
+except ImportError:
+    from schemas import ProgressUpdate, ProgressResponse
 
 router = APIRouter()
 
@@ -23,7 +26,10 @@ def _get_connection():
 
 
 def _count_role_skills(role: str) -> int:
-    from backend.routes.roles import _load_taxonomy
+    try:
+        from backend.routes.roles import _load_taxonomy
+    except ImportError:
+        from routes.roles import _load_taxonomy
     try:
         taxonomy = _load_taxonomy()
         return len(taxonomy.get(role, {}).get("skills", []))

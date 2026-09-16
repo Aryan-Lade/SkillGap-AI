@@ -6,7 +6,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import profile, skillgap, roadmap, roles, progress
+try:
+    from routes import profile, skillgap, roadmap, roles, progress
+except ImportError:
+    from backend.routes import profile, skillgap, roadmap, roles, progress
 
 app = FastAPI(
     title="SkillGap AI API",
@@ -16,7 +19,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "*"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,3 +40,9 @@ def health_check():
 @app.get("/")
 def root():
     return {"message": "SkillGap AI API — visit /docs for interactive API documentation"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)

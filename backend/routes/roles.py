@@ -1,14 +1,27 @@
 import json
 import os
 from fastapi import APIRouter, HTTPException
-from backend.schemas import RoleDetail, RoleSkillDetail, RolesCatalogueResponse
+try:
+    from backend.schemas import RoleDetail, RoleSkillDetail, RolesCatalogueResponse
+except ImportError:
+    from schemas import RoleDetail, RoleSkillDetail, RolesCatalogueResponse
 
 router = APIRouter()
 
-TAXONOMY_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    'data', 'processed', 'role_skill_taxonomy.json'
-)
+def _get_taxonomy_path():
+    candidates = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'processed', 'role_skill_taxonomy.json'),
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'role_skill_taxonomy.json'),
+        os.path.join(os.path.dirname(__file__), '..', 'data', 'role_skill_taxonomy.json'),
+        os.path.join(os.getcwd(), 'data', 'processed', 'role_skill_taxonomy.json'),
+        os.path.join(os.getcwd(), 'data', 'role_skill_taxonomy.json'),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+    return candidates[0]
+
+TAXONOMY_PATH = _get_taxonomy_path()
 
 _taxonomy_cache = None
 
@@ -16,7 +29,7 @@ _taxonomy_cache = None
 def _load_taxonomy():
     global _taxonomy_cache
     if _taxonomy_cache is None:
-        with open(TAXONOMY_PATH) as f:
+        with open(_get_taxonomy_path(), 'r', encoding='utf-8') as f:
             _taxonomy_cache = json.load(f)
     return _taxonomy_cache
 

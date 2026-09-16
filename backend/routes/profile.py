@@ -1,5 +1,8 @@
 from fastapi import APIRouter
-from backend.schemas import StudentProfile
+try:
+    from backend.schemas import StudentProfile
+except ImportError:
+    from schemas import StudentProfile
 
 router = APIRouter()
 

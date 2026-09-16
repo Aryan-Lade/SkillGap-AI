@@ -1,0 +1,274 @@
+{
+  "Data Scientist": {
+    "skills": [
+      {"name": "Python", "stage": "Foundational", "weight": 0.95},
+      {"name": "Statistics", "stage": "Foundational", "weight": 0.90},
+      {"name": "SQL", "stage": "Foundational", "weight": 0.85},
+      {"name": "Data Visualization", "stage": "Foundational", "weight": 0.75},
+      {"name": "Pandas", "stage": "Intermediate", "weight": 0.88},
+      {"name": "NumPy", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Machine Learning", "stage": "Intermediate", "weight": 0.92},
+      {"name": "Feature Engineering", "stage": "Intermediate", "weight": 0.78},
+      {"name": "Scikit-learn", "stage": "Intermediate", "weight": 0.85},
+      {"name": "Deep Learning", "stage": "Applied", "weight": 0.72},
+      {"name": "NLP", "stage": "Applied", "weight": 0.65},
+      {"name": "ML Deployment", "stage": "Applied", "weight": 0.68},
+      {"name": "A/B Testing", "stage": "Applied", "weight": 0.60}
+    ]
+  },
+  "Backend Developer": {
+    "skills": [
+      {"name": "Python", "stage": "Foundational", "weight": 0.88},
+      {"name": "SQL", "stage": "Foundational", "weight": 0.90},
+      {"name": "REST APIs", "stage": "Foundational", "weight": 0.95},
+      {"name": "Git", "stage": "Foundational", "weight": 0.80},
+      {"name": "Linux/Bash", "stage": "Foundational", "weight": 0.75},
+      {"name": "Django/Flask/FastAPI", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Database Design", "stage": "Intermediate", "weight": 0.85},
+      {"name": "Authentication/Security", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Unit Testing", "stage": "Intermediate", "weight": 0.78},
+      {"name": "Message Queues", "stage": "Applied", "weight": 0.70},
+      {"name": "Docker", "stage": "Applied", "weight": 0.80},
+      {"name": "CI/CD", "stage": "Applied", "weight": 0.72},
+      {"name": "Microservices", "stage": "Applied", "weight": 0.65}
+    ]
+  },
+  "ML Engineer": {
+    "skills": [
+      {"name": "Python", "stage": "Foundational", "weight": 0.95},
+      {"name": "Machine Learning", "stage": "Foundational", "weight": 0.95},
+      {"name": "Statistics", "stage": "Foundational", "weight": 0.85},
+      {"name": "SQL", "stage": "Foundational", "weight": 0.78},
+      {"name": "Pandas", "stage": "Intermediate", "weight": 0.85},
+      {"name": "NumPy", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Deep Learning", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Scikit-learn", "stage": "Intermediate", "weight": 0.80},
+      {"name": "Model Optimization", "stage": "Intermediate", "weight": 0.78},
+      {"name": "ML Deployment", "stage": "Applied", "weight": 0.92},
+      {"name": "MLOps", "stage": "Applied", "weight": 0.88},
+      {"name": "Docker", "stage": "Applied", "weight": 0.82},
+      {"name": "Feature Engineering", "stage": "Applied", "weight": 0.75}
+    ]
+  },
+  "Frontend Developer": {
+    "skills": [
+      {"name": "HTML/CSS", "stage": "Foundational", "weight": 0.95},
+      {"name": "JavaScript", "stage": "Foundational", "weight": 0.95},
+      {"name": "Responsive Design", "stage": "Foundational", "weight": 0.85},
+      {"name": "Git", "stage": "Foundational", "weight": 0.80},
+      {"name": "React", "stage": "Intermediate", "weight": 0.92},
+      {"name": "State Management", "stage": "Intermediate", "weight": 0.82},
+      {"name": "REST APIs", "stage": "Intermediate", "weight": 0.80},
+      {"name": "TypeScript", "stage": "Intermediate", "weight": 0.78},
+      {"name": "CSS Frameworks", "stage": "Intermediate", "weight": 0.72},
+      {"name": "Testing (Jest/RTL)", "stage": "Applied", "weight": 0.75},
+      {"name": "Performance Optimization", "stage": "Applied", "weight": 0.70},
+      {"name": "Webpack/Vite", "stage": "Applied", "weight": 0.68},
+      {"name": "Accessibility (a11y)", "stage": "Applied", "weight": 0.65}
+    ]
+  },
+  "AI Engineer": {
+    "skills": [
+      {"name": "Python", "stage": "Foundational", "weight": 0.95},
+      {"name": "Deep Learning", "stage": "Foundational", "weight": 0.90},
+      {"name": "Linear Algebra", "stage": "Foundational", "weight": 0.80},
+      {"name": "NLP", "stage": "Foundational", "weight": 0.85},
+      {"name": "PyTorch", "stage": "Intermediate", "weight": 0.90},
+      {"name": "Hugging Face", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Prompt Engineering", "stage": "Intermediate", "weight": 0.85},
+      {"name": "Vector Databases", "stage": "Intermediate", "weight": 0.82},
+      {"name": "LangChain/LlamaIndex", "stage": "Intermediate", "weight": 0.85},
+      {"name": "RAG Architectures", "stage": "Applied", "weight": 0.92},
+      {"name": "LLM Fine-Tuning", "stage": "Applied", "weight": 0.88},
+      {"name": "Model Quantization", "stage": "Applied", "weight": 0.75},
+      {"name": "Autonomous Agents", "stage": "Applied", "weight": 0.72}
+    ]
+  },
+  "DevOps Engineer": {
+    "skills": [
+      {"name": "Linux/Bash", "stage": "Foundational", "weight": 0.95},
+      {"name": "Git", "stage": "Foundational", "weight": 0.88},
+      {"name": "Networking", "stage": "Foundational", "weight": 0.80},
+      {"name": "Python", "stage": "Foundational", "weight": 0.75},
+      {"name": "Docker", "stage": "Intermediate", "weight": 0.95},
+      {"name": "CI/CD", "stage": "Intermediate", "weight": 0.92},
+      {"name": "Terraform", "stage": "Intermediate", "weight": 0.85},
+      {"name": "AWS/Cloud", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Nginx", "stage": "Intermediate", "weight": 0.72},
+      {"name": "Kubernetes", "stage": "Applied", "weight": 0.95},
+      {"name": "Prometheus/Grafana", "stage": "Applied", "weight": 0.85},
+      {"name": "Infrastructure as Code", "stage": "Applied", "weight": 0.82},
+      {"name": "Site Reliability (SRE)", "stage": "Applied", "weight": 0.78}
+    ]
+  },
+  "Java Developer": {
+    "skills": [
+      {"name": "Java", "stage": "Foundational", "weight": 0.95},
+      {"name": "Object-Oriented Programming", "stage": "Foundational", "weight": 0.92},
+      {"name": "Data Structures & Algorithms", "stage": "Foundational", "weight": 0.88},
+      {"name": "SQL", "stage": "Foundational", "weight": 0.85},
+      {"name": "Spring Boot", "stage": "Intermediate", "weight": 0.95},
+      {"name": "Hibernate/JPA", "stage": "Intermediate", "weight": 0.85},
+      {"name": "REST APIs", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Maven/Gradle", "stage": "Intermediate", "weight": 0.78},
+      {"name": "Unit Testing (JUnit)", "stage": "Intermediate", "weight": 0.80},
+      {"name": "Microservices", "stage": "Applied", "weight": 0.90},
+      {"name": "Docker", "stage": "Applied", "weight": 0.82},
+      {"name": "Spring Security", "stage": "Applied", "weight": 0.80},
+      {"name": "Kafka/Message Queues", "stage": "Applied", "weight": 0.75}
+    ]
+  },
+  "Cloud Engineer": {
+    "skills": [
+      {"name": "Linux/Bash", "stage": "Foundational", "weight": 0.90},
+      {"name": "Networking", "stage": "Foundational", "weight": 0.88},
+      {"name": "Python", "stage": "Foundational", "weight": 0.80},
+      {"name": "Git", "stage": "Foundational", "weight": 0.75},
+      {"name": "AWS/Cloud", "stage": "Intermediate", "weight": 0.95},
+      {"name": "Terraform", "stage": "Intermediate", "weight": 0.90},
+      {"name": "Docker", "stage": "Intermediate", "weight": 0.85},
+      {"name": "Cloud Security/IAM", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Serverless (Lambda)", "stage": "Intermediate", "weight": 0.80},
+      {"name": "Kubernetes", "stage": "Applied", "weight": 0.88},
+      {"name": "Multi-Cloud Architecture", "stage": "Applied", "weight": 0.82},
+      {"name": "Disaster Recovery", "stage": "Applied", "weight": 0.75},
+      {"name": "CI/CD", "stage": "Applied", "weight": 0.78}
+    ]
+  },
+  "Data Engineer": {
+    "skills": [
+      {"name": "SQL", "stage": "Foundational", "weight": 0.95},
+      {"name": "Python", "stage": "Foundational", "weight": 0.92},
+      {"name": "Database Design", "stage": "Foundational", "weight": 0.88},
+      {"name": "Linux/Bash", "stage": "Foundational", "weight": 0.75},
+      {"name": "Pandas", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Apache Spark", "stage": "Intermediate", "weight": 0.92},
+      {"name": "Data Warehousing", "stage": "Intermediate", "weight": 0.90},
+      {"name": "Docker", "stage": "Intermediate", "weight": 0.78},
+      {"name": "REST APIs", "stage": "Intermediate", "weight": 0.75},
+      {"name": "Apache Kafka", "stage": "Applied", "weight": 0.88},
+      {"name": "Apache Airflow", "stage": "Applied", "weight": 0.90},
+      {"name": "ETL Pipelines", "stage": "Applied", "weight": 0.95},
+      {"name": "Cloud Data Lakes", "stage": "Applied", "weight": 0.80}
+    ]
+  },
+  "Cybersecurity Analyst": {
+    "skills": [
+      {"name": "Networking", "stage": "Foundational", "weight": 0.95},
+      {"name": "Linux/Bash", "stage": "Foundational", "weight": 0.90},
+      {"name": "Operating Systems", "stage": "Foundational", "weight": 0.82},
+      {"name": "Python", "stage": "Foundational", "weight": 0.78},
+      {"name": "Network Security", "stage": "Intermediate", "weight": 0.92},
+      {"name": "Wireshark", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Vulnerability Assessment", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Cryptography", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Authentication/Security", "stage": "Intermediate", "weight": 0.85},
+      {"name": "SIEM Tools", "stage": "Applied", "weight": 0.90},
+      {"name": "Ethical Hacking", "stage": "Applied", "weight": 0.88},
+      {"name": "Incident Response", "stage": "Applied", "weight": 0.85},
+      {"name": "Threat Modeling", "stage": "Applied", "weight": 0.78}
+    ]
+  },
+  "Full Stack Developer": {
+    "skills": [
+      {"name": "HTML/CSS", "stage": "Foundational", "weight": 0.92},
+      {"name": "JavaScript", "stage": "Foundational", "weight": 0.95},
+      {"name": "Git", "stage": "Foundational", "weight": 0.85},
+      {"name": "SQL", "stage": "Foundational", "weight": 0.82},
+      {"name": "React", "stage": "Intermediate", "weight": 0.90},
+      {"name": "Node.js/Express", "stage": "Intermediate", "weight": 0.92},
+      {"name": "REST APIs", "stage": "Intermediate", "weight": 0.90},
+      {"name": "TypeScript", "stage": "Intermediate", "weight": 0.85},
+      {"name": "Authentication/Security", "stage": "Intermediate", "weight": 0.80},
+      {"name": "State Management", "stage": "Applied", "weight": 0.78},
+      {"name": "Docker", "stage": "Applied", "weight": 0.75},
+      {"name": "CI/CD", "stage": "Applied", "weight": 0.72},
+      {"name": "Microservices", "stage": "Applied", "weight": 0.70}
+    ]
+  },
+  "Mobile App Developer": {
+    "skills": [
+      {"name": "JavaScript", "stage": "Foundational", "weight": 0.88},
+      {"name": "Dart", "stage": "Foundational", "weight": 0.85},
+      {"name": "Object-Oriented Programming", "stage": "Foundational", "weight": 0.82},
+      {"name": "Git", "stage": "Foundational", "weight": 0.80},
+      {"name": "Flutter/React Native", "stage": "Intermediate", "weight": 0.95},
+      {"name": "Mobile UI/UX", "stage": "Intermediate", "weight": 0.88},
+      {"name": "REST APIs", "stage": "Intermediate", "weight": 0.85},
+      {"name": "State Management", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Local Storage (SQLite)", "stage": "Intermediate", "weight": 0.78},
+      {"name": "Firebase", "stage": "Applied", "weight": 0.85},
+      {"name": "App Store Deployment", "stage": "Applied", "weight": 0.82},
+      {"name": "Push Notifications", "stage": "Applied", "weight": 0.78},
+      {"name": "Mobile Performance", "stage": "Applied", "weight": 0.72}
+    ]
+  },
+  "QA / Automation Engineer": {
+    "skills": [
+      {"name": "Manual Testing", "stage": "Foundational", "weight": 0.90},
+      {"name": "Test Case Design", "stage": "Foundational", "weight": 0.88},
+      {"name": "Python", "stage": "Foundational", "weight": 0.82},
+      {"name": "Git", "stage": "Foundational", "weight": 0.78},
+      {"name": "Selenium", "stage": "Intermediate", "weight": 0.92},
+      {"name": "API Testing", "stage": "Intermediate", "weight": 0.90},
+      {"name": "Cypress/Playwright", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Unit Testing", "stage": "Intermediate", "weight": 0.82},
+      {"name": "SQL", "stage": "Intermediate", "weight": 0.75},
+      {"name": "CI/CD", "stage": "Applied", "weight": 0.85},
+      {"name": "Performance Testing", "stage": "Applied", "weight": 0.80},
+      {"name": "Test Automation Frameworks", "stage": "Applied", "weight": 0.92},
+      {"name": "Bug Tracking (Jira)", "stage": "Applied", "weight": 0.70}
+    ]
+  },
+  "Blockchain Developer": {
+    "skills": [
+      {"name": "Cryptography", "stage": "Foundational", "weight": 0.90},
+      {"name": "JavaScript", "stage": "Foundational", "weight": 0.85},
+      {"name": "Data Structures & Algorithms", "stage": "Foundational", "weight": 0.82},
+      {"name": "Git", "stage": "Foundational", "weight": 0.78},
+      {"name": "Solidity", "stage": "Intermediate", "weight": 0.95},
+      {"name": "Smart Contracts", "stage": "Intermediate", "weight": 0.95},
+      {"name": "Web3.js/Ethers.js", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Hardhat/Foundry", "stage": "Intermediate", "weight": 0.82},
+      {"name": "Unit Testing", "stage": "Intermediate", "weight": 0.80},
+      {"name": "DeFi Protocols", "stage": "Applied", "weight": 0.85},
+      {"name": "Security Auditing", "stage": "Applied", "weight": 0.88},
+      {"name": "Gas Optimization", "stage": "Applied", "weight": 0.82},
+      {"name": "Decentralized Storage (IPFS)", "stage": "Applied", "weight": 0.75}
+    ]
+  },
+  "Game Developer": {
+    "skills": [
+      {"name": "C++", "stage": "Foundational", "weight": 0.92},
+      {"name": "C#", "stage": "Foundational", "weight": 0.90},
+      {"name": "3D Mathematics", "stage": "Foundational", "weight": 0.85},
+      {"name": "Object-Oriented Programming", "stage": "Foundational", "weight": 0.85},
+      {"name": "Git", "stage": "Foundational", "weight": 0.78},
+      {"name": "Unity/Unreal Engine", "stage": "Intermediate", "weight": 0.95},
+      {"name": "Physics Engines", "stage": "Intermediate", "weight": 0.85},
+      {"name": "Game Loop Architecture", "stage": "Intermediate", "weight": 0.82},
+      {"name": "3D Modeling Basics", "stage": "Intermediate", "weight": 0.72},
+      {"name": "Shader Programming", "stage": "Applied", "weight": 0.85},
+      {"name": "Multiplayer Networking", "stage": "Applied", "weight": 0.82},
+      {"name": "Game AI", "stage": "Applied", "weight": 0.80},
+      {"name": "Performance Optimization", "stage": "Applied", "weight": 0.78}
+    ]
+  },
+  "Embedded Systems Engineer": {
+    "skills": [
+      {"name": "C", "stage": "Foundational", "weight": 0.95},
+      {"name": "C++", "stage": "Foundational", "weight": 0.88},
+      {"name": "Computer Architecture", "stage": "Foundational", "weight": 0.85},
+      {"name": "Digital Electronics", "stage": "Foundational", "weight": 0.80},
+      {"name": "Git", "stage": "Foundational", "weight": 0.75},
+      {"name": "Microcontrollers (ARM/ESP32)", "stage": "Intermediate", "weight": 0.92},
+      {"name": "Protocols (I2C/SPI/UART)", "stage": "Intermediate", "weight": 0.90},
+      {"name": "RTOS (FreeRTOS)", "stage": "Intermediate", "weight": 0.88},
+      {"name": "Linux/Bash", "stage": "Intermediate", "weight": 0.80},
+      {"name": "Device Drivers", "stage": "Applied", "weight": 0.90},
+      {"name": "Embedded Linux", "stage": "Applied", "weight": 0.88},
+      {"name": "Low-Power Optimization", "stage": "Applied", "weight": 0.82},
+      {"name": "Hardware Debugging", "stage": "Applied", "weight": 0.80}
+    ]
+  }
+}

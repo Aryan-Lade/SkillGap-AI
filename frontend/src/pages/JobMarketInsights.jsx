@@ -93,47 +93,35 @@ export default function JobMarketInsights() {
     <div style={{ maxWidth: 1150, margin: '2rem auto', padding: '0 1rem' }}>
       {/* Hero Title */}
       <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.35rem 1rem',
-            borderRadius: 999,
-            background: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
-            color: '#34d399',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            marginBottom: '0.75rem',
-          }}
-        >
-          <TrendingUp size={16} /> Tech Industry Hiring & Compensation Index (2026)
+        <div className="pill-badge pill-badge-lime" style={{ marginBottom: '1rem' }}>
+          <TrendingUp size={15} /> TECH COMPENSATION INDEX 2026
         </div>
-        <h1 style={{ fontSize: '2.3rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 0.5rem 0' }}>
+        <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#131311', letterSpacing: '-0.03em', margin: '0 0 0.75rem 0' }}>
           Live Tech Job Market & Salary Estimator
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '1.05rem', maxWidth: 680, margin: '0 auto' }}>
+        <p style={{ color: '#52524e', fontSize: '1.05rem', maxWidth: 680, margin: '0 auto', lineHeight: 1.5 }}>
           Explore compensation percentiles across top engineering roles and see exactly how closing
           your technical skill gaps multiplies your career earning potential.
         </p>
 
         {/* Currency Switcher */}
-        <div style={{ display: 'inline-flex', gap: '0.4rem', marginTop: '1.25rem', padding: '4px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ display: 'inline-flex', gap: '0.4rem', marginTop: '1.5rem', padding: '5px', borderRadius: '12px', background: '#ffffff', border: '1.5px solid #131311', boxShadow: '2px 2px 0px #131311' }}>
           {['USD', 'INR', 'EUR'].map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => setCurrency(c)}
               style={{
-                padding: '0.4rem 1rem',
-                borderRadius: 8,
-                border: 'none',
-                background: currency === c ? 'rgba(99, 102, 241, 0.35)' : 'transparent',
-                color: currency === c ? '#a5b4fc' : '#94a3b8',
-                fontWeight: currency === c ? 700 : 500,
-                fontSize: '0.82rem',
+                padding: '0.45rem 1.1rem',
+                borderRadius: '8px',
+                border: currency === c ? '1.5px solid #131311' : '1.5px solid transparent',
+                background: currency === c ? 'var(--accent-lime)' : 'transparent',
+                color: '#131311',
+                fontWeight: 700,
+                fontSize: '0.85rem',
                 cursor: 'pointer',
+                boxShadow: currency === c ? '1.5px 1.5px 0px #131311' : 'none',
+                transition: 'all 0.15s ease',
               }}
             >
               {c === 'USD' ? '🇺🇸 USD ($)' : c === 'INR' ? '🇮🇳 INR (LPA)' : '🇪🇺 EUR (€)'}
@@ -144,20 +132,18 @@ export default function JobMarketInsights() {
 
       {/* Main Interactive Calculator Card */}
       <div
-        className="glass-card animate-fadeIn"
+        className="neo-card animate-fadeIn"
         style={{
-          border: '1px solid rgba(99, 102, 241, 0.35)',
-          background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.5) 0%, rgba(15, 23, 42, 0.75) 100%)',
-          padding: '2rem',
+          padding: '2.25rem',
           marginBottom: '2.5rem',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
           <div>
-            <div style={{ color: '#a5b4fc', fontSize: '0.82rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Interactive Career ROI Simulator
+            <div style={{ display: 'inline-block', background: 'var(--accent-lime)', border: '1.5px solid #131311', borderRadius: '999px', padding: '0.2rem 0.75rem', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+              ROI Simulator
             </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f8fafc', margin: '0.25rem 0 0 0' }}>
+            <h2 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#131311', letterSpacing: '-0.02em', margin: 0 }}>
               Estimated Compensation for {selectedRole}
             </h2>
           </div>
@@ -168,7 +154,7 @@ export default function JobMarketInsights() {
               className="form-select"
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
-              style={{ minWidth: 200, padding: '0.55rem 0.85rem', fontSize: '0.88rem' }}
+              style={{ minWidth: 200, padding: '0.6rem 0.95rem', fontSize: '0.9rem', fontWeight: 700 }}
             >
               {ROLES_LIST.map((r) => (
                 <option key={r} value={r}>
@@ -182,7 +168,7 @@ export default function JobMarketInsights() {
               className="form-select"
               value={experienceLevel}
               onChange={(e) => setExperienceLevel(e.target.value)}
-              style={{ minWidth: 180, padding: '0.55rem 0.85rem', fontSize: '0.88rem' }}
+              style={{ minWidth: 180, padding: '0.6rem 0.95rem', fontSize: '0.9rem', fontWeight: 700 }}
             >
               <option value="Junior (0-2 yrs)">Junior (0-2 yrs)</option>
               <option value="Mid-Level (2-5 yrs)">Mid-Level (2-5 yrs)</option>
@@ -197,100 +183,103 @@ export default function JobMarketInsights() {
           {/* Base Salary */}
           <div
             style={{
-              padding: '1.25rem',
-              borderRadius: 12,
-              background: 'rgba(15, 23, 42, 0.6)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              padding: '1.5rem',
+              borderRadius: '12px',
+              background: '#ffffff',
+              border: '1.5px solid #131311',
+              boxShadow: '3px 3px 0px #131311',
             }}
           >
-            <div style={{ color: '#94a3b8', fontSize: '0.82rem', fontWeight: 600 }}>CURRENT BASELINE SALARY</div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, color: '#f8fafc', marginTop: '0.35rem' }}>
+            <div style={{ color: '#52524e', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>CURRENT BASELINE</div>
+            <div style={{ fontSize: '2.25rem', fontWeight: 900, color: '#131311', marginTop: '0.4rem', letterSpacing: '-0.02em' }}>
               {formatCurrency(baseAmount, currency)}
             </div>
-            <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.25rem' }}>
-              Standard industry benchmark for {experienceLevel}
+            <div style={{ fontSize: '0.82rem', color: '#80807c', marginTop: '0.35rem' }}>
+              Standard benchmark for {experienceLevel}
             </div>
           </div>
 
           {/* Potential Salary with Boost */}
           <div
             style={{
-              padding: '1.25rem',
-              borderRadius: 12,
-              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.05) 100%)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
+              padding: '1.5rem',
+              borderRadius: '12px',
+              background: 'var(--accent-lime-subtle)',
+              border: '1.5px solid #131311',
+              boxShadow: '4px 4px 0px #131311',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ color: '#6ee7b7', fontSize: '0.82rem', fontWeight: 700 }}>
-                POTENTIAL POST-ROADMAP SALARY
+              <div style={{ color: '#131311', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                POST-ROADMAP POTENTIAL
               </div>
               <span
                 style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                  fontWeight: 900,
                   padding: '2px 8px',
-                  borderRadius: 999,
-                  background: 'rgba(52, 211, 153, 0.25)',
-                  color: '#34d399',
+                  borderRadius: '999px',
+                  background: '#131311',
+                  color: 'var(--accent-lime)',
                 }}
               >
                 +{totalBoostPct}% GAIN
               </span>
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 900, color: '#34d399', marginTop: '0.35rem' }}>
+            <div style={{ fontSize: '2.25rem', fontWeight: 900, color: '#131311', marginTop: '0.4rem', letterSpacing: '-0.02em' }}>
               {formatCurrency(boostedAmount, currency)}
             </div>
-            <div style={{ fontSize: '0.78rem', color: '#a7f3d0', marginTop: '0.25rem' }}>
-              + {formatCurrency(gainAmount, currency)} annual earnings upside
+            <div style={{ fontSize: '0.84rem', color: '#131311', fontWeight: 700, marginTop: '0.35rem' }}>
+              ⚡ +{formatCurrency(gainAmount, currency)} annual upside
             </div>
           </div>
 
           {/* Market Demand Indicator */}
           <div
             style={{
-              padding: '1.25rem',
-              borderRadius: 12,
-              background: 'rgba(15, 23, 42, 0.6)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              padding: '1.5rem',
+              borderRadius: '12px',
+              background: '#ffffff',
+              border: '1.5px solid #131311',
+              boxShadow: '3px 3px 0px #131311',
             }}
           >
-            <div style={{ color: '#94a3b8', fontSize: '0.82rem', fontWeight: 600 }}>MARKET DEMAND & HIRING STATUS</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#c084fc', marginTop: '0.35rem' }}>
+            <div style={{ color: '#52524e', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em' }}>MARKET DEMAND</div>
+            <div style={{ fontSize: '1.65rem', fontWeight: 900, color: '#131311', marginTop: '0.4rem' }}>
               {roleData?.demand_level || 'Very High'}
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <span
                 style={{
-                  fontSize: '0.75rem',
-                  padding: '2px 8px',
-                  borderRadius: 6,
-                  background: 'rgba(168, 85, 247, 0.2)',
-                  color: '#d8b4fe',
-                  fontWeight: 600,
+                  fontSize: '0.78rem',
+                  padding: '3px 9px',
+                  borderRadius: '6px',
+                  background: '#131311',
+                  color: '#ffffff',
+                  fontWeight: 700,
                 }}
               >
                 {roleData?.hiring_status || 'Aggressive Hiring'}
               </span>
-              <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
-                Growth: <b style={{ color: '#4ade80' }}>{roleData?.growth_rate_yoy || '+28%'}</b>
+              <span style={{ fontSize: '0.82rem', color: '#52524e', fontWeight: 600 }}>
+                YoY: <b style={{ color: '#131311' }}>{roleData?.growth_rate_yoy || '+28%'}</b>
               </span>
             </div>
           </div>
         </div>
 
         {/* Skill Multipliers Checklist */}
-        <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '1.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Zap size={16} color="#fbbf24" /> Select High-Value Skills to Add to Your Roadmap
+        <div style={{ borderTop: '1.5px solid #131311', paddingTop: '1.75rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 800, color: '#131311', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Zap size={18} fill="#131311" /> Select High-Value Skills to Add to Your Roadmap
             </div>
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-              Click to simulate your salary boost
+            <span className="sticker-bubble" style={{ fontSize: '1.05rem', padding: '0.2rem 0.65rem' }}>
+              Click skills to see salary bump!
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
             {Object.entries(premiums).map(([skill, boost]) => {
               const isChecked = selectedSkillsToLearn.includes(skill)
               return (
@@ -299,29 +288,31 @@ export default function JobMarketInsights() {
                   type="button"
                   onClick={() => toggleSkill(skill)}
                   style={{
-                    padding: '0.55rem 0.9rem',
-                    borderRadius: 10,
-                    border: isChecked ? '1px solid #34d399' : '1px solid rgba(255, 255, 255, 0.1)',
-                    background: isChecked ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                    color: isChecked ? '#6ee7b7' : '#94a3b8',
+                    padding: '0.55rem 1rem',
+                    borderRadius: '10px',
+                    border: '1.5px solid #131311',
+                    background: isChecked ? 'var(--accent-lime)' : '#ffffff',
+                    color: '#131311',
                     cursor: 'pointer',
-                    fontSize: '0.85rem',
-                    fontWeight: isChecked ? 600 : 400,
+                    fontSize: '0.88rem',
+                    fontWeight: 700,
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    transition: 'all 0.15s ease-in-out',
+                    boxShadow: isChecked ? '3px 3px 0px #131311' : '1.5px 1.5px 0px #131311',
+                    transform: isChecked ? 'translate(-1px, -1px)' : 'none',
+                    transition: 'all 0.12s ease',
                   }}
                 >
                   <span>{skill}</span>
                   <span
                     style={{
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      padding: '1px 6px',
-                      borderRadius: 4,
-                      background: isChecked ? 'rgba(52, 211, 153, 0.3)' : 'rgba(255, 255, 255, 0.07)',
-                      color: isChecked ? '#fff' : '#cbd5e1',
+                      fontSize: '0.75rem',
+                      fontWeight: 800,
+                      padding: '2px 7px',
+                      borderRadius: '6px',
+                      background: isChecked ? '#131311' : '#f1fccf',
+                      color: isChecked ? 'var(--accent-lime)' : '#131311',
                     }}
                   >
                     +{boost}%
@@ -336,49 +327,53 @@ export default function JobMarketInsights() {
       {/* Role Comparison Table & Highest Paying Skills */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '2rem' }}>
         {/* Industry Benchmarks */}
-        <div className="glass-card">
-          <h3 style={{ margin: '0 0 1rem 0', color: '#f8fafc', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Briefcase size={20} color="#818cf8" /> Tech Engineering Hiring Index
+        <div className="neo-card">
+          <h3 style={{ margin: '0 0 1.25rem 0', color: '#131311', fontSize: '1.25rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Briefcase size={20} /> Tech Engineering Hiring Index
           </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-            {(marketOverview?.hottest_roles || []).map((r) => (
-              <div
-                key={r.role}
-                onClick={() => setSelectedRole(r.role)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 10,
-                  background: selectedRole === r.role ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                  border: selectedRole === r.role ? '1px solid #818cf8' : '1px solid rgba(255, 255, 255, 0.06)',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s',
-                }}
-              >
-                <div>
-                  <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.9rem' }}>{r.role}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{r.hiring_status}</div>
-                </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {(marketOverview?.hottest_roles || []).map((r) => {
+              const isSelected = selectedRole === r.role
+              return (
+                <div
+                  key={r.role}
+                  onClick={() => setSelectedRole(r.role)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.85rem 1.15rem',
+                    borderRadius: '10px',
+                    background: isSelected ? 'var(--accent-lime)' : '#ffffff',
+                    border: '1.5px solid #131311',
+                    boxShadow: isSelected ? '3px 3px 0px #131311' : '1.5px 1.5px 0px #131311',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 800, color: '#131311', fontSize: '0.95rem' }}>{r.role}</div>
+                    <div style={{ fontSize: '0.78rem', color: '#52524e', fontWeight: 600 }}>{r.hiring_status}</div>
+                  </div>
 
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 700, color: '#34d399', fontSize: '0.88rem' }}>
-                    {currency === 'INR' ? r.mid_salary_inr : `$${r.mid_salary_usd.toLocaleString()}`}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#a5b4fc', fontWeight: 600 }}>
-                    {r.growth_rate} YoY
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontWeight: 900, color: '#131311', fontSize: '0.95rem' }}>
+                      {currency === 'INR' ? r.mid_salary_inr : `$${r.mid_salary_usd.toLocaleString()}`}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#131311', fontWeight: 700 }}>
+                      {r.growth_rate} YoY
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
         {/* Highest Paying Skills of 2026 */}
-        <div className="glass-card">
-          <h3 style={{ margin: '0 0 1rem 0', color: '#f8fafc', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Award size={20} color="#f59e0b" /> Highest-Value Tech Skills
+        <div className="neo-card">
+          <h3 style={{ margin: '0 0 1.25rem 0', color: '#131311', fontSize: '1.25rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Award size={20} /> Highest-Value Tech Skills
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {(marketOverview?.highest_paying_skills || []).map((s, idx) => (
@@ -388,26 +383,28 @@ export default function JobMarketInsights() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 10,
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  padding: '0.85rem 1.15rem',
+                  borderRadius: '10px',
+                  background: '#ffffff',
+                  border: '1.5px solid #131311',
+                  boxShadow: '1.5px 1.5px 0px #131311',
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.88rem' }}>{s.skill}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Domain: {s.category}</div>
+                  <div style={{ fontWeight: 800, color: '#131311', fontSize: '0.92rem' }}>{s.skill}</div>
+                  <div style={{ fontSize: '0.78rem', color: '#80807c' }}>Domain: {s.category}</div>
                 </div>
 
                 <span
                   style={{
                     fontSize: '0.85rem',
-                    fontWeight: 800,
-                    padding: '3px 9px',
-                    borderRadius: 999,
-                    background: 'rgba(245, 158, 11, 0.15)',
-                    color: '#fbbf24',
-                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    fontWeight: 900,
+                    padding: '3px 10px',
+                    borderRadius: '999px',
+                    background: 'var(--accent-lime)',
+                    color: '#131311',
+                    border: '1.5px solid #131311',
+                    boxShadow: '1.5px 1.5px 0px #131311',
                   }}
                 >
                   {s.premium} Avg Premium
@@ -416,20 +413,23 @@ export default function JobMarketInsights() {
             ))}
 
             {/* Top Hiring Locations */}
-            <div style={{ marginTop: '0.5rem', padding: '0.85rem', borderRadius: 10, background: 'rgba(15, 23, 42, 0.5)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem' }}>
-                <MapPin size={15} color="#818cf8" /> Top Tech Hiring Hubs
+            <div style={{ marginTop: '0.75rem', padding: '1rem', borderRadius: '10px', background: 'var(--bg-surface-secondary)', border: '1.5px solid #131311' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#131311', display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.65rem' }}>
+                <MapPin size={16} /> Top Tech Hiring Hubs
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {(roleData?.top_locations || ['Remote', 'Bengaluru', 'San Francisco', 'London']).map((loc) => (
                   <span
                     key={loc}
                     style={{
-                      fontSize: '0.75rem',
-                      padding: '2px 8px',
-                      borderRadius: 6,
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      color: '#cbd5e1',
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      padding: '3px 9px',
+                      borderRadius: '999px',
+                      background: '#ffffff',
+                      border: '1.5px solid #131311',
+                      color: '#131311',
+                      boxShadow: '1px 1px 0px #131311',
                     }}
                   >
                     {loc}

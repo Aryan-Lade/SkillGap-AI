@@ -36,4 +36,11 @@ export const parseResumeText = (payload) => api.post('/resume/parse-text', paylo
 
 export const analyzeJobDescription = (payload) => api.post('/jd/analyze', payload)
 
+export const getMarketOverview = () => api.get('/market/overview')
+
+export const getRoleMarketData = (roleName) =>
+  api.get(`/market/role/${encodeURIComponent(roleName)}`)
+
+export const estimateSalaryBoost = (payload) => api.post('/market/estimate-salary', payload)
+
 export default api

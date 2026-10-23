@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Explore from './pages/Explore'
 import JobDescriptionAnalyzer from './pages/JobDescriptionAnalyzer'
+import JobMarketInsights from './pages/JobMarketInsights'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import AuthModal from './components/auth/AuthModal'
 import { LogIn, LogOut, User as UserIcon } from 'lucide-react'
@@ -43,6 +44,11 @@ function Nav() {
           <li>
             <NavLink to="/job-analyzer" className={({ isActive }) => (isActive ? 'active' : '')}>
               📋 JD Matcher
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/job-market" className={({ isActive }) => (isActive ? 'active' : '')}>
+              📊 Market & Salary
             </NavLink>
           </li>
         </ul>
@@ -159,6 +165,7 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/explore" element={<Explore />} />
               <Route path="/job-analyzer" element={<JobDescriptionAnalyzer />} />
+              <Route path="/job-market" element={<JobMarketInsights />} />
             </Routes>
           </main>
           <AuthModal />

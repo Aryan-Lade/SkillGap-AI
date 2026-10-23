@@ -7,9 +7,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 try:
-    from routes import profile, skillgap, roadmap, roles, progress, quiz, resume, jd, market, sandbox
+    from routes import profile, skillgap, roadmap, roles, progress, quiz, resume, jd, market, sandbox, planner
 except ImportError:
-    from backend.routes import profile, skillgap, roadmap, roles, progress, quiz, resume, jd, market, sandbox
+    from backend.routes import profile, skillgap, roadmap, roles, progress, quiz, resume, jd, market, sandbox, planner
 
 app = FastAPI(
     title="SkillGap AI API",
@@ -35,6 +35,7 @@ app.include_router(resume.router, prefix="/api")
 app.include_router(jd.router, prefix="/api")
 app.include_router(market.router, prefix="/api")
 app.include_router(sandbox.router, prefix="/api")
+app.include_router(planner.router, prefix="/api")
 
 
 @app.get("/health")

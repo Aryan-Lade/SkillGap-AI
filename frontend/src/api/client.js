@@ -47,4 +47,11 @@ export const getSandboxChallenges = () => api.get('/sandbox/challenges')
 
 export const runSandboxCode = (payload) => api.post('/sandbox/run', payload)
 
+export const generateStudyPlan = (payload) => api.post('/planner/generate', payload)
+
+export const exportCalendarIcs = (payload) =>
+  api.post('/planner/export-ics', payload, {
+    responseType: 'blob',
+  })
+
 export default api

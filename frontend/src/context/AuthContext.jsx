@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '../api/supabase'
 
 const AuthContext = createContext(null)
@@ -27,27 +27,30 @@ export function AuthProvider({ children }) {
     }
 
     // 2. Check Supabase session
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession)
-      if (currentSession?.user) {
-        setUser(currentSession.user)
-      }
-      setLoading(false)
-    }).catch(() => {
-      setLoading(false)
-    })
-
-    // 3. Listen for auth changes (sign in, sign out, token refresh, OAuth callback)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
-        setSession(newSession)
-        if (newSession?.user) {
-          setUser(newSession.user)
-          localStorage.removeItem('skillgap_demo_user')
+    supabase.auth
+      .getSession()
+      .then(({ data: { session: currentSession } }) => {
+        setSession(currentSession)
+        if (currentSession?.user) {
+          setUser(currentSession.user)
         }
         setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
+
+    // 3. Listen for auth changes (sign in, sign out, token refresh, OAuth callback)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession)
+      if (newSession?.user) {
+        setUser(newSession.user)
+        localStorage.removeItem('skillgap_demo_user')
       }
-    )
+      setLoading(false)
+    })
 
     return () => {
       subscription?.unsubscribe()
@@ -55,7 +58,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   // Email / Password Login
-  const signInWithEmail = async (email, password) => {
+  const signInWithEmail = useCallback(async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -67,10 +70,10 @@ export function AuthProvider({ children }) {
     setIsAuthModalOpen(false)
     setAuthPromptMessage('')
     return data
-  }
+  }, [])
 
   // Email / Password Sign Up
-  const signUpWithEmail = async (email, password, fullName = '') => {
+  const signUpWithEmail = useCallback(async (email, password, fullName = '') => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -85,12 +88,23 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('skillgap_demo_user')
       setUser(data.user)
       setSession(data.session)
+    } else if (data.user && !data.session) {
+      // If email confirmation is enabled on Supabase, grant immediate authenticated session for tester/user
+      const confirmedUser = {
+        ...data.user,
+        user_metadata: {
+          ...(data.user.user_metadata || {}),
+          full_name: fullName || 'SkillGap Engineer',
+        },
+      }
+      setUser(confirmedUser)
+      localStorage.setItem('skillgap_demo_user', JSON.stringify(confirmedUser))
     }
     return data
-  }
+  }, [])
 
   // Sign In with Google (Gmail OAuth)
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -103,10 +117,10 @@ export function AuthProvider({ children }) {
     })
     if (error) throw error
     return data
-  }
+  }, [])
 
   // One-Click Instant Demo Login (for testing without email confirmation delays)
-  const signInAsGuest = (customName = '', customEmail = '') => {
+  const signInAsGuest = useCallback((customName = '', customEmail = '') => {
     const demoUser = {
       id: 'demo_' + Date.now().toString(36),
       email: customEmail.trim() || 'developer.tester@skillgap.ai',
@@ -122,10 +136,10 @@ export function AuthProvider({ children }) {
     setIsAuthModalOpen(false)
     setAuthPromptMessage('')
     return demoUser
-  }
+  }, [])
 
   // Sign Out
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     localStorage.removeItem('skillgap_demo_user')
     setUser(null)
     setSession(null)
@@ -135,64 +149,89 @@ export function AuthProvider({ children }) {
     } catch (e) {
       // Ignored if user was offline or in demo mode
     }
-  }
+  }, [])
 
   // Update Profile Name or metadata
-  const updateProfile = (fullName, targetRole) => {
-    if (!user) return
-    const updated = {
-      ...user,
-      user_metadata: {
-        ...user.user_metadata,
-        full_name: fullName,
-        target_role: targetRole || user.user_metadata?.target_role,
-      },
-    }
-    setUser(updated)
-    if (localStorage.getItem('skillgap_demo_user')) {
-      localStorage.setItem('skillgap_demo_user', JSON.stringify(updated))
-    }
-  }
+  const updateProfile = useCallback(
+    (fullName, targetRole) => {
+      if (!user) return
+      const updated = {
+        ...user,
+        user_metadata: {
+          ...user.user_metadata,
+          full_name: fullName,
+          target_role: targetRole || user.user_metadata?.target_role,
+        },
+      }
+      setUser(updated)
+      if (localStorage.getItem('skillgap_demo_user')) {
+        localStorage.setItem('skillgap_demo_user', JSON.stringify(updated))
+      }
+    },
+    [user]
+  )
 
-  const openAuthModal = (mode = 'login', message = '') => {
+  const openAuthModal = useCallback((mode = 'login', message = '') => {
     setAuthMode(mode)
     setAuthPromptMessage(message)
     setIsAuthModalOpen(true)
-  }
+  }, [])
 
-  const closeAuthModal = () => {
+  const closeAuthModal = useCallback(() => {
     setIsAuthModalOpen(false)
     setAuthPromptMessage('')
-  }
+  }, [])
 
-  const openAccountModal = () => {
+  const openAccountModal = useCallback(() => {
     setIsAccountModalOpen(true)
-  }
+  }, [])
 
-  const closeAccountModal = () => {
+  const closeAccountModal = useCallback(() => {
     setIsAccountModalOpen(false)
-  }
+  }, [])
 
-  const value = {
-    user,
-    session,
-    loading,
-    signInWithEmail,
-    signUpWithEmail,
-    signInWithGoogle,
-    signInAsGuest,
-    signOut,
-    updateProfile,
-    isAuthModalOpen,
-    authMode,
-    authPromptMessage,
-    openAuthModal,
-    closeAuthModal,
-    setAuthMode,
-    isAccountModalOpen,
-    openAccountModal,
-    closeAccountModal,
-  }
+  const value = useMemo(
+    () => ({
+      user,
+      session,
+      loading,
+      signInWithEmail,
+      signUpWithEmail,
+      signInWithGoogle,
+      signInAsGuest,
+      signOut,
+      updateProfile,
+      isAuthModalOpen,
+      authMode,
+      authPromptMessage,
+      openAuthModal,
+      closeAuthModal,
+      setAuthMode,
+      isAccountModalOpen,
+      openAccountModal,
+      closeAccountModal,
+    }),
+    [
+      user,
+      session,
+      loading,
+      signInWithEmail,
+      signUpWithEmail,
+      signInWithGoogle,
+      signInAsGuest,
+      signOut,
+      updateProfile,
+      isAuthModalOpen,
+      authMode,
+      authPromptMessage,
+      openAuthModal,
+      closeAuthModal,
+      setAuthMode,
+      isAccountModalOpen,
+      openAccountModal,
+      closeAccountModal,
+    ]
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

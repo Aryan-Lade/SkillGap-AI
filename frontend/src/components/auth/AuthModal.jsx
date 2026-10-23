@@ -70,19 +70,18 @@ export default function AuthModal() {
     try {
       if (authMode === 'login') {
         await signInWithEmail(email.trim(), password)
-        closeAuthModal()
-        resetForm()
+        setSuccessMsg('Signed in successfully!')
+        setTimeout(() => {
+          closeAuthModal()
+          resetForm()
+        }, 400)
       } else {
-        const res = await signUpWithEmail(email.trim(), password, fullName.trim())
-        if (res.user && !res.session) {
-          setSuccessMsg('Account registered! Please check your email to confirm your account.')
-        } else {
-          setSuccessMsg('Account successfully created! Welcome to SkillGap AI.')
-          setTimeout(() => {
-            closeAuthModal()
-            resetForm()
-          }, 1200)
-        }
+        await signUpWithEmail(email.trim(), password, fullName.trim())
+        setSuccessMsg('Account registered and logged in! Welcome to SkillGap AI.')
+        setTimeout(() => {
+          closeAuthModal()
+          resetForm()
+        }, 600)
       }
     } catch (err) {
       console.error('Auth error:', err)
@@ -130,17 +129,23 @@ export default function AuthModal() {
       >
         {/* Close Button */}
         <button
-          onClick={closeAuthModal}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            closeAuthModal()
+          }}
           aria-label="Close modal"
           style={{
             position: 'absolute',
             top: '1.25rem',
             right: '1.25rem',
+            zIndex: 20,
             background: 'var(--bg-surface-secondary, #f3f2ea)',
             border: '1.5px solid #131311',
             borderRadius: '50%',
-            width: 34,
-            height: 34,
+            width: 36,
+            height: 36,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -464,6 +469,28 @@ export default function AuthModal() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+            {authMode === 'login' && (
+              <div style={{ textAlign: 'right', marginTop: '0.35rem' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('test@example.com')
+                    setPassword('password123')
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#52524e',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  ⚡ Quick fill test credentials (test@example.com)
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Submit Action Button */}

@@ -17,9 +17,9 @@ class CodeExecutionRequest(BaseModel):
 
 
 @router.get("/sandbox/challenges")
-def get_challenges():
-    """Returns curated hands-on coding challenges."""
-    return {"challenges": sandbox_service.get_challenges()}
+def get_challenges(skill: Optional[str] = None):
+    """Returns curated hands-on coding challenges filtered by skill."""
+    return {"challenges": sandbox_service.get_challenges(skill=skill)}
 
 
 @router.post("/sandbox/run")

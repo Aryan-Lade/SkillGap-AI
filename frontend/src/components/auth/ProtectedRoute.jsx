@@ -1,14 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { Lock, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react'
 
 export default function ProtectedRoute({ children, featureName = 'this feature' }) {
   const { user, loading, openAuthModal } = useAuth()
+  const hasPromptedRef = useRef(false)
 
   useEffect(() => {
-    if (!loading && !user) {
-      // Auto-trigger auth modal for seamless onboarding
-      openAuthModal('signup', `Please sign in or create an account to test ${featureName}.`)
+    if (!loading && !user && !hasPromptedRef.current) {
+      hasPromptedRef.current = true
+      openAuthModal('login', `Please sign in or create an account to access ${featureName}.`)
     }
   }, [loading, user, featureName, openAuthModal])
 

@@ -110,30 +110,16 @@ export default function StudyPlanner() {
   const progressPct = Math.min(100, Math.round((completedCount / totalDays) * 100))
 
   return (
-    <div style={{ maxWidth: 1180, margin: '2rem auto', padding: '0 1rem' }}>
+    <div style={{ maxWidth: 1200, margin: '2rem auto', padding: '0 1rem' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.35rem 1rem',
-            borderRadius: 999,
-            background: 'rgba(99, 102, 241, 0.15)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
-            color: '#a5b4fc',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            marginBottom: '0.75rem',
-          }}
-        >
-          <Calendar size={16} /> Automated Pacing & Calendar Sync
+        <div className="pill-badge pill-badge-lime" style={{ marginBottom: '1rem' }}>
+          <Calendar size={15} /> CALENDAR & PACING AUTOMATION
         </div>
-        <h1 style={{ fontSize: '2.3rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 0.5rem 0' }}>
+        <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#131311', letterSpacing: '-0.03em', margin: '0 0 0.75rem 0' }}>
           Smart Weekly Study Schedule & Calendar Sync
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '1.05rem', maxWidth: 680, margin: '0 auto' }}>
+        <p style={{ color: '#52524e', fontSize: '1.05rem', maxWidth: 680, margin: '0 auto', lineHeight: 1.5 }}>
           Break down your skill gaps into realistic day-by-day learning sessions, track progress,
           and export your roadmap directly to Google Calendar, Apple iCal, or Outlook.
         </p>
@@ -141,12 +127,10 @@ export default function StudyPlanner() {
 
       {/* Configuration Controls Bar */}
       <div
-        className="glass-card animate-fadeIn"
+        className="neo-card animate-fadeIn"
         style={{
-          padding: '1.5rem',
+          padding: '1.75rem',
           marginBottom: '2rem',
-          background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.45) 0%, rgba(15, 23, 42, 0.7) 100%)',
-          border: '1px solid rgba(99, 102, 241, 0.3)',
         }}
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', alignItems: 'center' }}>
@@ -196,14 +180,16 @@ export default function StudyPlanner() {
                   }}
                   style={{
                     flex: 1,
-                    padding: '0.45rem 0.5rem',
-                    borderRadius: 8,
-                    border: hoursPerWeek === opt.h ? '1px solid #818cf8' : '1px solid rgba(255, 255, 255, 0.1)',
-                    background: hoursPerWeek === opt.h ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.03)',
-                    color: hoursPerWeek === opt.h ? '#c7d2fe' : '#94a3b8',
-                    fontSize: '0.78rem',
-                    fontWeight: hoursPerWeek === opt.h ? 700 : 500,
+                    padding: '0.55rem 0.5rem',
+                    borderRadius: '8px',
+                    border: '1.5px solid #131311',
+                    background: hoursPerWeek === opt.h ? 'var(--accent-lime)' : '#ffffff',
+                    color: '#131311',
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
                     cursor: 'pointer',
+                    boxShadow: hoursPerWeek === opt.h ? '2px 2px 0px #131311' : '1px 1px 0px #131311',
+                    transition: 'all 0.12s ease',
                   }}
                 >
                   {opt.label}
@@ -214,40 +200,33 @@ export default function StudyPlanner() {
         </div>
 
         {/* Skills Tags Selector */}
-        <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1' }}>
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1.5px solid #131311' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
+            <span style={{ fontSize: '0.86rem', fontWeight: 800, color: '#131311' }}>
               Skills to Schedule ({selectedSkills.length}):
             </span>
-            <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Type skill & press Enter</span>
+            <span className="sticker-note" style={{ fontSize: '1.15rem' }}>
+              type skill & press Enter!
+            </span>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
             {selectedSkills.map((s) => (
               <span
                 key={s}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '3px 9px',
-                  borderRadius: 6,
-                  background: 'rgba(99, 102, 241, 0.2)',
-                  border: '1px solid rgba(99, 102, 241, 0.4)',
-                  color: '#c7d2fe',
-                  fontSize: '0.8rem',
-                }}
+                className="tag"
               >
                 {s}
                 <button
                   type="button"
+                  className="tag-remove"
                   onClick={() => removeSkill(s)}
-                  style={{ background: 'none', border: 'none', color: '#a5b4fc', cursor: 'pointer', padding: 0 }}
                 >
                   ×
                 </button>
               </span>
             ))}
+
             <input
               type="text"
               placeholder="+ Add skill..."
@@ -258,9 +237,11 @@ export default function StudyPlanner() {
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
-                color: '#fff',
-                fontSize: '0.82rem',
-                minWidth: 100,
+                color: '#131311',
+                fontWeight: 600,
+                fontSize: '0.88rem',
+                minWidth: 120,
+                padding: '0.3rem 0.5rem',
               }}
             />
           </div>
@@ -273,99 +254,76 @@ export default function StudyPlanner() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '1rem',
+            gap: '1.25rem',
             marginBottom: '2rem',
           }}
         >
           {/* Target Completion */}
-          <div className="glass-card" style={{ padding: '1.25rem' }}>
-            <div style={{ color: '#94a3b8', fontSize: '0.78rem', fontWeight: 600 }}>TARGET COMPLETION DATE</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#34d399', marginTop: '0.3rem' }}>
+          <div className="neo-card" style={{ padding: '1.5rem' }}>
+            <div style={{ color: '#52524e', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase' }}>TARGET COMPLETION</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#131311', marginTop: '0.35rem' }}>
               {plan.target_completion_date}
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#6ee7b7', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '0.82rem', color: '#52524e', fontWeight: 600, marginTop: '0.2rem' }}>
               {plan.estimated_weeks} weeks ({plan.hours_per_week} hrs/week)
             </div>
           </div>
 
           {/* Total Sessions */}
-          <div className="glass-card" style={{ padding: '1.25rem' }}>
-            <div style={{ color: '#94a3b8', fontSize: '0.78rem', fontWeight: 600 }}>CURRICULUM COMMITMENT</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', marginTop: '0.3rem' }}>
+          <div className="neo-card" style={{ padding: '1.5rem' }}>
+            <div style={{ color: '#52524e', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase' }}>CURRICULUM COMMITMENT</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#131311', marginTop: '0.35rem' }}>
               {plan.total_study_hours} Hours
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-              {plan.total_study_sessions} focused daily study sessions
+            <div style={{ fontSize: '0.82rem', color: '#80807c', marginTop: '0.2rem' }}>
+              {plan.total_study_sessions} focused daily sessions
             </div>
           </div>
 
           {/* Progress Tracker */}
-          <div className="glass-card" style={{ padding: '1.25rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: '#94a3b8', fontSize: '0.78rem', fontWeight: 600 }}>ROADMAP COMPLETION</span>
-              <span style={{ color: '#38bdf8', fontWeight: 700, fontSize: '0.82rem' }}>{progressPct}%</span>
+          <div className="neo-card" style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ color: '#52524e', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase' }}>ROADMAP COMPLETION</span>
+              <span style={{ color: '#131311', fontWeight: 900, fontSize: '0.95rem' }}>{progressPct}%</span>
             </div>
-            <div
-              style={{
-                width: '100%',
-                height: 8,
-                borderRadius: 999,
-                background: 'rgba(255, 255, 255, 0.08)',
-                overflow: 'hidden',
-                margin: '0.6rem 0 0.3rem 0',
-              }}
-            >
+            <div className="progress-bar-track" style={{ margin: '0.75rem 0 0.4rem 0' }}>
               <div
-                style={{
-                  width: `${progressPct}%`,
-                  height: '100%',
-                  background: 'linear-gradient(90deg, #38bdf8, #34d399)',
-                  transition: 'width 0.3s ease',
-                }}
+                className="progress-bar-fill"
+                style={{ width: `${progressPct}%` }}
               />
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+            <div style={{ fontSize: '0.78rem', color: '#80807c' }}>
               {completedCount} of {totalDays} sessions completed
             </div>
           </div>
 
           {/* Export Action Card */}
           <div
-            className="glass-card"
+            className="neo-card"
             style={{
-              padding: '1.25rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.15) 100%)',
-              border: '1px solid rgba(99, 102, 241, 0.4)',
+              background: 'var(--accent-lime-subtle)',
             }}
           >
             <button
               type="button"
+              className="btn btn-primary"
               onClick={handleDownloadIcs}
               disabled={downloadingIcs}
               style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 8,
-                padding: '0.65rem 1rem',
-                fontSize: '0.88rem',
-                fontWeight: 600,
-                cursor: downloadingIcs ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem',
-                boxShadow: '0 4px 12px rgba(99, 102, 241, 0.35)',
+                width: '100%',
+                padding: '0.75rem 1rem',
+                fontSize: '0.92rem',
               }}
             >
-              <Download size={16} />
+              <Download size={17} />
               {downloadingIcs ? 'Generating .ics...' : 'Export Calendar (.ics)'}
             </button>
-            <div style={{ fontSize: '0.7rem', color: '#c7d2fe', textAlign: 'center', marginTop: '0.4rem' }}>
-              Syncs with Google Calendar, Apple iCal & Outlook
+            <div style={{ fontSize: '0.75rem', color: '#131311', fontWeight: 700, textAlign: 'center', marginTop: '0.5rem' }}>
+              Syncs with Google, Apple & Outlook
             </div>
           </div>
         </div>
@@ -373,16 +331,16 @@ export default function StudyPlanner() {
 
       {/* Weekly Schedule View */}
       {plan && (
-        <div className="glass-card animate-fadeIn">
+        <div className="neo-card animate-fadeIn">
           {/* Week Selector Tabs */}
           <div
             style={{
               display: 'flex',
               gap: '0.5rem',
               overflowX: 'auto',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-              paddingBottom: '0.75rem',
-              marginBottom: '1.5rem',
+              borderBottom: '1.5px solid #131311',
+              paddingBottom: '0.85rem',
+              marginBottom: '1.75rem',
             }}
           >
             {plan.weekly_modules.map((w) => {
@@ -393,28 +351,32 @@ export default function StudyPlanner() {
                   type="button"
                   onClick={() => setActiveWeekTab(w.week_number)}
                   style={{
-                    padding: '0.5rem 1rem',
-                    borderRadius: 8,
-                    border: isSelected ? '1px solid #818cf8' : '1px solid rgba(255, 255, 255, 0.06)',
-                    background: isSelected ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.02)',
-                    color: isSelected ? '#e0e7ff' : '#94a3b8',
-                    fontWeight: isSelected ? 700 : 500,
-                    fontSize: '0.85rem',
+                    padding: '0.55rem 1.15rem',
+                    borderRadius: '8px',
+                    border: '1.5px solid #131311',
+                    background: isSelected ? 'var(--accent-lime)' : '#ffffff',
+                    color: '#131311',
+                    fontWeight: 800,
+                    fontSize: '0.88rem',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
+                    boxShadow: isSelected ? '2px 2px 0px #131311' : '1px 1px 0px #131311',
+                    transition: 'all 0.12s ease',
                   }}
                 >
                   <span>Week {w.week_number}</span>
                   <span
                     style={{
                       fontSize: '0.72rem',
-                      padding: '1px 6px',
-                      borderRadius: 4,
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      color: '#cbd5e1',
+                      fontWeight: 800,
+                      padding: '2px 6px',
+                      borderRadius: '999px',
+                      border: '1px solid #131311',
+                      background: isSelected ? '#131311' : 'var(--bg-surface-secondary)',
+                      color: isSelected ? 'var(--accent-lime)' : '#131311',
                     }}
                   >
                     {w.total_hours}h
@@ -430,11 +392,11 @@ export default function StudyPlanner() {
             .map((week) => (
               <div key={week.week_number}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                  <h3 style={{ margin: 0, color: '#f8fafc', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Calendar size={20} color="#818cf8" />
+                  <h3 style={{ margin: 0, color: '#131311', fontSize: '1.3rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Calendar size={20} />
                     {week.title}
                   </h3>
-                  <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                  <span style={{ fontSize: '0.85rem', color: '#52524e', fontWeight: 600 }}>
                     {week.days.length} study sessions planned
                   </span>
                 </div>
@@ -450,20 +412,21 @@ export default function StudyPlanner() {
                           display: 'flex',
                           alignItems: 'flex-start',
                           gap: '1rem',
-                          padding: '1rem 1.25rem',
-                          borderRadius: 12,
-                          background: isDone ? 'rgba(16, 185, 129, 0.08)' : 'rgba(15, 23, 42, 0.6)',
-                          border: isDone ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)',
+                          padding: '1.15rem 1.35rem',
+                          borderRadius: '10px',
+                          background: isDone ? 'var(--accent-lime-subtle)' : '#ffffff',
+                          border: '1.5px solid #131311',
+                          boxShadow: isDone ? '1px 1px 0px #131311' : '3px 3px 0px #131311',
                           cursor: 'pointer',
-                          transition: 'all 0.15s ease-in-out',
+                          transition: 'all 0.12s ease-in-out',
                         }}
                       >
                         {/* Checkbox Icon */}
                         <div style={{ marginTop: '0.2rem' }}>
                           <CheckCircle2
                             size={22}
-                            color={isDone ? '#34d399' : '#475569'}
-                            fill={isDone ? 'rgba(52, 211, 153, 0.2)' : 'transparent'}
+                            color="#131311"
+                            fill={isDone ? 'var(--accent-lime)' : 'transparent'}
                           />
                         </div>
 
@@ -474,20 +437,21 @@ export default function StudyPlanner() {
                               <span
                                 style={{
                                   fontSize: '0.72rem',
-                                  fontWeight: 700,
-                                  padding: '2px 7px',
-                                  borderRadius: 4,
-                                  background: 'rgba(99, 102, 241, 0.25)',
-                                  color: '#a5b4fc',
+                                  fontWeight: 800,
+                                  padding: '2px 8px',
+                                  borderRadius: '999px',
+                                  border: '1px solid #131311',
+                                  background: 'var(--accent-lime)',
+                                  color: '#131311',
                                 }}
                               >
                                 {day.skill}
                               </span>
                               <span
                                 style={{
-                                  fontWeight: 600,
-                                  color: isDone ? '#94a3b8' : '#f8fafc',
-                                  fontSize: '0.95rem',
+                                  fontWeight: 800,
+                                  color: isDone ? '#80807c' : '#131311',
+                                  fontSize: '1rem',
                                   textDecoration: isDone ? 'line-through' : 'none',
                                 }}
                               >
@@ -495,7 +459,7 @@ export default function StudyPlanner() {
                               </span>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.78rem', color: '#64748b' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.8rem', color: '#52524e', fontWeight: 600 }}>
                               <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                                 <Clock size={13} /> {day.duration_minutes} mins
                               </span>
@@ -505,7 +469,7 @@ export default function StudyPlanner() {
                             </div>
                           </div>
 
-                          <p style={{ color: '#94a3b8', fontSize: '0.82rem', margin: '0.4rem 0 0 0', lineHeight: 1.45 }}>
+                          <p style={{ color: '#52524e', fontSize: '0.86rem', margin: '0.5rem 0 0 0', lineHeight: 1.5 }}>
                             {day.learning_objectives}
                           </p>
                         </div>

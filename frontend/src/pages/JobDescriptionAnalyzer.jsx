@@ -13,6 +13,8 @@ import {
   BookOpen,
 } from 'lucide-react'
 import { analyzeJobDescription } from '../api/client'
+import { useAuth } from '../context/AuthContext'
+import { recordActivity } from '../utils/history'
 
 const SAMPLE_JDS = [
   {
@@ -40,6 +42,7 @@ Requirements:
 ]
 
 export default function JobDescriptionAnalyzer() {
+  const { user } = useAuth()
   const [jobTitle, setJobTitle] = useState('')
   const [company, setCompany] = useState('')
   const [jobDesc, setJobDesc] = useState('')
@@ -85,13 +88,24 @@ export default function JobDescriptionAnalyzer() {
     setResult(null)
 
     try {
+      const titleUsed = jobTitle || 'Target Tech Role'
       const res = await analyzeJobDescription({
-        job_title: jobTitle || 'Software Engineer',
+        job_title: titleUsed,
         job_description: jobDesc,
         current_skills: currentSkills,
         experience_level: experienceLevel,
       })
       setResult(res.data)
+
+      const fitPct = Math.round(res.data?.fit_score || 0)
+      recordActivity(user?.id || 'guest', {
+        type: 'jd',
+        title: `${titleUsed} Posting Match`,
+        subtitle: `${company ? company + ' · ' : ''}Fit Score: ${fitPct}%`,
+        score: `${fitPct}% Fit`,
+        details: `Missing: ${res.data?.missing_skills?.slice(0, 4).join(', ') || 'None identified'}`,
+        link: '/job-analyzer',
+      })
     } catch (err) {
       console.error('JD analysis error:', err)
       setError(err?.response?.data?.detail || 'Failed to analyze job description. Please try again.')

@@ -3,55 +3,33 @@ export default function StatCard({
   value,
   subtext,
   icon,
-  accentColor = 'var(--accent-blue)',
+  accentColor = '#131311',
   trend = null,
 }) {
   return (
     <div
-      className="glass-card stat-card"
+      className="neo-card stat-card"
       style={{
         padding: '1.25rem',
-        borderRadius: 'var(--radius-md)',
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid var(--border-subtle)',
+        borderRadius: '10px',
+        background: '#ffffff',
+        border: '1.5px solid #131311',
+        boxShadow: '2.5px 2.5px 0px #131311',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         gap: '0.75rem',
         position: 'relative',
         overflow: 'hidden',
-        transition: 'var(--transition)',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = accentColor
-        e.currentTarget.style.transform = 'translateY(-2px)'
-        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
-        e.currentTarget.style.boxShadow = `0 8px 24px -6px ${accentColor}33`
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = 'var(--border-subtle)'
-        e.currentTarget.style.transform = 'none'
-        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
-        e.currentTarget.style.boxShadow = 'none'
+        transition: 'all 0.15s ease',
       }}
     >
-      {/* Background accent glow top line */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '2px',
-        background: accentColor,
-        opacity: 0.6,
-      }} />
-
       {/* Top Header: Title & Icon */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
         <span style={{
           fontSize: '0.78rem',
-          fontWeight: 600,
-          color: 'var(--text-muted)',
+          fontWeight: 800,
+          color: '#80807c',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
         }}>
@@ -62,12 +40,13 @@ export default function StatCard({
           width: 34,
           height: 34,
           borderRadius: 8,
-          background: `${accentColor}18`,
-          border: `1px solid ${accentColor}33`,
+          background: 'var(--accent-lime)',
+          border: '1.5px solid #131311',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
+          boxShadow: '1px 1px 0px #131311',
         }}>
           {icon}
         </div>
@@ -77,9 +56,9 @@ export default function StatCard({
       <div>
         <div style={{
           fontFamily: 'var(--font-display)',
-          fontSize: '1.75rem',
-          fontWeight: 800,
-          color: 'var(--text-primary)',
+          fontSize: '1.85rem',
+          fontWeight: 900,
+          color: '#131311',
           letterSpacing: '-0.02em',
           lineHeight: 1.1,
         }}>
@@ -89,7 +68,8 @@ export default function StatCard({
         {subtext && (
           <div style={{
             fontSize: '0.78rem',
-            color: 'var(--text-secondary)',
+            color: '#52524e',
+            fontWeight: 600,
             marginTop: '0.35rem',
             display: 'flex',
             alignItems: 'center',

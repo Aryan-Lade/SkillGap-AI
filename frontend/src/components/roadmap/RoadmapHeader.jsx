@@ -29,32 +29,20 @@ export default function RoadmapHeader({
         marginBottom: '1.25rem',
       }}>
         <div>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            padding: '0.25rem 0.75rem',
-            borderRadius: 999,
-            background: 'rgba(99, 179, 237, 0.12)',
-            border: '1px solid rgba(99, 179, 237, 0.25)',
-            color: 'var(--accent-blue)',
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            marginBottom: '0.5rem',
-          }}>
+          <div className="pill-badge pill-badge-lime" style={{ marginBottom: '0.65rem' }}>
             <Target size={14} />
             Target Career Path
           </div>
           <h2 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '1.75rem',
-            fontWeight: 800,
-            letterSpacing: '-0.02em',
-            color: 'var(--text-primary)',
+            fontSize: '1.85rem',
+            fontWeight: 900,
+            letterSpacing: '-0.03em',
+            color: '#131311',
           }}>
             {targetRole} Learning Roadmap
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
+          <p style={{ color: '#52524e', fontSize: '0.92rem', marginTop: '0.25rem' }}>
             Structured phase-by-phase progression optimized by skill importance and industry hiring demand.
           </p>
         </div>
@@ -70,15 +58,16 @@ export default function RoadmapHeader({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-md)',
-            padding: '0.5rem 0.85rem',
+            background: '#ffffff',
+            border: '1.5px solid #131311',
+            boxShadow: '2px 2px 0px #131311',
+            borderRadius: '8px',
+            padding: '0.55rem 0.95rem',
           }}>
-            <Layers size={16} color="var(--accent-blue)" />
-            <div style={{ fontSize: '0.8rem' }}>
-              <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>Total Skills</span>
-              <strong style={{ color: 'var(--text-primary)' }}>{totalSkills}</strong>
+            <Layers size={17} color="#131311" />
+            <div style={{ fontSize: '0.82rem' }}>
+              <span style={{ color: '#80807c', display: 'block', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase' }}>Total Skills</span>
+              <strong style={{ color: '#131311', fontWeight: 900, fontSize: '1rem' }}>{totalSkills}</strong>
             </div>
           </div>
 
@@ -86,15 +75,16 @@ export default function RoadmapHeader({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-md)',
-            padding: '0.5rem 0.85rem',
+            background: 'var(--accent-lime-subtle)',
+            border: '1.5px solid #131311',
+            boxShadow: '2px 2px 0px #131311',
+            borderRadius: '8px',
+            padding: '0.55rem 0.95rem',
           }}>
-            <CheckCircle2 size={16} color="var(--accent-green)" />
-            <div style={{ fontSize: '0.8rem' }}>
-              <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>Completed</span>
-              <strong style={{ color: 'var(--accent-green)' }}>{completedCount}</strong>
+            <CheckCircle2 size={17} color="#131311" />
+            <div style={{ fontSize: '0.82rem' }}>
+              <span style={{ color: '#131311', display: 'block', fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase' }}>Completed</span>
+              <strong style={{ color: '#131311', fontWeight: 900, fontSize: '1rem' }}>{completedCount}</strong>
             </div>
           </div>
 
@@ -102,15 +92,16 @@ export default function RoadmapHeader({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-md)',
-            padding: '0.5rem 0.85rem',
+            background: '#ffffff',
+            border: '1.5px solid #131311',
+            boxShadow: '2px 2px 0px #131311',
+            borderRadius: '8px',
+            padding: '0.55rem 0.95rem',
           }}>
-            <Flame size={16} color="var(--accent-orange)" />
-            <div style={{ fontSize: '0.8rem' }}>
-              <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>Remaining</span>
-              <strong style={{ color: 'var(--accent-orange)' }}>{remainingCount}</strong>
+            <Flame size={17} color="#ff7660" />
+            <div style={{ fontSize: '0.82rem' }}>
+              <span style={{ color: '#80807c', display: 'block', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase' }}>Remaining</span>
+              <strong style={{ color: '#131311', fontWeight: 900, fontSize: '1rem' }}>{remainingCount}</strong>
             </div>
           </div>
 
@@ -118,15 +109,16 @@ export default function RoadmapHeader({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-md)',
-            padding: '0.5rem 0.85rem',
+            background: '#ffffff',
+            border: '1.5px solid #131311',
+            boxShadow: '2px 2px 0px #131311',
+            borderRadius: '8px',
+            padding: '0.55rem 0.95rem',
           }}>
-            <Clock size={16} color="var(--accent-purple)" />
-            <div style={{ fontSize: '0.8rem' }}>
-              <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>Est. Timeline</span>
-              <strong style={{ color: 'var(--text-primary)' }}>{estimatedWeeks}</strong>
+            <Clock size={17} color="#131311" />
+            <div style={{ fontSize: '0.82rem' }}>
+              <span style={{ color: '#80807c', display: 'block', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase' }}>Timeline</span>
+              <strong style={{ color: '#131311', fontWeight: 900, fontSize: '0.95rem' }}>{estimatedWeeks}</strong>
             </div>
           </div>
         </div>
@@ -136,18 +128,19 @@ export default function RoadmapHeader({
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '0.5rem',
-        padding: '0.35rem',
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-md)',
+        gap: '0.4rem',
+        padding: '5px',
+        background: '#ffffff',
+        border: '1.5px solid #131311',
+        boxShadow: '2px 2px 0px #131311',
+        borderRadius: '10px',
         width: 'fit-content',
         flexWrap: 'wrap',
       }}>
         <span style={{
           fontSize: '0.75rem',
-          fontWeight: 600,
-          color: 'var(--text-muted)',
+          fontWeight: 800,
+          color: '#80807c',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
           padding: '0 0.5rem',
@@ -161,28 +154,30 @@ export default function RoadmapHeader({
               key={opt.id}
               onClick={() => onFilterChange(opt.id)}
               style={{
-                background: isActive ? 'var(--gradient-hero)' : 'transparent',
-                color: isActive ? '#ffffff' : 'var(--text-secondary)',
-                border: 'none',
-                borderRadius: 'var(--radius-sm)',
+                background: isActive ? 'var(--accent-lime)' : 'transparent',
+                color: '#131311',
+                border: isActive ? '1.5px solid #131311' : '1.5px solid transparent',
+                borderRadius: '6px',
                 padding: '0.35rem 0.85rem',
                 fontSize: '0.82rem',
-                fontWeight: isActive ? 600 : 500,
+                fontWeight: 700,
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.4rem',
                 cursor: 'pointer',
-                transition: 'var(--transition)',
+                boxShadow: isActive ? '1.5px 1.5px 0px #131311' : 'none',
+                transition: 'all 0.12s ease',
               }}
             >
               <span>{opt.label}</span>
               {typeof opt.count === 'number' && (
                 <span style={{
                   fontSize: '0.72rem',
-                  padding: '0.1rem 0.4rem',
+                  fontWeight: 800,
+                  padding: '1px 6px',
                   borderRadius: 999,
-                  background: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: isActive ? '#ffffff' : 'var(--text-muted)',
+                  background: isActive ? '#131311' : 'var(--bg-surface-secondary)',
+                  color: isActive ? 'var(--accent-lime)' : '#131311',
                 }}>
                   {opt.count}
                 </span>

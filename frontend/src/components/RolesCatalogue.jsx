@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { getAllRoles } from '../api/client'
+import { ArrowRight, Sparkles, ChevronDown, ChevronUp, Layers } from 'lucide-react'
 
 const STAGE_COLORS = {
-  Foundational: { bg: 'rgba(99,179,237,0.12)', color: 'var(--accent-blue)', border: 'rgba(99,179,237,0.25)' },
-  Intermediate: { bg: 'rgba(183,148,244,0.12)', color: 'var(--accent-purple)', border: 'rgba(183,148,244,0.25)' },
-  Applied: { bg: 'rgba(104,211,145,0.12)', color: 'var(--accent-green)', border: 'rgba(104,211,145,0.25)' },
+  Foundational: { bg: 'var(--accent-teal-subtle)', color: '#131311', border: '#131311' },
+  Intermediate: { bg: 'var(--accent-lime-subtle)', color: '#131311', border: '#131311' },
+  Applied: { bg: 'var(--accent-coral-subtle)', color: '#131311', border: '#131311' },
 }
 
 const ROLE_ICONS = {
@@ -59,9 +60,9 @@ export default function RolesCatalogue() {
   }, [])
 
   if (loading) return (
-    <div className="loading-overlay">
-      <div className="spinner" />
-      <span>Loading role catalogue...</span>
+    <div style={{ textAlign: 'center', padding: '3rem' }}>
+      <div className="spinner" style={{ margin: '0 auto 1rem auto' }} />
+      <span style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>Loading taxonomy catalogue...</span>
     </div>
   )
 
@@ -71,7 +72,7 @@ export default function RolesCatalogue() {
 
   return (
     <div className="animate-fadeIn">
-      <div className="grid-2" style={{ gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem' }}>
         {roles.map((role) => {
           const icon = ROLE_ICONS[role.role] || '💼'
           const isActive = selected === role.role
@@ -83,96 +84,141 @@ export default function RolesCatalogue() {
           return (
             <div
               key={role.role}
-              className="glass-card"
+              className="neo-card"
               style={{
                 cursor: 'pointer',
-                border: isActive ? '1px solid var(--accent-blue)' : '1px solid var(--border-subtle)',
-                boxShadow: isActive ? 'var(--shadow-glow)' : 'none',
-                transition: 'var(--transition)',
+                background: isActive ? 'var(--accent-lime-subtle)' : 'var(--bg-surface)',
+                boxShadow: isActive ? 'var(--shadow-lg)' : 'var(--shadow-main)',
+                transform: isActive ? 'translate(-2px, -2px)' : 'none',
+                transition: 'all 0.15s ease-in-out',
               }}
               onClick={() => setSelected(isActive ? null : role.role)}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
                 <div style={{
-                  width: 52, height: 52,
-                  background: 'var(--gradient-hero)',
-                  borderRadius: 'var(--radius-sm)',
+                  width: 48, height: 48,
+                  background: 'var(--accent-lime)',
+                  border: 'var(--border-main)',
+                  borderRadius: '10px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1.6rem', flexShrink: 0,
+                  fontSize: '1.5rem', flexShrink: 0,
+                  boxShadow: '2px 2px 0px #131311',
                 }}>
                   {icon}
                 </div>
                 <div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, marginBottom: '0.25rem' }}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.15rem', marginBottom: '0.25rem' }}>
                     {role.role}
                   </h3>
-                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                  <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
                     {ROLE_DESCRIPTIONS[role.role]}
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                {[['Foundational', foundational], ['Intermediate', intermediate], ['Applied', applied]].map(([stage, count]) => (
-                  count > 0 && (
-                    <span key={stage} style={{
-                      ...STAGE_COLORS[stage],
-                      padding: '0.15rem 0.55rem',
-                      borderRadius: 999,
-                      fontSize: '0.72rem',
-                      fontWeight: 600,
-                      border: `1px solid ${STAGE_COLORS[stage].border}`,
-                    }}>
-                      {count} {stage}
-                    </span>
-                  )
-                ))}
+              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '2px 7px', borderRadius: 6, background: '#e0f2fe', border: '1px solid #131311', color: '#131311' }}>
+                  {foundational} Foundational
+                </span>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '2px 7px', borderRadius: 6, background: '#fef3c7', border: '1px solid #131311', color: '#131311' }}>
+                  {intermediate} Intermediate
+                </span>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '2px 7px', borderRadius: 6, background: '#dcfce7', border: '1px solid #131311', color: '#131311' }}>
+                  {applied} Applied
+                </span>
               </div>
 
-              {isActive && (
-                <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem', marginTop: '0.5rem' }}>
-                  {['Foundational', 'Intermediate', 'Applied'].map((stage) => {
-                    const stageSkills = role.skills.filter((s) => s.stage === stage)
-                    if (!stageSkills.length) return null
-                    const cfg = STAGE_COLORS[stage]
-                    return (
-                      <div key={stage} style={{ marginBottom: '0.75rem' }}>
-                        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: cfg.color, marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                          {stage}
-                        </p>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                          {stageSkills.map((s) => (
-                            <span key={s.name} style={{
-                              background: cfg.bg,
-                              color: cfg.color,
-                              border: `1px solid ${cfg.border}`,
-                              borderRadius: 999,
-                              padding: '0.15rem 0.55rem',
-                              fontSize: '0.78rem',
-                              fontWeight: 500,
-                            }}>
-                              {s.name}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5rem' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  {skillCount} total skills
-                </span>
-                <span style={{ fontSize: '0.8rem', color: 'var(--accent-blue)' }}>
-                  {isActive ? '▲ Collapse' : '▼ Expand'}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.65rem', borderTop: '1px solid rgba(19,19,17,0.1)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <span>{skillCount} Required Skills</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#131311' }}>
+                  {isActive ? 'Hide Details' : 'View Breakdown'} {isActive ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </span>
               </div>
             </div>
           )
         })}
       </div>
+
+      {/* Expanded Role Detail Drawer */}
+      {roleData && (
+        <div
+          className="neo-card animate-fadeIn"
+          style={{
+            marginTop: '2rem',
+            background: 'var(--bg-surface)',
+            padding: '2rem',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <span style={{ fontSize: '2rem' }}>{ROLE_ICONS[roleData.role]}</span>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>{roleData.role} Skill Breakdown</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{ROLE_DESCRIPTIONS[roleData.role]}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setSelected(null)}
+              className="btn btn-outline"
+              style={{ padding: '0.4rem 0.85rem', fontSize: '0.85rem' }}
+            >
+              Close
+            </button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            {['Foundational', 'Intermediate', 'Applied'].map((stage) => {
+              const stageSkills = roleData.skills.filter((s) => s.stage === stage)
+              const cfg = STAGE_COLORS[stage]
+
+              return (
+                <div
+                  key={stage}
+                  style={{
+                    padding: '1.25rem',
+                    borderRadius: '10px',
+                    border: 'var(--border-main)',
+                    background: cfg.bg,
+                    boxShadow: 'var(--shadow-sm)',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem' }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#131311', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      {stage}
+                    </span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '2px 6px', borderRadius: 4, background: '#131311', color: '#fff' }}>
+                      {stageSkills.length} skills
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    {stageSkills.map((s) => (
+                      <div
+                        key={s.name}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '0.45rem 0.65rem',
+                          borderRadius: 6,
+                          background: '#ffffff',
+                          border: '1px solid #131311',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          color: '#131311',
+                        }}
+                      >
+                        <span>{s.name}</span>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Weight: {s.weight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

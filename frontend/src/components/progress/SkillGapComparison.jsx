@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Target, CheckCircle2 } from 'lucide-react'
+import { Target } from 'lucide-react'
 
 export default function SkillGapComparison({
   completedCount = 0,
@@ -8,18 +8,12 @@ export default function SkillGapComparison({
   stages = { Foundational: 0, Intermediate: 0, Applied: 0 },
   stageTotals = { Foundational: 1, Intermediate: 1, Applied: 1 },
 }) {
-  // Dimensions for skill competency radar comparison
-  // 1. Fundamentals
-  // 2. Frameworks & Libs
-  // 3. Systems & Cloud
-  // 4. Architecture & Delivery
   const dimensions = useMemo(() => {
     const fRatio = (stages.Foundational || 0) / Math.max(stageTotals.Foundational || 1, 1)
     const iRatio = (stages.Intermediate || 0) / Math.max(stageTotals.Intermediate || 1, 1)
     const aRatio = (stages.Applied || 0) / Math.max(stageTotals.Applied || 1, 1)
     const overallRatio = completedCount / Math.max(totalCount || 1, 1)
 
-    // Baseline minimum is 20% so user has visible baseline before completing
     const base = Math.min(45, (matchPercentage || 50) * 0.45)
 
     return [
@@ -51,13 +45,11 @@ export default function SkillGapComparison({
     ]
   }, [completedCount, totalCount, matchPercentage, stages, stageTotals])
 
-  // Radar geometry calculations
   const size = 260
   const center = size / 2
   const maxRadius = 90
   const angleStep = (2 * Math.PI) / dimensions.length
 
-  // Generate polygon points
   const getCoordinates = (value, angle) => {
     const r = (value / 100) * maxRadius
     const x = center + r * Math.sin(angle)
@@ -87,9 +79,10 @@ export default function SkillGapComparison({
     <div
       style={{
         padding: '1.4rem',
-        borderRadius: 'var(--radius-md)',
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid var(--border-subtle)',
+        borderRadius: '10px',
+        background: '#ffffff',
+        border: '1.5px solid #131311',
+        boxShadow: '2.5px 2.5px 0px #131311',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -99,12 +92,12 @@ export default function SkillGapComparison({
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-            <Target size={16} color="var(--accent-green)" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.92rem', fontWeight: 800, color: '#131311' }}>
+            <Target size={16} />
             Skill Gap Closed vs Target
           </div>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            Current capability versus industry job role requirement
+          <span style={{ fontSize: '0.78rem', color: '#80807c' }}>
+            Current capability versus industry requirement
           </span>
         </div>
 
@@ -114,11 +107,12 @@ export default function SkillGapComparison({
           gap: '0.3rem',
           padding: '0.2rem 0.65rem',
           borderRadius: 999,
-          background: 'rgba(104, 211, 145, 0.12)',
-          border: '1px solid rgba(104, 211, 145, 0.3)',
-          color: 'var(--accent-green)',
+          background: 'var(--accent-lime)',
+          border: '1px solid #131311',
+          color: '#131311',
           fontSize: '0.8rem',
-          fontWeight: 700,
+          fontWeight: 800,
+          boxShadow: '1px 1px 0px #131311',
         }}>
           {avgClosedPct}% Closed
         </div>
@@ -127,13 +121,6 @@ export default function SkillGapComparison({
       {/* SVG Radar Chart */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.5rem 0' }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
-          <defs>
-            <radialGradient id="currentAreaGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#68d391" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#63b3ed" stopOpacity="0.2" />
-            </radialGradient>
-          </defs>
-
           {/* Web grid rings (25%, 50%, 75%, 100%) */}
           {[0.25, 0.5, 0.75, 1.0].map((ringLevel) => {
             const ringPts = dimensions
@@ -147,8 +134,8 @@ export default function SkillGapComparison({
                 key={ringLevel}
                 points={ringPts}
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.08)"
-                strokeWidth="1"
+                stroke="#e5e4dc"
+                strokeWidth="1.2"
               />
             )
           })}
@@ -163,31 +150,30 @@ export default function SkillGapComparison({
                 y1={center}
                 x2={coord.x}
                 y2={coord.y}
-                stroke="rgba(255, 255, 255, 0.1)"
+                stroke="#e5e4dc"
                 strokeWidth="1"
                 strokeDasharray="2,2"
               />
             )
           })}
 
-          {/* Target Requirement Polygon (Dashed Purple/White) */}
+          {/* Target Requirement Polygon (Dashed Charcoal) */}
           <polygon
             points={requiredPolygon}
-            fill="rgba(183, 148, 244, 0.06)"
-            stroke="rgba(183, 148, 244, 0.4)"
+            fill="none"
+            stroke="#80807c"
             strokeWidth="1.5"
             strokeDasharray="4,4"
           />
 
-          {/* Current Level Polygon (Glowing Gradient Fill) */}
+          {/* Current Level Polygon (Lime Fill with Crisp Border) */}
           <polygon
             points={currentPolygon}
-            fill="url(#currentAreaGrad)"
-            stroke="#68d391"
+            fill="rgba(198, 253, 80, 0.45)"
+            stroke="#131311"
             strokeWidth="2"
             style={{
-              filter: 'drop-shadow(0 0 6px rgba(104, 211, 145, 0.4))',
-              transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+              transition: 'all 0.5s ease',
             }}
           />
 
@@ -199,11 +185,10 @@ export default function SkillGapComparison({
                 key={d.name}
                 cx={coord.x}
                 cy={coord.y}
-                r="3.5"
-                fill="#68d391"
-                stroke="#080b14"
+                r="4"
+                fill="var(--accent-lime)"
+                stroke="#131311"
                 strokeWidth="1.5"
-                style={{ transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
               />
             )
           })}
@@ -218,9 +203,9 @@ export default function SkillGapComparison({
                 y={coord.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill="var(--text-secondary)"
+                fill="#131311"
                 fontSize="9px"
-                fontWeight="600"
+                fontWeight="800"
               >
                 {d.name}
               </text>
@@ -236,18 +221,18 @@ export default function SkillGapComparison({
         justifyContent: 'center',
         gap: '1.25rem',
         marginTop: '0.75rem',
-        borderTop: '1px solid var(--border-subtle)',
+        borderTop: '1.5px solid #131311',
         paddingTop: '0.75rem',
         fontSize: '0.78rem',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-green)' }}>
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#68d391', boxShadow: '0 0 6px rgba(104,211,145,0.6)' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#131311', fontWeight: 700 }}>
+          <span style={{ width: 12, height: 12, borderRadius: '3px', background: 'var(--accent-lime)', border: '1px solid #131311' }} />
           <span>Your Current Level</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-purple)' }}>
-          <span style={{ width: 12, height: 2, background: 'var(--accent-purple)' }} />
-          <span>Required Role Level</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#80807c', fontWeight: 600 }}>
+          <span style={{ width: 14, height: 2, background: '#80807c', borderTop: '1px dashed #80807c' }} />
+          <span>Target Required Level</span>
         </div>
       </div>
     </div>

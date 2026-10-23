@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import { Lock, Zap, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react'
+import { Lock, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react'
 
 export default function ProtectedRoute({ children, featureName = 'this feature' }) {
-  const { user, loading, openAuthModal, signInAsGuest } = useAuth()
+  const { user, loading, openAuthModal } = useAuth()
 
   useEffect(() => {
     if (!loading && !user) {
@@ -84,9 +84,9 @@ export default function ProtectedRoute({ children, featureName = 'this feature' 
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: 360, margin: '0 auto' }}>
-          {/* Quick Demo One-Click Access */}
+          {/* Sign In with Email */}
           <button
-            onClick={() => signInAsGuest()}
+            onClick={() => openAuthModal('login')}
             className="btn btn-primary"
             style={{
               padding: '0.85rem 1.25rem',
@@ -97,36 +97,20 @@ export default function ProtectedRoute({ children, featureName = 'this feature' 
               gap: '0.5rem',
             }}
           >
-            <Zap size={18} fill="#131311" />
-            <span>⚡ Instant Demo Access (One-Click)</span>
+            <Lock size={18} />
+            <span>Sign In to Continue</span>
           </button>
 
-          {/* Standard Sign In / Up */}
+          {/* Create New Account */}
           <button
-            onClick={() => openAuthModal('login')}
+            onClick={() => openAuthModal('signup')}
             className="btn btn-outline"
             style={{
               padding: '0.75rem 1.25rem',
               fontSize: '0.95rem',
             }}
           >
-            Sign In with Email or Google
-          </button>
-
-          <button
-            onClick={() => openAuthModal('signup')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#52524e',
-              fontSize: '0.86rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              marginTop: '0.25rem',
-            }}
-          >
-            Don't have an account? Sign Up Free
+            Create New Account
           </button>
         </div>
       </div>

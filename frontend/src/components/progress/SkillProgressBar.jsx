@@ -12,16 +12,6 @@ export default function SkillProgressBar({
 }) {
   const pct = Math.max(0, Math.min(100, Math.round(percentage)))
 
-  // Color coding requirement:
-  // red <40%, amber 40–75%, green >75%
-  const getColor = (val) => {
-    if (val > 75) return { color: '#68d391', bg: 'rgba(104, 211, 145, 0.15)', name: 'green' }
-    if (val >= 40) return { color: '#f6ad55', bg: 'rgba(246, 173, 85, 0.15)', name: 'amber' }
-    return { color: '#fc8181', bg: 'rgba(252, 129, 129, 0.15)', name: 'red' }
-  }
-
-  const { color } = getColor(pct)
-
   const stageBadgeClass = {
     Foundational: 'badge-foundational',
     Intermediate: 'badge-intermediate',
@@ -31,11 +21,12 @@ export default function SkillProgressBar({
   return (
     <div
       style={{
-        padding: '0.85rem 1rem',
-        borderRadius: 'var(--radius-sm)',
-        background: isCompleted ? 'rgba(104, 211, 145, 0.05)' : 'rgba(255, 255, 255, 0.02)',
-        border: `1px solid ${isCompleted ? 'rgba(104, 211, 145, 0.25)' : 'var(--border-subtle)'}`,
-        transition: 'var(--transition)',
+        padding: '0.9rem 1.1rem',
+        borderRadius: '8px',
+        background: isCompleted ? 'var(--accent-lime-subtle)' : '#ffffff',
+        border: '1.5px solid #131311',
+        boxShadow: isCompleted ? '2px 2px 0px #131311' : '1.5px 1.5px 0px #131311',
+        transition: 'all 0.12s ease',
       }}
     >
       <div style={{
@@ -58,29 +49,28 @@ export default function SkillProgressBar({
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                color: isCompleted ? 'var(--accent-green)' : 'var(--text-muted)',
-                transition: 'var(--transition)',
+                color: '#131311',
+                transition: 'transform 0.1s ease',
               }}
             >
-              {isCompleted ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+              {isCompleted ? (
+                <CheckCircle2 size={18} fill="var(--accent-lime)" color="#131311" />
+              ) : (
+                <Circle size={18} color="#80807c" />
+              )}
             </button>
           )}
 
           <span style={{
-            fontSize: '0.88rem',
-            fontWeight: 600,
-            color: isCompleted ? 'var(--accent-green)' : 'var(--text-primary)',
+            fontSize: '0.9rem',
+            fontWeight: 800,
+            color: '#131311',
             textDecoration: isCompleted ? 'line-through' : 'none',
-            opacity: isCompleted ? 0.9 : 1,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           }}>
             {skillName}
-          </span>
-
-          <span className={`badge ${stageBadgeClass}`} style={{ fontSize: '0.68rem', padding: '0.1rem 0.5rem' }}>
-            {stage}
           </span>
 
           {isVerified && (
@@ -90,30 +80,30 @@ export default function SkillProgressBar({
                 alignItems: 'center',
                 gap: '0.2rem',
                 fontSize: '0.68rem',
-                fontWeight: 700,
-                color: 'var(--accent-green)',
-                background: 'rgba(72, 187, 120, 0.15)',
-                padding: '0.1rem 0.45rem',
+                fontWeight: 800,
+                padding: '1px 6px',
                 borderRadius: 999,
+                background: 'var(--accent-lime)',
+                border: '1px solid #131311',
+                color: '#131311',
               }}
-              title="Verified via AI Assessment Quiz"
+              title="Verified via assessment quiz"
             >
-              <ShieldCheck size={11} /> Verified ✓
+              <ShieldCheck size={11} />
+              Verified
             </span>
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
-          {typeof weight === 'number' && (
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-              {(weight * 100).toFixed(0)}% impact
-            </span>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
+          <span className={`badge ${stageBadgeClass}`} style={{ fontSize: '0.7rem', padding: '0.15rem 0.5rem' }}>
+            {stage}
+          </span>
           <span style={{
-            fontSize: '0.82rem',
-            fontWeight: 700,
-            color,
-            minWidth: '38px',
+            fontSize: '0.78rem',
+            fontWeight: 900,
+            color: '#131311',
+            minWidth: 32,
             textAlign: 'right',
           }}>
             {pct}%
@@ -121,22 +111,13 @@ export default function SkillProgressBar({
         </div>
       </div>
 
-      {/* Progress track */}
-      <div
-        role="progressbar"
-        aria-valuenow={pct}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`${skillName} completion: ${pct}%`}
-        className="progress-bar-track"
-        style={{ height: 7 }}
-      >
+      {/* Progress Track */}
+      <div className="progress-bar-track" style={{ height: 8 }}>
         <div
           className="progress-bar-fill"
           style={{
             width: `${pct}%`,
-            background: isCompleted ? 'var(--accent-green)' : color,
-            transition: 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: isCompleted ? 'var(--accent-lime)' : '#131311',
           }}
         />
       </div>

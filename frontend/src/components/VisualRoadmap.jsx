@@ -140,14 +140,11 @@ export default function VisualRoadmap({
   return (
     <section
       aria-label="Interactive Learning Roadmap"
-      className="glass-card animate-fadeIn roadmap-section-focal"
+      className="neo-card animate-fadeIn roadmap-section-focal"
       style={{
         position: 'relative',
         padding: '2.25rem',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-xl)',
-        background: 'linear-gradient(170deg, rgba(13, 18, 33, 0.85) 0%, rgba(8, 11, 20, 0.95) 100%)',
-        boxShadow: 'var(--shadow-card), 0 0 50px rgba(99, 179, 237, 0.08)',
+        background: '#ffffff',
       }}
     >
       {/* Top Banner & Filter Summary */}

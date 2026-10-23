@@ -157,19 +157,20 @@ export default function Dashboard() {
         gap: '1rem',
       }}>
         <div>
+          <div className="pill-badge pill-badge-lime" style={{ marginBottom: '0.65rem' }}>
+            <Sparkles size={14} /> AI CAREER DIAGNOSTICS
+          </div>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '2.2rem',
-            fontWeight: 800,
-            letterSpacing: '-0.025em',
+            fontSize: '2.5rem',
+            fontWeight: 900,
+            letterSpacing: '-0.03em',
             marginBottom: '0.4rem',
-            background: 'linear-gradient(135deg, #ffffff 30%, rgba(255, 255, 255, 0.7) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: '#131311',
           }}>
             Skill Gap AI Dashboard
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.96rem' }}>
+          <p style={{ color: '#52524e', fontSize: '1rem', fontWeight: 500 }}>
             AI-driven competency analysis, visual career roadmaps, and real-time progress tracking.
           </p>
         </div>

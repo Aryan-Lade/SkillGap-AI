@@ -368,12 +368,13 @@ def _call_gemini_api(skill: str, role: str, level: str, api_key: str):
 You are an expert technical interviewer and educator for technical roles like '{role or "Software Engineer"}'.
 Generate exactly 5 high-quality, practical multiple-choice questions (MCQs) to evaluate a developer's knowledge in the skill: '{skill}'.
 Difficulty level: '{level or "Intermediate"}'.
+Language: Professional English. All questions, options, explanations, and subtopics must be strictly in English.
 
 Strict Requirements:
 1. Provide realistic questions (mix of conceptual, best-practice, and real-world code/scenario troubleshooting).
 2. Exactly 4 options per question.
 3. Include correct_index (0, 1, 2, or 3).
-4. Include a concise, educational explanation explaining why the correct answer is right and why it matters.
+4. Include a concise, educational explanation explaining why the correct answer is right and why it matters in English.
 5. Include a subtopic name (e.g., 'Hooks', 'Async/Await', 'Indexing', 'Security').
 
 Return ONLY a valid JSON array with 5 objects matching this exact structure:
@@ -575,26 +576,26 @@ def evaluate_quiz(quiz_id: str, skill: str, user_answers: dict) -> dict:
     passed = score_percentage >= 70.0
     all_wrong = (correct_count == 0)
 
-    # Custom Hindi/English friendly feedback as requested
+    # Professional English feedback messages
     if all_wrong:
-        headline = "Need Fundamental Learning 🚨"
+        headline = "Foundational Learning Required 🚨"
         feedback_message = (
-            f"Aapne sabhi {total} sawaal galat kiye hain! "
-            f"Is skill ({skill}) ko shuru se acche se learn kijiye. Roadmap me diye gaye curated resources aur documentation ko pehle dhyan se padhein, fir re-attempt karein."
+            f"You scored 0 out of {total} questions on {skill}. "
+            f"We recommend revising the core fundamentals of this skill. Check the curated learning resources and official documentation provided in your roadmap before attempting again."
         )
         badge_status = "failed"
     elif not passed:
         headline = "Almost There — More Practice Needed ⚠️"
         feedback_message = (
-            f"Aapko is skill ({skill}) par thoda aur dhyan dene ki zarurat hai. "
-            f"Aapka score {score_percentage}% raha (Passing: 70%). Niche diye gaye galat answers aur unke explanations dhyan se samjhein."
+            f"You scored {score_percentage}% on {skill} (Passing requirement: 70%). "
+            f"Review the detailed answers and explanations below to strengthen your understanding, then retake the assessment to earn your verification badge."
         )
         badge_status = "failed"
     else:
         headline = "Skill Verified! 🎉"
         feedback_message = (
-            f"Shaandar pradarshan! Aapne {score_percentage}% score ke sath {skill} ka assessment successfully pass kar liya hai. "
-            f"Yeh skill ab aapke profile me Verified mark kar di gayi hai."
+            f"Outstanding performance! You successfully passed the {skill} assessment with a score of {score_percentage}%. "
+            f"This skill has now been officially verified and added to your profile roadmap."
         )
         badge_status = "verified"
 

@@ -8,14 +8,16 @@ import {
   AlertTriangle,
   RotateCcw,
   BookOpen,
-  HelpCircle,
   ChevronRight,
   ChevronLeft,
-  Award,
   ShieldCheck,
-  Flame,
+  Check,
+  HelpCircle,
+  Award,
 } from 'lucide-react'
 import { getSkillQuiz, submitSkillQuiz } from '../../api/client'
+import { recordActivity } from '../../utils/history'
+import { useAuth } from '../../context/AuthContext'
 
 export default function QuizModal({
   isOpen,
@@ -24,6 +26,7 @@ export default function QuizModal({
   onClose,
   onVerified,
 }) {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [quizData, setQuizData] = useState(null)
@@ -118,6 +121,19 @@ export default function QuizModal({
         answers: currentAnswers,
       })
       setResult(res.data)
+
+      // Record to User History
+      recordActivity(user?.id || 'guest', {
+        type: 'quiz',
+        title: `${quizData.skill} Assessment`,
+        subtitle: `Role: ${role} · Skill: ${quizData.skill}`,
+        score: `Score: ${res.data.score}/${res.data.total} (${res.data.score_percentage}%)`,
+        details: res.data.passed
+          ? `Verified! Passed with ${res.data.score_percentage}%.`
+          : `Attempt completed. Scored ${res.data.score_percentage}%. Needs review.`,
+        link: '/dashboard',
+      })
+
       if (res.data.passed && onVerified) {
         onVerified(quizData.skill)
       }
@@ -163,6 +179,7 @@ export default function QuizModal({
   const totalQuestions = questions.length
   const answeredCount = Object.keys(answers).length
   const progressPercent = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0
+  const isTimeCritical = timeLeft < 30
 
   return (
     <div
@@ -170,87 +187,109 @@ export default function QuizModal({
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 1000,
-        background: 'rgba(5, 8, 18, 0.82)',
-        backdropFilter: 'blur(8px)',
+        zIndex: 10000,
+        background: 'rgba(19, 19, 17, 0.72)',
+        backdropFilter: 'blur(6px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1.25rem',
+        padding: '1rem',
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget && !submitting) onClose()
       }}
     >
       <div
-        className="modal-content animate-slideUp"
+        className="animate-slideUp"
         style={{
           width: '100%',
-          maxWidth: '680px',
-          maxHeight: '90vh',
-          background: 'linear-gradient(145deg, #0e1424 0%, #080c16 100%)',
-          borderRadius: 'var(--radius-lg, 16px)',
-          border: '1px solid rgba(99, 179, 237, 0.25)',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(99, 179, 237, 0.1)',
+          maxWidth: '720px',
+          maxHeight: '92vh',
+          background: '#ffffff',
+          borderRadius: '16px',
+          border: '2.5px solid #131311',
+          boxShadow: '8px 8px 0px #131311',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
           position: 'relative',
+          color: '#131311',
         }}
       >
         {/* Top Header */}
         <div
           style={{
             padding: '1.25rem 1.5rem',
-            borderBottom: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+            borderBottom: '2px solid #131311',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: 'rgba(255, 255, 255, 0.02)',
+            background: 'var(--bg-primary, #f8f7f2)',
+            gap: '1rem',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
             <div
               style={{
-                width: 34,
-                height: 34,
-                borderRadius: 8,
-                background: 'linear-gradient(135deg, rgba(99, 179, 237, 0.2) 0%, rgba(183, 148, 244, 0.2) 100%)',
+                width: 42,
+                height: 42,
+                borderRadius: 10,
+                background: 'var(--accent-lime, #c6fd50)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1px solid rgba(99, 179, 237, 0.3)',
+                border: '2px solid #131311',
+                boxShadow: '2px 2px 0px #131311',
+                flexShrink: 0,
               }}
             >
-              <Sparkles size={18} color="var(--accent-blue, #63b3ed)" />
+              <Award size={22} color="#131311" />
             </div>
             <div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  color: 'var(--text-secondary, #52524e)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                }}
+              >
                 Skill Verification Assessment
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#fff' }}>
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: '1.35rem',
+                  fontWeight: 900,
+                  color: '#131311',
+                  letterSpacing: '-0.02em',
+                }}
+              >
                 {skill}
               </h3>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {!result && !loading && (
+            {!result && !loading && !error && (
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.4rem',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: 999,
-                  background: timeLeft < 30 ? 'rgba(252, 129, 129, 0.15)' : 'rgba(255, 255, 255, 0.05)',
-                  border: `1px solid ${timeLeft < 30 ? 'rgba(252, 129, 129, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
-                  color: timeLeft < 30 ? 'var(--accent-pink, #fc8181)' : 'var(--text-primary, #e2e8f0)',
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
+                  gap: '0.45rem',
+                  padding: '0.4rem 0.85rem',
+                  borderRadius: 9999,
+                  background: isTimeCritical ? 'var(--accent-coral-subtle, #ffece8)' : '#ffffff',
+                  border: '2px solid #131311',
+                  boxShadow: '2px 2px 0px #131311',
+                  color: isTimeCritical ? '#dc2626' : '#131311',
+                  fontSize: '0.88rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.02em',
                 }}
               >
-                <Clock size={15} />
+                <Clock size={16} color={isTimeCritical ? '#dc2626' : '#131311'} />
                 <span>{formatTime(timeLeft)}</span>
               </div>
             )}
@@ -259,70 +298,142 @@ export default function QuizModal({
               onClick={onClose}
               aria-label="Close Quiz"
               style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-muted, #718096)',
+                background: '#ffffff',
+                border: '2px solid #131311',
+                boxShadow: '2px 2px 0px #131311',
+                color: '#131311',
                 cursor: 'pointer',
-                padding: 4,
-                borderRadius: '50%',
+                width: 36,
+                height: 36,
+                borderRadius: 8,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translate(-1px, -1px)'
+                e.currentTarget.style.boxShadow = '3px 3px 0px #131311'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'none'
+                e.currentTarget.style.boxShadow = '2px 2px 0px #131311'
               }}
             >
-              <X size={20} />
+              <X size={18} strokeWidth={2.5} />
             </button>
           </div>
         </div>
 
-        {/* Progress Bar (during quiz) */}
-        {!result && !loading && (
-          <div style={{ width: '100%', height: 3, background: 'rgba(255, 255, 255, 0.05)' }}>
+        {/* Neo Progress Bar (during quiz) */}
+        {!result && !loading && !error && (
+          <div
+            style={{
+              width: '100%',
+              height: 8,
+              background: 'var(--bg-surface-secondary, #f3f2ea)',
+              borderBottom: '2px solid #131311',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
             <div
               style={{
                 height: '100%',
                 width: `${progressPercent}%`,
-                background: 'linear-gradient(90deg, #63b3ed, #b794f4)',
-                transition: 'width 0.3s ease',
+                background: 'var(--accent-lime, #c6fd50)',
+                borderRight: progressPercent > 0 ? '2px solid #131311' : 'none',
+                transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             />
           </div>
         )}
 
         {/* Main Body */}
-        <div style={{ padding: '1.5rem', overflowY: 'auto', flex: 1 }}>
+        <div
+          style={{
+            padding: '1.5rem',
+            overflowY: 'auto',
+            flex: 1,
+            background: '#ffffff',
+          }}
+        >
           {/* Loading State */}
           {loading && (
             <div style={{ textAlign: 'center', padding: '3.5rem 1rem' }}>
               <div
                 style={{
-                  width: 50,
-                  height: 50,
-                  border: '3px solid rgba(99, 179, 237, 0.2)',
-                  borderTopColor: 'var(--accent-blue, #63b3ed)',
+                  width: 52,
+                  height: 52,
+                  border: '4px solid #e5e5dc',
+                  borderTopColor: '#131311',
                   borderRadius: '50%',
                   margin: '0 auto 1.5rem',
-                  animation: 'spin 1s linear infinite',
+                  animation: 'spin 0.8s linear infinite',
                 }}
               />
-              <h4 style={{ fontSize: '1.15rem', color: '#fff', marginBottom: '0.4rem' }}>
-                Generating AI Assessment for {skill}...
+              <h4
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: '#131311',
+                  marginBottom: '0.4rem',
+                }}
+              >
+                Generating Assessment for {skill}...
               </h4>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                Google Gemini AI is crafting 5 targeted multiple-choice questions for your experience level.
+              <p style={{ color: 'var(--text-secondary, #52524e)', fontSize: '0.92rem', maxWidth: 440, margin: '0 auto' }}>
+                Curating 5 high-yield multiple-choice questions tailored to test practical, production-level knowledge.
               </p>
             </div>
           )}
 
           {/* Error State */}
           {error && !loading && (
-            <div style={{ textAlign: 'center', padding: '2.5rem 1rem' }}>
-              <AlertTriangle size={42} color="var(--accent-pink, #fc8181)" style={{ margin: '0 auto 1rem' }} />
-              <h4 style={{ color: '#fff', marginBottom: '0.5rem' }}>Could not load quiz</h4>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '2.5rem 1.5rem',
+                background: 'var(--accent-coral-subtle, #ffece8)',
+                border: '2px solid #131311',
+                borderRadius: '12px',
+                boxShadow: '4px 4px 0px #131311',
+                margin: '1rem 0',
+              }}
+            >
+              <div
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 12,
+                  background: '#ff7660',
+                  border: '2px solid #131311',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1rem',
+                  boxShadow: '2px 2px 0px #131311',
+                }}
+              >
+                <AlertTriangle size={28} color="#131311" />
+              </div>
+              <h4 style={{ color: '#131311', fontSize: '1.2rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+                Assessment Unavailable
+              </h4>
+              <p style={{ color: '#52524e', fontSize: '0.92rem', marginBottom: '1.5rem', maxWidth: 420, margin: '0 auto 1.5rem' }}>
                 {error}
               </p>
-              <button onClick={handleRetry} className="btn btn-primary" style={{ display: 'inline-flex', gap: '0.5rem' }}>
+              <button
+                onClick={handleRetry}
+                className="btn btn-primary"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  border: '2px solid #131311',
+                  boxShadow: '3px 3px 0px #131311',
+                }}
+              >
                 <RotateCcw size={16} /> Try Again
               </button>
             </div>
@@ -331,48 +442,113 @@ export default function QuizModal({
           {/* Active Question View */}
           {!loading && !error && !result && currentQuestion && (
             <div>
-              {/* Question Meta */}
+              {/* Question Navigation Chips & Metadata */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '1rem',
+                  flexWrap: 'wrap',
+                  gap: '0.75rem',
+                  marginBottom: '1.25rem',
                 }}
               >
-                <span
-                  style={{
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    color: 'var(--accent-blue, #63b3ed)',
-                    background: 'rgba(99, 179, 237, 0.12)',
-                    padding: '0.2rem 0.6rem',
-                    borderRadius: 999,
-                  }}
-                >
-                  Question {currentIndex + 1} of {totalQuestions}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  {questions.map((q, idx) => {
+                    const isAnswered = answers[String(q.id)] !== undefined
+                    const isCurrent = idx === currentIndex
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentIndex(idx)}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          border: '2px solid #131311',
+                          background: isCurrent
+                            ? 'var(--accent-lime, #c6fd50)'
+                            : isAnswered
+                            ? '#131311'
+                            : '#ffffff',
+                          color: isCurrent
+                            ? '#131311'
+                            : isAnswered
+                            ? 'var(--accent-lime, #c6fd50)'
+                            : '#52524e',
+                          fontWeight: 800,
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          boxShadow: isCurrent ? '2px 2px 0px #131311' : 'none',
+                          transition: 'all 0.15s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {idx + 1}
+                      </button>
+                    )
+                  })}
+                </div>
 
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  Topic: <strong>{currentQuestion.subtopic}</strong>
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span
+                    style={{
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      color: '#131311',
+                      background: 'var(--bg-surface-secondary, #f3f2ea)',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: 9999,
+                      border: '1.5px solid #131311',
+                    }}
+                  >
+                    Topic: <strong>{currentQuestion.subtopic}</strong>
+                  </span>
+                </div>
               </div>
 
               {/* Question Text */}
-              <h4
+              <div
                 style={{
-                  fontSize: '1.15rem',
-                  fontWeight: 600,
-                  color: '#fff',
-                  lineHeight: 1.5,
+                  background: 'var(--bg-primary, #f8f7f2)',
+                  border: '2px solid #131311',
+                  borderRadius: '12px',
+                  padding: '1.25rem 1.4rem',
                   marginBottom: '1.5rem',
+                  boxShadow: '3px 3px 0px #131311',
                 }}
               >
-                {currentQuestion.question}
-              </h4>
+                <div
+                  style={{
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-secondary, #52524e)',
+                    letterSpacing: '0.06em',
+                    marginBottom: '0.4rem',
+                  }}
+                >
+                  Question {currentIndex + 1} of {totalQuestions}
+                </div>
+                <h4
+                  style={{
+                    fontSize: '1.18rem',
+                    fontWeight: 800,
+                    color: '#131311',
+                    lineHeight: 1.5,
+                    margin: 0,
+                    letterSpacing: '-0.015em',
+                  }}
+                >
+                  {currentQuestion.question}
+                </h4>
+              </div>
 
               {/* Options */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 {currentQuestion.options.map((opt, optIdx) => {
                   const isSelected = answers[String(currentQuestion.id)] === optIdx
                   const optionLetters = ['A', 'B', 'C', 'D']
@@ -385,37 +561,72 @@ export default function QuizModal({
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.85rem',
-                        padding: '0.9rem 1.15rem',
-                        borderRadius: 'var(--radius-md, 10px)',
-                        background: isSelected ? 'rgba(99, 179, 237, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                        border: `1px solid ${isSelected ? 'var(--accent-blue, #63b3ed)' : 'rgba(255, 255, 255, 0.08)'}`,
-                        color: isSelected ? '#fff' : 'var(--text-primary, #e2e8f0)',
+                        gap: '1rem',
+                        padding: '1rem 1.25rem',
+                        borderRadius: '12px',
+                        background: isSelected ? 'var(--accent-lime, #c6fd50)' : '#ffffff',
+                        border: isSelected ? '2.5px solid #131311' : '2px solid #131311',
+                        color: '#131311',
                         cursor: 'pointer',
                         textAlign: 'left',
-                        fontSize: '0.93rem',
-                        transition: 'all 0.2s ease',
-                        boxShadow: isSelected ? '0 0 15px rgba(99, 179, 237, 0.2)' : 'none',
+                        fontSize: '0.96rem',
+                        fontWeight: isSelected ? 700 : 500,
+                        transition: 'all 0.15s ease',
+                        boxShadow: isSelected ? '4px 4px 0px #131311' : '3px 3px 0px #131311',
+                        transform: isSelected ? 'translate(-1px, -1px)' : 'none',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.transform = 'translate(-2px, -2px)'
+                          e.currentTarget.style.boxShadow = '5px 5px 0px #131311'
+                          e.currentTarget.style.background = '#fafaf5'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.transform = 'none'
+                          e.currentTarget.style.boxShadow = '3px 3px 0px #131311'
+                          e.currentTarget.style.background = '#ffffff'
+                        }
                       }}
                     >
                       <span
                         style={{
-                          width: 28,
-                          height: 28,
-                          borderRadius: 6,
-                          background: isSelected ? 'var(--accent-blue, #63b3ed)' : 'rgba(255, 255, 255, 0.07)',
-                          color: isSelected ? '#000' : 'var(--text-secondary, #a0aec0)',
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          background: isSelected ? '#131311' : 'var(--bg-surface-secondary, #f3f2ea)',
+                          color: isSelected ? 'var(--accent-lime, #c6fd50)' : '#131311',
+                          border: '1.5px solid #131311',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '0.8rem',
-                          fontWeight: 700,
+                          fontSize: '0.85rem',
+                          fontWeight: 800,
                           flexShrink: 0,
                         }}
                       >
                         {optionLetters[optIdx]}
                       </span>
-                      <span style={{ flex: 1 }}>{opt}</span>
+
+                      <span style={{ flex: 1, lineHeight: 1.45 }}>{opt}</span>
+
+                      {isSelected && (
+                        <div
+                          style={{
+                            width: 24,
+                            height: 24,
+                            borderRadius: '50%',
+                            background: '#131311',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <Check size={14} color="var(--accent-lime, #c6fd50)" strokeWidth={3} />
+                        </div>
+                      )}
                     </button>
                   )
                 })}
@@ -426,115 +637,170 @@ export default function QuizModal({
           {/* Results View */}
           {result && (
             <div className="animate-fadeIn">
-              {/* Result Summary Card */}
+              {/* Result Summary Neo Card */}
               <div
                 style={{
                   textAlign: 'center',
-                  padding: '1.75rem',
-                  borderRadius: 'var(--radius-md, 12px)',
+                  padding: '2rem 1.5rem',
+                  borderRadius: '14px',
                   background: result.passed
-                    ? 'linear-gradient(145deg, rgba(72, 187, 120, 0.15) 0%, rgba(56, 161, 105, 0.05) 100%)'
+                    ? 'var(--accent-lime-subtle, #f1fccf)'
                     : result.all_wrong
-                    ? 'linear-gradient(145deg, rgba(245, 101, 101, 0.18) 0%, rgba(229, 62, 62, 0.05) 100%)'
-                    : 'linear-gradient(145deg, rgba(237, 137, 54, 0.15) 0%, rgba(221, 107, 32, 0.05) 100%)',
-                  border: `1px solid ${
-                    result.passed
-                      ? 'rgba(72, 187, 120, 0.35)'
-                      : result.all_wrong
-                      ? 'rgba(245, 101, 101, 0.4)'
-                      : 'rgba(237, 137, 54, 0.35)'
-                  }`,
+                    ? 'var(--accent-coral-subtle, #ffece8)'
+                    : '#fef3c7',
+                  border: '2.5px solid #131311',
+                  boxShadow: '6px 6px 0px #131311',
                   marginBottom: '1.5rem',
+                  position: 'relative',
                 }}
               >
+                {/* Result Icon */}
                 <div
                   style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: '50%',
-                    background: result.passed ? 'rgba(72, 187, 120, 0.2)' : 'rgba(245, 101, 101, 0.2)',
+                    width: 68,
+                    height: 68,
+                    borderRadius: 16,
+                    background: result.passed
+                      ? 'var(--accent-lime, #c6fd50)'
+                      : result.all_wrong
+                      ? '#ff7660'
+                      : '#ffd15c',
+                    border: '2.5px solid #131311',
+                    boxShadow: '3px 3px 0px #131311',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    margin: '0 auto 1rem',
+                    margin: '0 auto 1.25rem',
                   }}
                 >
                   {result.passed ? (
-                    <ShieldCheck size={36} color="var(--accent-green, #48bb78)" />
+                    <ShieldCheck size={38} color="#131311" strokeWidth={2.2} />
                   ) : result.all_wrong ? (
-                    <XCircle size={36} color="var(--accent-pink, #fc8181)" />
+                    <XCircle size={38} color="#131311" strokeWidth={2.2} />
                   ) : (
-                    <AlertTriangle size={36} color="var(--accent-orange, #ed8936)" />
+                    <AlertTriangle size={38} color="#131311" strokeWidth={2.2} />
                   )}
                 </div>
 
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff', marginBottom: '0.4rem' }}>
+                {/* Status Badge */}
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      padding: '0.35rem 0.9rem',
+                      borderRadius: 9999,
+                      background: '#131311',
+                      color: result.passed ? 'var(--accent-lime, #c6fd50)' : '#ffffff',
+                      border: '1.5px solid #131311',
+                      fontSize: '0.8rem',
+                      fontWeight: 800,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                    }}
+                  >
+                    {result.passed ? '✓ Skill Verified' : 'Assessment Result'}
+                  </span>
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 900,
+                    color: '#131311',
+                    marginBottom: '0.5rem',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
                   {result.headline}
                 </h3>
 
                 <div
                   style={{
-                    fontSize: '2rem',
-                    fontWeight: 800,
-                    color: result.passed
-                      ? 'var(--accent-green, #48bb78)'
-                      : result.all_wrong
-                      ? 'var(--accent-pink, #fc8181)'
-                      : 'var(--accent-orange, #ed8936)',
-                    margin: '0.4rem 0',
+                    fontSize: '2.5rem',
+                    fontWeight: 900,
+                    color: '#131311',
+                    margin: '0.5rem 0',
+                    letterSpacing: '-0.03em',
                   }}
                 >
                   {result.score_percentage}%
-                  <span style={{ fontSize: '1rem', color: 'var(--text-muted)', fontWeight: 500, marginLeft: '0.4rem' }}>
-                    ({result.score}/{result.total} correct)
+                  <span
+                    style={{
+                      fontSize: '1.05rem',
+                      color: 'var(--text-secondary, #52524e)',
+                      fontWeight: 700,
+                      marginLeft: '0.5rem',
+                      letterSpacing: 'normal',
+                    }}
+                  >
+                    ({result.score}/{result.total} Correct)
                   </span>
                 </div>
 
-                {/* Feedback message (Hindi / English informative text) */}
-                <p
+                {/* English Feedback Message Box */}
+                <div
                   style={{
                     fontSize: '0.94rem',
-                    color: 'var(--text-primary, #e2e8f0)',
+                    color: '#131311',
                     lineHeight: 1.6,
-                    maxWidth: 540,
-                    margin: '0.75rem auto 0',
-                    background: 'rgba(0, 0, 0, 0.25)',
-                    padding: '0.85rem 1.15rem',
-                    borderRadius: 'var(--radius-sm, 8px)',
-                    borderLeft: `4px solid ${
-                      result.passed
-                        ? 'var(--accent-green, #48bb78)'
-                        : result.all_wrong
-                        ? 'var(--accent-pink, #fc8181)'
-                        : 'var(--accent-orange, #ed8936)'
-                    }`,
+                    maxWidth: 580,
+                    margin: '1rem auto 0',
+                    background: '#ffffff',
+                    padding: '1rem 1.25rem',
+                    borderRadius: '10px',
+                    border: '2px solid #131311',
+                    boxShadow: '3px 3px 0px #131311',
+                    textAlign: 'left',
                   }}
                 >
-                  {result.feedback_message}
-                </p>
+                  <p style={{ margin: 0, fontWeight: 500 }}>
+                    {result.feedback_message}
+                  </p>
+                </div>
               </div>
 
               {/* Missed Topics Tags */}
               {result.missed_subtopics && result.missed_subtopics.length > 0 && (
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                    Recommended Sub-topics to Re-learn:
+                <div
+                  style={{
+                    marginBottom: '1.5rem',
+                    padding: '1rem 1.25rem',
+                    background: 'var(--bg-primary, #f8f7f2)',
+                    border: '2px solid #131311',
+                    borderRadius: '12px',
+                    boxShadow: '3px 3px 0px #131311',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '0.82rem',
+                      fontWeight: 800,
+                      color: '#131311',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      marginBottom: '0.65rem',
+                    }}
+                  >
+                    Recommended Sub-topics to Focus On:
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                     {result.missed_subtopics.map((sub, i) => (
                       <span
                         key={i}
                         style={{
-                          background: 'rgba(237, 137, 54, 0.15)',
-                          border: '1px solid rgba(237, 137, 54, 0.3)',
-                          color: 'var(--accent-orange, #ed8936)',
-                          fontSize: '0.8rem',
-                          fontWeight: 600,
-                          padding: '0.25rem 0.65rem',
-                          borderRadius: 999,
+                          background: '#ffffff',
+                          border: '1.5px solid #131311',
+                          boxShadow: '2px 2px 0px #131311',
+                          color: '#131311',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          padding: '0.3rem 0.75rem',
+                          borderRadius: 9999,
                         }}
                       >
-                        {sub}
+                        ⚡ {sub}
                       </span>
                     ))}
                   </div>
@@ -546,10 +812,19 @@ export default function QuizModal({
                 <button
                   type="button"
                   onClick={() => setShowReview(!showReview)}
-                  className="btn btn-secondary"
-                  style={{ width: '100%', justifyContent: 'center', fontSize: '0.88rem' }}
+                  className="btn btn-outline"
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    fontSize: '0.92rem',
+                    fontWeight: 700,
+                    border: '2px solid #131311',
+                    boxShadow: '3px 3px 0px #131311',
+                    background: '#ffffff',
+                    padding: '0.75rem 1rem',
+                  }}
                 >
-                  <BookOpen size={16} />
+                  <BookOpen size={17} />
                   {showReview ? 'Hide Detailed Answers' : 'Review Answers & Detailed Explanations'}
                 </button>
               </div>
@@ -561,49 +836,110 @@ export default function QuizModal({
                     <div
                       key={i}
                       style={{
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: `1px solid ${
-                          item.is_correct ? 'rgba(72, 187, 120, 0.25)' : 'rgba(245, 101, 101, 0.3)'
-                        }`,
-                        borderRadius: 'var(--radius-md, 10px)',
-                        padding: '1.1rem',
+                        background: '#ffffff',
+                        border: '2px solid #131311',
+                        borderRadius: '12px',
+                        boxShadow: '3px 3px 0px #131311',
+                        padding: '1.25rem',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                        {item.is_correct ? (
-                          <CheckCircle2 size={18} color="var(--accent-green, #48bb78)" />
-                        ) : (
-                          <XCircle size={18} color="var(--accent-pink, #fc8181)" />
-                        )}
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>
-                          Q{i + 1}: {item.question}
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          justifyContent: 'space-between',
+                          gap: '0.75rem',
+                          marginBottom: '0.75rem',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
+                          <span
+                            style={{
+                              width: 26,
+                              height: 26,
+                              borderRadius: 6,
+                              background: '#131311',
+                              color: 'var(--accent-lime, #c6fd50)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '0.78rem',
+                              fontWeight: 800,
+                              flexShrink: 0,
+                              marginTop: 2,
+                            }}
+                          >
+                            {i + 1}
+                          </span>
+                          <span style={{ fontSize: '0.96rem', fontWeight: 800, color: '#131311', lineHeight: 1.45 }}>
+                            {item.question}
+                          </span>
+                        </div>
+
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            padding: '0.25rem 0.65rem',
+                            borderRadius: 9999,
+                            background: item.is_correct
+                              ? 'var(--accent-lime, #c6fd50)'
+                              : 'var(--accent-coral-subtle, #ffece8)',
+                            color: item.is_correct ? '#131311' : '#dc2626',
+                            border: '1.5px solid #131311',
+                            fontSize: '0.76rem',
+                            fontWeight: 800,
+                            flexShrink: 0,
+                          }}
+                        >
+                          {item.is_correct ? (
+                            <>
+                              <CheckCircle2 size={14} color="#131311" /> Correct
+                            </>
+                          ) : (
+                            <>
+                              <XCircle size={14} color="#dc2626" /> Incorrect
+                            </>
+                          )}
                         </span>
                       </div>
 
-                      <div style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginLeft: '1.6rem' }}>
-                        <div style={{ marginBottom: '0.25rem' }}>
-                          <strong>Your Answer:</strong>{' '}
-                          <span style={{ color: item.is_correct ? 'var(--accent-green)' : 'var(--accent-pink)' }}>
+                      <div style={{ fontSize: '0.88rem', color: '#52524e', marginLeft: '2.25rem' }}>
+                        <div style={{ marginBottom: '0.35rem' }}>
+                          <strong style={{ color: '#131311' }}>Your Answer:</strong>{' '}
+                          <span
+                            style={{
+                              color: item.is_correct ? '#16a34a' : '#dc2626',
+                              fontWeight: 700,
+                            }}
+                          >
                             {item.user_option_text}
                           </span>
                         </div>
+
                         {!item.is_correct && (
-                          <div style={{ marginBottom: '0.25rem' }}>
-                            <strong>Correct Answer:</strong>{' '}
-                            <span style={{ color: 'var(--accent-green)' }}>{item.correct_option_text}</span>
+                          <div style={{ marginBottom: '0.35rem' }}>
+                            <strong style={{ color: '#131311' }}>Correct Answer:</strong>{' '}
+                            <span style={{ color: '#16a34a', fontWeight: 700 }}>
+                              {item.correct_option_text}
+                            </span>
                           </div>
                         )}
+
                         <div
                           style={{
-                            marginTop: '0.5rem',
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: 6,
-                            background: 'rgba(255, 255, 255, 0.04)',
-                            fontSize: '0.8rem',
+                            marginTop: '0.65rem',
+                            padding: '0.75rem 1rem',
+                            borderRadius: 8,
+                            background: 'var(--bg-surface-secondary, #f3f2ea)',
+                            border: '1.5px solid #131311',
+                            fontSize: '0.85rem',
                             lineHeight: 1.5,
+                            color: '#131311',
                           }}
                         >
-                          <strong style={{ color: 'var(--accent-blue)' }}>Why:</strong> {item.explanation}
+                          <strong style={{ color: '#131311' }}>💡 Why:</strong> {item.explanation}
                         </div>
                       </div>
                     </div>
@@ -618,16 +954,37 @@ export default function QuizModal({
         <div
           style={{
             padding: '1rem 1.5rem',
-            borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+            borderTop: '2px solid #131311',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: 'rgba(255, 255, 255, 0.02)',
+            background: 'var(--bg-primary, #f8f7f2)',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
           }}
         >
           {!result && !loading && !error && (
             <>
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+              <div
+                style={{
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  color: 'var(--text-secondary, #52524e)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: answeredCount === totalQuestions ? 'var(--accent-lime, #c6fd50)' : '#ffd15c',
+                    border: '1px solid #131311',
+                  }}
+                />
                 {answeredCount} of {totalQuestions} answered
               </div>
 
@@ -636,8 +993,17 @@ export default function QuizModal({
                   <button
                     type="button"
                     onClick={() => setCurrentIndex((prev) => prev - 1)}
-                    className="btn btn-secondary"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.88rem' }}
+                    className="btn btn-outline"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.88rem',
+                      padding: '0.55rem 1.15rem',
+                      border: '2px solid #131311',
+                      boxShadow: '3px 3px 0px #131311',
+                      background: '#ffffff',
+                    }}
                   >
                     <ChevronLeft size={16} /> Prev
                   </button>
@@ -648,7 +1014,16 @@ export default function QuizModal({
                     type="button"
                     onClick={() => setCurrentIndex((prev) => prev + 1)}
                     className="btn btn-primary"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.88rem' }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.88rem',
+                      padding: '0.55rem 1.15rem',
+                      border: '2px solid #131311',
+                      boxShadow: '3px 3px 0px #131311',
+                      background: 'var(--accent-lime, #c6fd50)',
+                    }}
                   >
                     Next <ChevronRight size={16} />
                   </button>
@@ -663,10 +1038,16 @@ export default function QuizModal({
                       alignItems: 'center',
                       gap: '0.45rem',
                       fontSize: '0.9rem',
-                      background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                      fontWeight: 800,
+                      background: 'var(--accent-lime, #c6fd50)',
+                      border: '2.5px solid #131311',
+                      boxShadow: '4px 4px 0px #131311',
+                      padding: '0.6rem 1.35rem',
+                      cursor: submitting ? 'not-allowed' : 'pointer',
+                      opacity: submitting ? 0.75 : 1,
                     }}
                   >
-                    {submitting ? 'Evaluating...' : 'Submit Assessment ✓'}
+                    {submitting ? 'Evaluating Answers...' : 'Submit Assessment ✓'}
                   </button>
                 )}
               </div>
@@ -674,24 +1055,53 @@ export default function QuizModal({
           )}
 
           {result && (
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '0.85rem',
+                flexWrap: 'wrap',
+              }}
+            >
               {!result.passed && (
                 <button
                   type="button"
                   onClick={handleRetry}
-                  className="btn btn-secondary"
-                  style={{ display: 'inline-flex', gap: '0.4rem', fontSize: '0.88rem' }}
+                  className="btn btn-outline"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    fontSize: '0.9rem',
+                    fontWeight: 700,
+                    border: '2px solid #131311',
+                    boxShadow: '3px 3px 0px #131311',
+                    background: '#ffffff',
+                    padding: '0.6rem 1.25rem',
+                  }}
                 >
-                  <RotateCcw size={15} /> Retake Assessment
+                  <RotateCcw size={16} /> Retake Assessment
                 </button>
               )}
+
               <button
                 type="button"
                 onClick={onClose}
                 className="btn btn-primary"
-                style={{ fontSize: '0.88rem' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 800,
+                  border: '2.5px solid #131311',
+                  boxShadow: '4px 4px 0px #131311',
+                  background: 'var(--accent-lime, #c6fd50)',
+                  padding: '0.6rem 1.35rem',
+                }}
               >
-                {result.passed ? 'Great, Done!' : 'Back to Roadmap'}
+                {result.passed ? 'Great, Done! 🎉' : 'Back to Roadmap'}
               </button>
             </div>
           )}

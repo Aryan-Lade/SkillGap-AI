@@ -27,4 +27,11 @@ export const getSkillQuiz = (skill, role = 'Full Stack Developer', level = 'Inte
 
 export const submitSkillQuiz = (submissionData) => api.post('/quiz/submit', submissionData)
 
+export const parseResumeFile = (formData) =>
+  api.post('/resume/parse', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+
+export const parseResumeText = (payload) => api.post('/resume/parse-text', payload)
+
 export default api

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { getAllRoles } from '../api/client'
+import ResumeUploadSection from './ResumeUploadSection'
 
 const DEFAULT_ROLE_OPTIONS = [
   'AI Engineer',
@@ -162,6 +163,12 @@ export default function ProfileForm({ onSubmit, loading }) {
     setCurrentSkills([])
   }
 
+  const handleApplyResumeProfile = ({ targetRole: r, experienceLevel: e, skills: s }) => {
+    if (r) setTargetRole(r)
+    if (e) setExperienceLevel(e)
+    if (s && s.length > 0) setCurrentSkills(s)
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!targetRole || !experienceLevel || currentSkills.length === 0) return
@@ -176,9 +183,11 @@ export default function ProfileForm({ onSubmit, loading }) {
         <span className="icon">🎯</span>
         Build Your Profile
       </div>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', fontSize: '0.95rem' }}>
+      <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
         Tell us where you are and where you want to go — we'll map the gap.
       </p>
+
+      <ResumeUploadSection onApplyProfile={handleApplyResumeProfile} />
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <div className="form-group">

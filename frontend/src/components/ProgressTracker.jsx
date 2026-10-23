@@ -183,14 +183,11 @@ export default function ProgressTracker({
   return (
     <section
       aria-label="Comprehensive Progress Tracker"
-      className="glass-card animate-fadeIn progress-tracker-focal"
+      className="neo-card animate-fadeIn progress-tracker-focal"
       style={{
         position: 'relative',
         padding: '2.25rem',
-        border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-xl)',
-        background: 'linear-gradient(170deg, rgba(13, 18, 33, 0.85) 0%, rgba(8, 11, 20, 0.95) 100%)',
-        boxShadow: 'var(--shadow-card), 0 0 50px rgba(104, 211, 145, 0.06)',
+        background: '#ffffff',
       }}
     >
       {/* Top Section Header */}
@@ -203,33 +200,21 @@ export default function ProgressTracker({
         marginBottom: '2rem',
       }}>
         <div>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            padding: '0.25rem 0.75rem',
-            borderRadius: 999,
-            background: 'rgba(104, 211, 145, 0.12)',
-            border: '1px solid rgba(104, 211, 145, 0.25)',
-            color: 'var(--accent-green)',
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            marginBottom: '0.5rem',
-          }}>
+          <div className="pill-badge pill-badge-lime" style={{ marginBottom: '0.65rem' }}>
             <TrendingUp size={14} />
             Real-Time Mastery Hub
           </div>
 
           <h2 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '1.75rem',
-            fontWeight: 800,
-            letterSpacing: '-0.02em',
-            color: 'var(--text-primary)',
+            fontSize: '1.85rem',
+            fontWeight: 900,
+            letterSpacing: '-0.03em',
+            color: '#131311',
           }}>
             Skill Gap & Learning Progress Tracker
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
+          <p style={{ color: '#52524e', fontSize: '0.92rem', marginTop: '0.2rem' }}>
             Unified view of completed skills, time invested, active streaks, and closed competencies.
           </p>
         </div>
@@ -238,9 +223,10 @@ export default function ProgressTracker({
           {saveMsg && (
             <span style={{
               fontSize: '0.8rem',
-              color: 'var(--accent-green)',
-              fontWeight: 600,
-              background: 'rgba(104, 211, 145, 0.1)',
+              color: '#131311',
+              fontWeight: 800,
+              background: 'var(--accent-lime)',
+              border: '1px solid #131311',
               padding: '0.3rem 0.75rem',
               borderRadius: 999,
             }}>
@@ -249,13 +235,14 @@ export default function ProgressTracker({
           )}
 
           <div style={{
-            background: 'var(--gradient-hero)',
+            background: 'var(--accent-lime)',
+            border: '1.5px solid #131311',
             borderRadius: 999,
-            padding: '0.4rem 1.1rem',
+            padding: '0.45rem 1.15rem',
             fontSize: '0.9rem',
-            fontWeight: 700,
-            color: '#ffffff',
-            boxShadow: '0 4px 16px rgba(102, 126, 234, 0.4)',
+            fontWeight: 800,
+            color: '#131311',
+            boxShadow: '2px 2px 0px #131311',
           }}>
             {completedCount} / {totalCount} Skills Done
           </div>
@@ -274,10 +261,10 @@ export default function ProgressTracker({
       >
         {/* Overall Radial Chart */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '1.75rem 1.25rem',
+          background: 'var(--bg-surface-secondary)',
+          border: '1.5px solid #131311',
+          boxShadow: '2px 2px 0px #131311',
+          borderRadius: '12px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

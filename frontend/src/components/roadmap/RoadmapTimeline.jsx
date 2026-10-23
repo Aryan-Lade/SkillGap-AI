@@ -37,6 +37,7 @@ export default function RoadmapTimeline({
   selectedSkill = null,
   onSelectSkill,
   filter = 'all',
+  verifiedSkills = [],
 }) {
   let globalIndex = 0
 
@@ -152,6 +153,7 @@ export default function RoadmapTimeline({
                     key={skill.skill}
                     skill={skill}
                     status={skill.status}
+                    isVerified={verifiedSkills.includes(skill.skill)}
                     isSelected={isSelected}
                     index={globalIndex}
                     onSelect={() => onSelectSkill(skill)}

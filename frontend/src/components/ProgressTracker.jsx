@@ -29,6 +29,25 @@ export default function ProgressTracker({
   const [saving, setSaving] = useState(false)
   const [saveMsg, setSaveMsg] = useState('')
   const [activeTab, setActiveTab] = useState('all') // 'all' | 'Foundational' | 'Intermediate' | 'Applied'
+  const [verifiedSkills, setVerifiedSkills] = useState(() => {
+    try {
+      const saved = localStorage.getItem('skillgap_verified_skills')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+
+  useEffect(() => {
+    const handleStorage = () => {
+      try {
+        const saved = localStorage.getItem('skillgap_verified_skills')
+        if (saved) setVerifiedSkills(JSON.parse(saved))
+      } catch {}
+    }
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
+  }, [])
 
   const stages = useMemo(() => {
     return STAGE_ORDER.filter((s) => roadmap && roadmap[s]?.length > 0)
@@ -443,6 +462,7 @@ export default function ProgressTracker({
                   percentage={skillPercentage}
                   weight={sk.weight}
                   isCompleted={isDone}
+                  isVerified={verifiedSkills.includes(sk.skill)}
                   disabled={saving}
                   onToggle={() => handleToggle(sk.skill)}
                 />

@@ -11,14 +11,18 @@ import {
   Award,
   ListChecks,
   Compass,
+  Sparkles,
+  ShieldCheck,
 } from 'lucide-react'
 
 export default function RoadmapDetailPanel({
   skill,
   status = 'locked',
+  isVerified = false,
   onClose,
   onToggleComplete,
   onStartLearning,
+  onOpenQuiz,
 }) {
   const panelRef = useRef(null)
 
@@ -133,6 +137,24 @@ export default function RoadmapDetailPanel({
             }}>
               <Award size={14} />
               {(skill.weight * 100).toFixed(0)}% Hiring Weight
+            </span>
+          )}
+
+          {isVerified && (
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              fontSize: '0.78rem',
+              color: 'var(--accent-green)',
+              background: 'rgba(72, 187, 120, 0.15)',
+              border: '1px solid rgba(72, 187, 120, 0.35)',
+              padding: '0.2rem 0.6rem',
+              borderRadius: 999,
+              fontWeight: 700,
+            }}>
+              <ShieldCheck size={14} />
+              Verified Skill ✓
             </span>
           )}
         </div>
@@ -343,7 +365,26 @@ export default function RoadmapDetailPanel({
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {onOpenQuiz && (
+            <button
+              onClick={() => onOpenQuiz(skill.skill)}
+              className="btn btn-secondary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.88rem',
+                background: isVerified ? 'rgba(72, 187, 120, 0.12)' : 'rgba(99, 179, 237, 0.12)',
+                borderColor: isVerified ? 'rgba(72, 187, 120, 0.35)' : 'rgba(99, 179, 237, 0.35)',
+                color: isVerified ? 'var(--accent-green)' : 'var(--accent-blue)',
+              }}
+            >
+              <Sparkles size={15} />
+              {isVerified ? 'Retake Quiz' : '⚡ Take Verification Quiz'}
+            </button>
+          )}
+
           {!isInProgress && !isCompleted && onStartLearning && (
             <button
               onClick={() => onStartLearning(skill.skill)}

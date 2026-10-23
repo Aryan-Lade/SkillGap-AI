@@ -4,20 +4,17 @@ const STAGE_THEMES = {
   Foundational: {
     badge: 'Beginner',
     badgeClass: 'badge-foundational',
-    accent: 'var(--accent-blue)',
-    borderActive: 'rgba(99, 179, 237, 0.6)',
+    accent: '#0b4949',
   },
   Intermediate: {
     badge: 'Intermediate',
     badgeClass: 'badge-intermediate',
-    accent: 'var(--accent-purple)',
-    borderActive: 'rgba(183, 148, 244, 0.6)',
+    accent: '#2b4800',
   },
   Applied: {
     badge: 'Advanced',
     badgeClass: 'badge-applied',
-    accent: 'var(--accent-green)',
-    borderActive: 'rgba(104, 211, 145, 0.6)',
+    accent: '#8c1b09',
   },
 }
 
@@ -40,38 +37,33 @@ export default function RoadmapNode({
   const statusConfig = {
     completed: {
       label: 'Completed',
-      icon: <CheckCircle2 size={16} color="var(--accent-green)" />,
-      badgeBg: 'rgba(104, 211, 145, 0.15)',
-      badgeColor: 'var(--accent-green)',
-      borderColor: 'rgba(104, 211, 145, 0.4)',
+      icon: <CheckCircle2 size={15} color="#131311" />,
+      badgeBg: 'var(--accent-lime-subtle)',
+      badgeColor: '#131311',
     },
     'in-progress': {
       label: 'In Progress',
-      icon: <PlayCircle size={16} color="var(--accent-blue)" className="animate-spin-slow" />,
-      badgeBg: 'rgba(99, 179, 237, 0.18)',
-      badgeColor: 'var(--accent-blue)',
-      borderColor: 'var(--accent-blue)',
+      icon: <PlayCircle size={15} color="#131311" />,
+      badgeBg: 'var(--accent-lime)',
+      badgeColor: '#131311',
     },
     'up-next': {
       label: 'Up Next',
-      icon: <ArrowRightCircle size={16} color="var(--accent-purple)" />,
-      badgeBg: 'rgba(183, 148, 244, 0.15)',
-      badgeColor: 'var(--accent-purple)',
-      borderColor: 'rgba(183, 148, 244, 0.35)',
+      icon: <ArrowRightCircle size={15} color="#52524e" />,
+      badgeBg: 'var(--bg-surface-secondary)',
+      badgeColor: '#52524e',
     },
     locked: {
       label: 'Locked',
-      icon: <Lock size={15} color="var(--text-muted)" />,
-      badgeBg: 'rgba(255, 255, 255, 0.05)',
-      badgeColor: 'var(--text-muted)',
-      borderColor: 'var(--border-subtle)',
+      icon: <Lock size={14} color="#80807c" />,
+      badgeBg: '#f3f2ea',
+      badgeColor: '#80807c',
     },
   }[status] || {
     label: 'Up Next',
-    icon: <ArrowRightCircle size={16} />,
-    badgeBg: 'rgba(255,255,255,0.05)',
-    badgeColor: 'var(--text-secondary)',
-    borderColor: 'var(--border-subtle)',
+    icon: <ArrowRightCircle size={15} />,
+    badgeBg: '#f3f2ea',
+    badgeColor: '#52524e',
   }
 
   const handleKeyDown = (e) => {
@@ -96,25 +88,24 @@ export default function RoadmapNode({
         flexDirection: 'column',
         gap: '0.75rem',
         padding: '1.25rem 1.4rem',
-        borderRadius: 'var(--radius-md)',
+        borderRadius: '10px',
         background: isSelected
-          ? 'rgba(255, 255, 255, 0.08)'
+          ? 'var(--accent-lime-subtle)'
           : isInProgress
-          ? 'rgba(99, 179, 237, 0.06)'
+          ? '#ffffff'
           : isCompleted
-          ? 'rgba(104, 211, 145, 0.04)'
-          : isLocked
-          ? 'rgba(255, 255, 255, 0.02)'
-          : 'var(--bg-card)',
-        border: `1.5px solid ${isSelected ? theme.accent : statusConfig.borderColor}`,
-        boxShadow: isInProgress
-          ? '0 0 24px rgba(99, 179, 237, 0.25)'
-          : isSelected
-          ? `0 0 20px ${theme.borderActive}`
-          : 'none',
-        opacity: isLocked ? 0.65 : 1,
+          ? '#fafaf7'
+          : '#ffffff',
+        border: '1.5px solid #131311',
+        boxShadow: isSelected
+          ? '4px 4px 0px #131311'
+          : isInProgress
+          ? '3px 3px 0px var(--accent-lime)'
+          : '2px 2px 0px #131311',
+        transform: isSelected ? 'translate(-2px, -2px)' : 'none',
+        opacity: isLocked ? 0.75 : 1,
         cursor: 'pointer',
-        transition: 'var(--transition)',
+        transition: 'all 0.15s ease',
         outline: 'none',
         userSelect: 'none',
       }}
@@ -126,10 +117,10 @@ export default function RoadmapNode({
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'var(--gradient-hero)',
-          borderTopLeftRadius: 'var(--radius-md)',
-          borderTopRightRadius: 'var(--radius-md)',
+          height: '4px',
+          background: 'var(--accent-lime)',
+          borderTopLeftRadius: '9px',
+          borderTopRightRadius: '9px',
         }} />
       )}
 
@@ -147,11 +138,12 @@ export default function RoadmapNode({
             height: 24,
             borderRadius: '50%',
             background: isCompleted
-              ? 'var(--accent-green)'
+              ? 'var(--accent-lime)'
               : isInProgress
-              ? 'var(--accent-blue)'
-              : 'rgba(255, 255, 255, 0.08)',
-            color: isCompleted || isInProgress ? '#080b14' : 'var(--text-muted)',
+              ? '#131311'
+              : 'var(--bg-surface-secondary)',
+            color: isInProgress ? '#ffffff' : '#131311',
+            border: '1.5px solid #131311',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -168,10 +160,10 @@ export default function RoadmapNode({
             padding: '0.2rem 0.6rem',
             borderRadius: 999,
             fontSize: '0.72rem',
-            fontWeight: 600,
+            fontWeight: 700,
             background: statusConfig.badgeBg,
             color: statusConfig.badgeColor,
-            border: `1px solid ${statusConfig.badgeColor}33`,
+            border: '1px solid #131311',
           }}>
             {statusConfig.icon}
             {statusConfig.label}
@@ -186,10 +178,10 @@ export default function RoadmapNode({
                 padding: '0.2rem 0.5rem',
                 borderRadius: 999,
                 fontSize: '0.7rem',
-                fontWeight: 700,
-                background: 'rgba(72, 187, 120, 0.15)',
-                color: 'var(--accent-green)',
-                border: '1px solid rgba(72, 187, 120, 0.4)',
+                fontWeight: 800,
+                background: 'var(--accent-lime)',
+                color: '#131311',
+                border: '1px solid #131311',
               }}
               title="Skill Verified via Assessment Quiz"
             >
@@ -210,9 +202,9 @@ export default function RoadmapNode({
           <h4 style={{
             fontFamily: 'var(--font-display)',
             fontSize: '1.15rem',
-            fontWeight: 700,
-            color: isLocked ? 'var(--text-secondary)' : 'var(--text-primary)',
-            letterSpacing: '-0.01em',
+            fontWeight: 800,
+            color: '#131311',
+            letterSpacing: '-0.02em',
             margin: 0,
           }}>
             {skill.skill}
@@ -221,8 +213,12 @@ export default function RoadmapNode({
           {typeof skill.weight === 'number' && (
             <span style={{
               fontSize: '0.75rem',
-              color: 'var(--accent-orange)',
-              fontWeight: 600,
+              color: '#131311',
+              fontWeight: 800,
+              padding: '1px 6px',
+              borderRadius: '4px',
+              background: 'var(--accent-lime-subtle)',
+              border: '1px solid #131311',
               whiteSpace: 'nowrap',
             }}>
               {(skill.weight * 100).toFixed(0)}% weight
@@ -232,7 +228,7 @@ export default function RoadmapNode({
 
         <p style={{
           fontSize: '0.82rem',
-          color: 'var(--text-muted)',
+          color: '#52524e',
           marginTop: '0.35rem',
           lineHeight: 1.45,
           display: '-webkit-box',
@@ -250,26 +246,26 @@ export default function RoadmapNode({
         alignItems: 'center',
         justifyContent: 'space-between',
         fontSize: '0.78rem',
-        color: 'var(--text-muted)',
-        borderTop: '1px solid var(--border-subtle)',
+        color: '#52524e',
+        borderTop: '1px solid #131311',
         paddingTop: '0.65rem',
         marginTop: '0.2rem',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Clock size={14} color="var(--accent-blue)" />
-          <span>{skill.hours ? `${skill.hours} hrs · ` : ''}{skill.weeks || '1-2 weeks'}</span>
+          <Clock size={14} color="#131311" />
+          <span style={{ fontWeight: 600 }}>{skill.hours ? `${skill.hours} hrs · ` : ''}{skill.weeks || '1-2 weeks'}</span>
         </div>
 
         <span style={{
           display: 'inline-flex',
           alignItems: 'center',
           gap: '0.25rem',
-          color: isSelected ? theme.accent : 'var(--text-secondary)',
-          fontWeight: 600,
+          color: '#131311',
+          fontWeight: 800,
           fontSize: '0.75rem',
         }}>
           {isSelected ? 'Viewing' : 'Inspect'}
-          <Sparkles size={13} />
+          <Sparkles size={13} fill="#131311" />
         </span>
       </div>
     </div>

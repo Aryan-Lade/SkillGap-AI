@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, NavLink, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Explore from './pages/Explore'
@@ -6,12 +6,15 @@ import JobDescriptionAnalyzer from './pages/JobDescriptionAnalyzer'
 import JobMarketInsights from './pages/JobMarketInsights'
 import CodeSandbox from './pages/CodeSandbox'
 import StudyPlanner from './pages/StudyPlanner'
+import LoginPage from './pages/LoginPage'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import AuthModal from './components/auth/AuthModal'
-import { LogIn, LogOut, User as UserIcon } from 'lucide-react'
+import AccountModal from './components/account/AccountModal'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import { LogIn, LogOut, User as UserIcon, Clock, Sparkles } from 'lucide-react'
 
 function Nav() {
-  const { user, openAuthModal, signOut } = useAuth()
+  const { user, openAuthModal, openAccountModal, signOut } = useAuth()
 
   const displayName =
     user?.user_metadata?.full_name ||
@@ -66,19 +69,32 @@ function Nav() {
         </ul>
 
         {/* Auth Navigation Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <div
+              {/* Account Profile & History Button */}
+              <button
+                onClick={openAccountModal}
+                title="View your account details and past history"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.3rem 0.75rem',
+                  gap: '0.45rem',
+                  padding: '0.35rem 0.75rem',
                   borderRadius: 999,
-                  background: 'var(--bg-surface)',
-                  border: 'var(--border-main)',
-                  boxShadow: 'var(--shadow-sm)',
+                  background: 'var(--bg-surface, #ffffff)',
+                  border: '1.5px solid #131311',
+                  boxShadow: '2px 2px 0px #131311',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translate(-1px, -1px)'
+                  e.currentTarget.style.boxShadow = '3px 3px 0px #131311'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'none'
+                  e.currentTarget.style.boxShadow = '2px 2px 0px #131311'
                 }}
               >
                 <div
@@ -86,39 +102,59 @@ function Nav() {
                     width: 24,
                     height: 24,
                     borderRadius: '50%',
-                    background: 'var(--accent-lime)',
+                    background: 'var(--accent-lime, #c6fd50)',
                     border: '1px solid #131311',
                     color: '#131311',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '0.75rem',
-                    fontWeight: 800,
+                    fontWeight: 900,
                   }}
                 >
                   {userInitial}
                 </div>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 700 }}>
+                <span style={{ fontSize: '0.85rem', color: '#131311', fontWeight: 800 }}>
                   {displayName}
                 </span>
-              </div>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    background: '#fef3c7',
+                    padding: '1px 6px',
+                    borderRadius: 999,
+                    border: '1px solid #131311',
+                    fontWeight: 700,
+                  }}
+                >
+                  Account & History
+                </span>
+              </button>
 
               <button
                 onClick={signOut}
                 title="Sign out"
                 style={{
-                  background: 'var(--bg-surface)',
-                  border: 'var(--border-main)',
-                  borderRadius: 'var(--radius-sm)',
-                  padding: '0.35rem 0.65rem',
-                  color: 'var(--text-secondary)',
+                  background: 'var(--bg-surface, #ffffff)',
+                  border: '1.5px solid #131311',
+                  borderRadius: '8px',
+                  padding: '0.4rem 0.65rem',
+                  color: '#52524e',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.35rem',
                   fontSize: '0.82rem',
-                  fontWeight: 600,
-                  boxShadow: 'var(--shadow-sm)',
+                  fontWeight: 700,
+                  boxShadow: '2px 2px 0px #131311',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#dc2626'
+                  e.currentTarget.style.borderColor = '#dc2626'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#52524e'
+                  e.currentTarget.style.borderColor = '#131311'
                 }}
               >
                 <LogOut size={14} />
@@ -169,28 +205,73 @@ export default function App() {
           <main className="main-content">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/job-analyzer" element={<JobDescriptionAnalyzer />} />
-              <Route path="/job-market" element={<JobMarketInsights />} />
-              <Route path="/sandbox" element={<CodeSandbox />} />
-              <Route path="/planner" element={<StudyPlanner />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute featureName="Dashboard & AI Roadmap">
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/explore"
+                element={
+                  <ProtectedRoute featureName="Explore Roles & Skills">
+                    <Explore />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/job-analyzer"
+                element={
+                  <ProtectedRoute featureName="Job Description Matcher">
+                    <JobDescriptionAnalyzer />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/job-market"
+                element={
+                  <ProtectedRoute featureName="Market Insights & Salary Estimator">
+                    <JobMarketInsights />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sandbox"
+                element={
+                  <ProtectedRoute featureName="Interactive Code Sandbox">
+                    <CodeSandbox />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/planner"
+                element={
+                  <ProtectedRoute featureName="Smart Study Planner">
+                    <StudyPlanner />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/login" element={<LoginPage mode="login" />} />
+              <Route path="/signup" element={<LoginPage mode="signup" />} />
             </Routes>
           </main>
           <AuthModal />
+          <AccountModal />
           <footer
             style={{
-              background: 'var(--bg-surface)',
-              borderTop: 'var(--border-main)',
+              background: 'var(--bg-surface, #ffffff)',
+              borderTop: 'var(--border-main, 1.5px solid #131311)',
               padding: '2rem 1.5rem',
               textAlign: 'center',
-              color: 'var(--text-secondary)',
+              color: '#52524e',
               fontSize: '0.85rem',
             }}
           >
             <div style={{ maxWidth: 1240, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                <span style={{ background: 'var(--accent-lime)', padding: '2px 8px', borderRadius: 4, border: 'var(--border-main)' }}>SkillGap AI</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 800, color: '#131311' }}>
+                <span style={{ background: 'var(--accent-lime, #c6fd50)', padding: '2px 8px', borderRadius: 4, border: '1.5px solid #131311' }}>SkillGap AI</span>
                 <span>— Precision Career Roadmaps for Engineers</span>
               </div>
               <div>

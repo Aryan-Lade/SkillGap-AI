@@ -9,26 +9,48 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState('login') // 'login' | 'signup'
+  const [authPromptMessage, setAuthPromptMessage] = useState('')
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
 
   useEffect(() => {
-    // 1. Check current session
+    // 1. Check local demo user first if saved
+    const savedDemo = localStorage.getItem('skillgap_demo_user')
+    if (savedDemo) {
+      try {
+        const parsed = JSON.parse(savedDemo)
+        setUser(parsed)
+        setLoading(false)
+        return
+      } catch (e) {
+        localStorage.removeItem('skillgap_demo_user')
+      }
+    }
+
+    // 2. Check Supabase session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession)
-      setUser(currentSession?.user ?? null)
+      if (currentSession?.user) {
+        setUser(currentSession.user)
+      }
+      setLoading(false)
+    }).catch(() => {
       setLoading(false)
     })
 
-    // 2. Listen for auth changes (sign in, sign out, token refresh, OAuth callback)
+    // 3. Listen for auth changes (sign in, sign out, token refresh, OAuth callback)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
         setSession(newSession)
-        setUser(newSession?.user ?? null)
+        if (newSession?.user) {
+          setUser(newSession.user)
+          localStorage.removeItem('skillgap_demo_user')
+        }
         setLoading(false)
       }
     )
 
     return () => {
-      subscription.unsubscribe()
+      subscription?.unsubscribe()
     }
   }, [])
 
@@ -39,7 +61,11 @@ export function AuthProvider({ children }) {
       password,
     })
     if (error) throw error
+    localStorage.removeItem('skillgap_demo_user')
+    setUser(data.user)
+    setSession(data.session)
     setIsAuthModalOpen(false)
+    setAuthPromptMessage('')
     return data
   }
 
@@ -55,6 +81,11 @@ export function AuthProvider({ children }) {
       },
     })
     if (error) throw error
+    if (data.session && data.user) {
+      localStorage.removeItem('skillgap_demo_user')
+      setUser(data.user)
+      setSession(data.session)
+    }
     return data
   }
 
@@ -74,19 +105,72 @@ export function AuthProvider({ children }) {
     return data
   }
 
-  // Sign Out
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
+  // One-Click Instant Demo Login (for testing without email confirmation delays)
+  const signInAsGuest = (customName = '', customEmail = '') => {
+    const demoUser = {
+      id: 'demo_' + Date.now().toString(36),
+      email: customEmail.trim() || 'developer.tester@skillgap.ai',
+      user_metadata: {
+        full_name: customName.trim() || 'Alex Rivera (Demo Student)',
+        target_role: 'Full Stack Developer',
+        is_demo: true,
+      },
+      created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+    }
+    setUser(demoUser)
+    localStorage.setItem('skillgap_demo_user', JSON.stringify(demoUser))
+    setIsAuthModalOpen(false)
+    setAuthPromptMessage('')
+    return demoUser
   }
 
-  const openAuthModal = (mode = 'login') => {
+  // Sign Out
+  const signOut = async () => {
+    localStorage.removeItem('skillgap_demo_user')
+    setUser(null)
+    setSession(null)
+    setIsAccountModalOpen(false)
+    try {
+      await supabase.auth.signOut()
+    } catch (e) {
+      // Ignored if user was offline or in demo mode
+    }
+  }
+
+  // Update Profile Name or metadata
+  const updateProfile = (fullName, targetRole) => {
+    if (!user) return
+    const updated = {
+      ...user,
+      user_metadata: {
+        ...user.user_metadata,
+        full_name: fullName,
+        target_role: targetRole || user.user_metadata?.target_role,
+      },
+    }
+    setUser(updated)
+    if (localStorage.getItem('skillgap_demo_user')) {
+      localStorage.setItem('skillgap_demo_user', JSON.stringify(updated))
+    }
+  }
+
+  const openAuthModal = (mode = 'login', message = '') => {
     setAuthMode(mode)
+    setAuthPromptMessage(message)
     setIsAuthModalOpen(true)
   }
 
   const closeAuthModal = () => {
     setIsAuthModalOpen(false)
+    setAuthPromptMessage('')
+  }
+
+  const openAccountModal = () => {
+    setIsAccountModalOpen(true)
+  }
+
+  const closeAccountModal = () => {
+    setIsAccountModalOpen(false)
   }
 
   const value = {
@@ -96,12 +180,18 @@ export function AuthProvider({ children }) {
     signInWithEmail,
     signUpWithEmail,
     signInWithGoogle,
+    signInAsGuest,
     signOut,
+    updateProfile,
     isAuthModalOpen,
     authMode,
+    authPromptMessage,
     openAuthModal,
     closeAuthModal,
     setAuthMode,
+    isAccountModalOpen,
+    openAccountModal,
+    closeAccountModal,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

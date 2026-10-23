@@ -12,6 +12,7 @@ import { ChevronDown, ChevronUp, Sparkles, RefreshCw } from 'lucide-react'
 
 import { useAuth } from '../context/AuthContext'
 import { saveUserProgressToSupabase, fetchUserProgressFromSupabase } from '../api/supabaseProgress'
+import { recordActivity } from '../utils/history'
 
 export default function Dashboard() {
   const { user } = useAuth()
@@ -83,6 +84,16 @@ export default function Dashboard() {
       setRoadmapData(roadRes.data.roadmap)
       setShowProfileForm(false) // Collapse form once results are loaded so roadmap/progress take the focal center
       await loadExistingProgress(formProfile.student_id, formProfile.target_role)
+
+      const matchPct = Math.round((gapRes.data?.match_score || 0.75) * 100)
+      recordActivity(user?.id || formProfile.student_id || 'guest', {
+        type: 'skillgap',
+        title: `${formProfile.target_role} Skill Gap Analysis`,
+        subtitle: `Experience: ${formProfile.experience_level} · Current Skills: ${formProfile.current_skills?.length || 0}`,
+        score: `${matchPct}% Match`,
+        details: `Identified missing skills: ${gapRes.data?.missing_skills?.slice(0, 4).join(', ') || 'None'}`,
+        link: '/dashboard',
+      })
     } catch (err) {
       setError(
         err?.response?.data?.detail ||

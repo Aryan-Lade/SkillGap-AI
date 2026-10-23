@@ -1,6 +1,19 @@
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import { X, Mail, Lock, User, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
+import {
+  X,
+  Mail,
+  Lock,
+  User,
+  AlertCircle,
+  CheckCircle2,
+  Loader2,
+  Zap,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react'
 
 export default function AuthModal() {
   const {
@@ -8,14 +21,17 @@ export default function AuthModal() {
     closeAuthModal,
     authMode,
     setAuthMode,
+    authPromptMessage,
     signInWithEmail,
     signUpWithEmail,
     signInWithGoogle,
+    signInAsGuest,
   } = useAuth()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [fullName, setFullName] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -27,6 +43,7 @@ export default function AuthModal() {
     setEmail('')
     setPassword('')
     setFullName('')
+    setShowPassword(false)
     setError(null)
     setSuccessMsg(null)
   }
@@ -41,27 +58,44 @@ export default function AuthModal() {
     e.preventDefault()
     setError(null)
     setSuccessMsg(null)
+
+    if (!email.trim() || !password.trim()) {
+      setError('Please provide both email and password.')
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.')
+      return
+    }
+
     setLoading(true)
 
     try {
       if (authMode === 'login') {
-        await signInWithEmail(email, password)
+        await signInWithEmail(email.trim(), password)
         closeAuthModal()
         resetForm()
       } else {
-        const res = await signUpWithEmail(email, password, fullName)
+        const res = await signUpWithEmail(email.trim(), password, fullName.trim())
         if (res.user && !res.session) {
-          setSuccessMsg('Account created! Please check your email to confirm your account.')
+          setSuccessMsg('Account registered! Please check your email to confirm your account, or use Demo Mode for instant access.')
         } else {
-          setSuccessMsg('Account successfully created and signed in!')
+          setSuccessMsg('Account successfully created! Welcome to SkillGap AI.')
           setTimeout(() => {
             closeAuthModal()
             resetForm()
-          }, 1500)
+          }, 1200)
         }
       }
     } catch (err) {
-      setError(err?.message || 'Authentication failed. Please check your credentials.')
+      console.error('Auth error:', err)
+      const msg = err?.message || 'Authentication failed. Please check your credentials.'
+      if (msg.toLowerCase().includes('email not confirmed')) {
+        setError('Email confirmation required by Supabase. You can also click "Instant Demo Access" below to test immediately.')
+      } else {
+        setError(msg)
+      }
     } finally {
       setLoading(false)
     }
@@ -78,6 +112,15 @@ export default function AuthModal() {
     }
   }
 
+  const handleDemoSignIn = () => {
+    signInAsGuest(
+      authMode === 'signup' && fullName.trim() ? fullName.trim() : 'Alex Rivera (Demo Student)',
+      email.trim() || 'alex.tester@skillgap.ai'
+    )
+    closeAuthModal()
+    resetForm()
+  }
+
   return (
     <div
       style={{
@@ -86,29 +129,32 @@ export default function AuthModal() {
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 1000,
+        zIndex: 10000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '1rem',
-        background: 'rgba(4, 7, 14, 0.75)',
-        backdropFilter: 'blur(10px)',
+        background: 'rgba(19, 19, 17, 0.75)',
+        backdropFilter: 'blur(8px)',
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget) closeAuthModal()
       }}
     >
       <div
-        className="glass-card animate-fadeIn"
+        className="animate-fadeIn"
         style={{
           width: '100%',
-          maxWidth: 440,
+          maxWidth: 480,
+          background: '#ffffff',
+          borderRadius: '16px',
+          border: '2px solid #131311',
+          boxShadow: '8px 8px 0px #131311',
           padding: '2.25rem',
-          borderRadius: 'var(--radius-xl)',
-          background: 'linear-gradient(165deg, rgba(17, 24, 39, 0.95) 0%, rgba(8, 11, 20, 0.98) 100%)',
-          border: '1px solid var(--border-glow)',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(99, 179, 237, 0.15)',
           position: 'relative',
+          color: '#131311',
+          maxHeight: '94vh',
+          overflowY: 'auto',
         }}
       >
         {/* Close Button */}
@@ -119,90 +165,168 @@ export default function AuthModal() {
             position: 'absolute',
             top: '1.25rem',
             right: '1.25rem',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-surface-secondary, #f3f2ea)',
+            border: '1.5px solid #131311',
             borderRadius: '50%',
-            width: 32,
-            height: 32,
+            width: 34,
+            height: 34,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'var(--text-secondary)',
+            color: '#131311',
             cursor: 'pointer',
-            transition: 'var(--transition)',
+            transition: 'all 0.15s ease',
+            boxShadow: '1px 1px 0px #131311',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translate(-1px, -1px)'
+            e.currentTarget.style.boxShadow = '2px 2px 0px #131311'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'none'
+            e.currentTarget.style.boxShadow = '1px 1px 0px #131311'
+          }}
         >
           <X size={18} />
         </button>
 
-        {/* Modal Title & Tabs */}
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '1.65rem',
-            fontWeight: 800,
-            letterSpacing: '-0.02em',
-            color: 'var(--text-primary)',
-            marginBottom: '0.35rem',
-          }}>
-            {authMode === 'login' ? 'Welcome Back' : 'Create an Account'}
+        {/* Top Tag & Header */}
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '3px 10px', background: 'var(--accent-lime, #c6fd50)', border: '1.5px solid #131311', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.75rem', boxShadow: '2px 2px 0px #131311' }}>
+            <Sparkles size={13} />
+            <span>Secure Authentication</span>
+          </div>
+
+          <h2
+            style={{
+              fontSize: '1.85rem',
+              fontWeight: 900,
+              color: '#131311',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2,
+              marginBottom: '0.4rem',
+            }}
+          >
+            {authMode === 'login' ? 'Welcome Back!' : 'Create Your Account'}
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}>
+
+          <p style={{ color: '#52524e', fontSize: '0.92rem', lineHeight: 1.45 }}>
             {authMode === 'login'
-              ? 'Sign in to sync your personalized roadmap & progress'
-              : 'Save and track your career roadmap across devices'}
+              ? 'Sign in to access your personalized learning roadmap and test features.'
+              : 'Sign up to track skill benchmarks and unlock personalized roadmaps.'}
           </p>
 
-          <div style={{
-            display: 'flex',
-            background: 'rgba(255, 255, 255, 0.04)',
-            padding: '0.25rem',
-            borderRadius: 'var(--radius-sm)',
-            marginTop: '1.25rem',
-            border: '1px solid var(--border-subtle)',
-          }}>
-            <button
-              type="button"
-              onClick={() => handleSwitchMode('login')}
+          {/* Prompt Message if redirected from a protected action */}
+          {authPromptMessage && (
+            <div
               style={{
-                flex: 1,
-                padding: '0.45rem',
-                border: 'none',
-                borderRadius: 6,
-                fontSize: '0.85rem',
+                marginTop: '0.85rem',
+                padding: '0.55rem 0.85rem',
+                borderRadius: '8px',
+                background: '#e6f6f6',
+                border: '1.5px solid #5db7b7',
+                color: '#131311',
+                fontSize: '0.82rem',
                 fontWeight: 600,
-                cursor: 'pointer',
-                background: authMode === 'login' ? 'var(--gradient-hero)' : 'transparent',
-                color: authMode === 'login' ? '#fff' : 'var(--text-secondary)',
-                transition: 'var(--transition)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                textAlign: 'left',
               }}
             >
-              Sign In
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSwitchMode('signup')}
-              style={{
-                flex: 1,
-                padding: '0.45rem',
-                border: 'none',
-                borderRadius: 6,
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                background: authMode === 'signup' ? 'var(--gradient-hero)' : 'transparent',
-                color: authMode === 'signup' ? '#fff' : 'var(--text-secondary)',
-                transition: 'var(--transition)',
-              }}
-            >
-              Sign Up
-            </button>
-          </div>
+              <ShieldCheck size={16} color="#0d9488" style={{ flexShrink: 0 }} />
+              <span>{authPromptMessage}</span>
+            </div>
+          )}
         </div>
 
-        {/* Continue with Google / Gmail Button */}
+        {/* Mode Switcher Tabs */}
+        <div
+          style={{
+            display: 'flex',
+            background: '#f3f2ea',
+            padding: '4px',
+            borderRadius: '10px',
+            border: '1.5px solid #131311',
+            marginBottom: '1.25rem',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => handleSwitchMode('login')}
+            style={{
+              flex: 1,
+              padding: '0.55rem',
+              border: authMode === 'login' ? '1.5px solid #131311' : '1.5px solid transparent',
+              borderRadius: '7px',
+              fontSize: '0.88rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              background: authMode === 'login' ? 'var(--accent-lime, #c6fd50)' : 'transparent',
+              color: '#131311',
+              boxShadow: authMode === 'login' ? '2px 2px 0px #131311' : 'none',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSwitchMode('signup')}
+            style={{
+              flex: 1,
+              padding: '0.55rem',
+              border: authMode === 'signup' ? '1.5px solid #131311' : '1.5px solid transparent',
+              borderRadius: '7px',
+              fontSize: '0.88rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              background: authMode === 'signup' ? 'var(--accent-lime, #c6fd50)' : 'transparent',
+              color: '#131311',
+              boxShadow: authMode === 'signup' ? '2px 2px 0px #131311' : 'none',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            Create Account
+          </button>
+        </div>
+
+        {/* Quick Demo Login Banner */}
+        <button
+          type="button"
+          onClick={handleDemoSignIn}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.65rem',
+            padding: '0.75rem 1rem',
+            borderRadius: '10px',
+            background: '#fef3c7',
+            border: '2px solid #131311',
+            boxShadow: '3px 3px 0px #131311',
+            color: '#131311',
+            fontSize: '0.92rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            marginBottom: '1rem',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translate(-1px, -1px)'
+            e.currentTarget.style.boxShadow = '4px 4px 0px #131311'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'none'
+            e.currentTarget.style.boxShadow = '3px 3px 0px #131311'
+          }}
+        >
+          <Zap size={18} fill="#f59e0b" color="#d97706" />
+          <span>⚡ Instant Demo Access (One-Click Test)</span>
+        </button>
+
+        {/* Google OAuth Button */}
         <button
           type="button"
           onClick={handleGoogleSignIn}
@@ -214,24 +338,26 @@ export default function AuthModal() {
             justifyContent: 'center',
             gap: '0.75rem',
             padding: '0.75rem 1rem',
-            borderRadius: 'var(--radius-sm)',
-            background: 'rgba(255, 255, 255, 0.06)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            color: 'var(--text-primary)',
+            borderRadius: '10px',
+            background: '#ffffff',
+            border: '1.5px solid #131311',
+            boxShadow: '2px 2px 0px #131311',
+            color: '#131311',
             fontSize: '0.92rem',
-            fontWeight: 600,
+            fontWeight: 700,
             cursor: googleLoading ? 'not-allowed' : 'pointer',
-            transition: 'var(--transition)',
+            transition: 'all 0.15s ease',
+            marginBottom: '1.25rem',
           }}
           onMouseEnter={(e) => {
             if (!googleLoading) {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-              e.currentTarget.style.borderColor = 'var(--border-glow)'
+              e.currentTarget.style.transform = 'translate(-1px, -1px)'
+              e.currentTarget.style.boxShadow = '3px 3px 0px #131311'
             }
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)'
+            e.currentTarget.style.transform = 'none'
+            e.currentTarget.style.boxShadow = '2px 2px 0px #131311'
           }}
         >
           {googleLoading ? (
@@ -260,156 +386,289 @@ export default function AuthModal() {
         </button>
 
         {/* Divider */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          margin: '1.25rem 0',
-          color: 'var(--text-muted)',
-          fontSize: '0.78rem',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}>
-          <div style={{ flex: 1, height: 1, background: 'var(--border-subtle)' }} />
-          <span>or continue with email</span>
-          <div style={{ flex: 1, height: 1, background: 'var(--border-subtle)' }} />
-        </div>
-
-        {/* Alerts */}
-        {error && (
-          <div style={{
+        <div
+          style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.65rem 0.85rem',
-            borderRadius: 'var(--radius-sm)',
-            background: 'rgba(252, 129, 129, 0.1)',
-            border: '1px solid rgba(252, 129, 129, 0.3)',
-            color: 'var(--accent-pink)',
-            fontSize: '0.84rem',
-            marginBottom: '1rem',
-          }}>
-            <AlertCircle size={16} style={{ flexShrink: 0 }} />
+            gap: '0.75rem',
+            margin: '1.25rem 0',
+            color: '#80807c',
+            fontSize: '0.78rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            fontWeight: 700,
+          }}
+        >
+          <div style={{ flex: 1, height: 1.5, background: '#e5e7eb' }} />
+          <span>or with email & password</span>
+          <div style={{ flex: 1, height: 1.5, background: '#e5e7eb' }} />
+        </div>
+
+        {/* Error Alert */}
+        {error && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '0.65rem',
+              padding: '0.75rem 0.95rem',
+              borderRadius: '8px',
+              background: '#ffece8',
+              border: '1.5px solid #ff7660',
+              color: '#991b1b',
+              fontSize: '0.86rem',
+              fontWeight: 600,
+              marginBottom: '1rem',
+            }}
+          >
+            <AlertCircle size={18} style={{ flexShrink: 0, marginTop: 2 }} />
             <span>{error}</span>
           </div>
         )}
 
+        {/* Success Alert */}
         {successMsg && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.65rem 0.85rem',
-            borderRadius: 'var(--radius-sm)',
-            background: 'rgba(104, 211, 145, 0.1)',
-            border: '1px solid rgba(104, 211, 145, 0.3)',
-            color: 'var(--accent-green)',
-            fontSize: '0.84rem',
-            marginBottom: '1rem',
-          }}>
-            <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '0.65rem',
+              padding: '0.75rem 0.95rem',
+              borderRadius: '8px',
+              background: '#f1fccf',
+              border: '1.5px solid #16a34a',
+              color: '#14532d',
+              fontSize: '0.86rem',
+              fontWeight: 600,
+              marginBottom: '1rem',
+            }}
+          >
+            <CheckCircle2 size={18} style={{ flexShrink: 0, marginTop: 2 }} />
             <span>{successMsg}</span>
           </div>
         )}
 
-        {/* Email & Password Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {/* Auth Form */}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.95rem' }}>
           {authMode === 'signup' && (
-            <div className="form-group">
-              <label className="form-label" style={{ fontSize: '0.78rem' }}>Full Name</label>
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  marginBottom: '0.35rem',
+                  color: '#131311',
+                }}
+              >
+                Full Name
+              </label>
               <div style={{ position: 'relative' }}>
-                <User size={16} style={{ position: 'absolute', left: 12, top: 13, color: 'var(--text-muted)' }} />
+                <User
+                  size={18}
+                  style={{
+                    position: 'absolute',
+                    left: '0.85rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#80807c',
+                  }}
+                />
                 <input
                   type="text"
                   required
-                  placeholder="John Doe"
+                  placeholder="e.g. Alex Rivera"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   style={{
                     width: '100%',
-                    padding: '0.65rem 0.85rem 0.65rem 2.25rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: 'var(--radius-sm)',
-                    color: '#fff',
-                    fontSize: '0.9rem',
+                    padding: '0.75rem 0.85rem 0.75rem 2.5rem',
+                    borderRadius: '8px',
+                    border: '1.5px solid #131311',
+                    background: '#ffffff',
+                    color: '#131311',
+                    fontSize: '0.92rem',
                     outline: 'none',
+                    fontWeight: 500,
                   }}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = '#c6fd50')}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = '#131311')}
                 />
               </div>
             </div>
           )}
 
-          <div className="form-group">
-            <label className="form-label" style={{ fontSize: '0.78rem' }}>Email Address</label>
+          <div>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                marginBottom: '0.35rem',
+                color: '#131311',
+              }}
+            >
+              Email Address
+            </label>
             <div style={{ position: 'relative' }}>
-              <Mail size={16} style={{ position: 'absolute', left: 12, top: 13, color: 'var(--text-muted)' }} />
+              <Mail
+                size={18}
+                style={{
+                  position: 'absolute',
+                  left: '0.85rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#80807c',
+                }}
+              />
               <input
                 type="email"
                 required
-                placeholder="you@example.com"
+                placeholder="you@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '0.65rem 0.85rem 0.65rem 2.25rem',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 'var(--radius-sm)',
-                  color: '#fff',
-                  fontSize: '0.9rem',
+                  padding: '0.75rem 0.85rem 0.75rem 2.5rem',
+                  borderRadius: '8px',
+                  border: '1.5px solid #131311',
+                  background: '#ffffff',
+                  color: '#131311',
+                  fontSize: '0.92rem',
                   outline: 'none',
+                  fontWeight: 500,
                 }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = '#c6fd50')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#131311')}
               />
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label" style={{ fontSize: '0.78rem' }}>Password</label>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+              <label
+                style={{
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  color: '#131311',
+                }}
+              >
+                Password
+              </label>
+              {authMode === 'login' && (
+                <span
+                  style={{
+                    fontSize: '0.78rem',
+                    color: '#52524e',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                  }}
+                  onClick={() => alert('Password reset: Please sign in via Google OAuth or use Instant Demo Access.')}
+                >
+                  Forgot password?
+                </span>
+              )}
+            </div>
             <div style={{ position: 'relative' }}>
-              <Lock size={16} style={{ position: 'absolute', left: 12, top: 13, color: 'var(--text-muted)' }} />
+              <Lock
+                size={18}
+                style={{
+                  position: 'absolute',
+                  left: '0.85rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#80807c',
+                }}
+              />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
-                minLength={6}
-                placeholder="••••••••"
+                placeholder="At least 6 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '0.65rem 0.85rem 0.65rem 2.25rem',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 'var(--radius-sm)',
-                  color: '#fff',
-                  fontSize: '0.9rem',
+                  padding: '0.75rem 2.5rem 0.75rem 2.5rem',
+                  borderRadius: '8px',
+                  border: '1.5px solid #131311',
+                  background: '#ffffff',
+                  color: '#131311',
+                  fontSize: '0.92rem',
                   outline: 'none',
+                  fontWeight: 500,
                 }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = '#c6fd50')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = '#131311')}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '0.85rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#80807c',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
 
+          {/* Submit Action Button */}
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary"
             style={{
-              width: '100%',
-              padding: '0.75rem',
-              fontSize: '0.92rem',
               marginTop: '0.5rem',
+              padding: '0.85rem',
+              borderRadius: '10px',
+              border: '2px solid #131311',
+              background: 'var(--accent-lime, #c6fd50)',
+              color: '#131311',
+              fontSize: '1rem',
+              fontWeight: 800,
+              cursor: loading ? 'not-allowed' : 'pointer',
+              boxShadow: '3px 3px 0px #131311',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                e.currentTarget.style.transform = 'translate(-2px, -2px)'
+                e.currentTarget.style.boxShadow = '5px 5px 0px #131311'
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'none'
+              e.currentTarget.style.boxShadow = '3px 3px 0px #131311'
             }}
           >
             {loading ? (
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Loader2 size={16} className="animate-spin" />
-                {authMode === 'login' ? 'Signing In...' : 'Creating Account...'}
-              </span>
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                <span>Processing...</span>
+              </>
             ) : (
-              <span>{authMode === 'login' ? 'Sign In with Email' : 'Create Free Account'}</span>
+              <span>{authMode === 'login' ? 'Sign In to Dashboard' : 'Create Free Account'}</span>
             )}
           </button>
         </form>
+
+        {/* Footer Note */}
+        <div style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.82rem', color: '#80807c' }}>
+          By continuing, you agree to SkillGap AI terms of service and privacy policy.
+        </div>
       </div>
     </div>
   )

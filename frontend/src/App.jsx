@@ -24,43 +24,43 @@ function Nav() {
     <nav className="nav">
       <div className="nav-inner">
         <NavLink to="/" className="nav-logo">
-          SkillGap AI
+          ⚡ SkillGap AI
         </NavLink>
 
         <ul className="nav-links">
           <li>
             <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} end>
-              🏠 Home
+              Home
             </NavLink>
           </li>
           <li>
             <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
-              🎯 Dashboard
+              Dashboard
             </NavLink>
           </li>
           <li>
             <NavLink to="/explore" className={({ isActive }) => (isActive ? 'active' : '')}>
-              🔍 Explore
+              Explore Roles
             </NavLink>
           </li>
           <li>
             <NavLink to="/job-analyzer" className={({ isActive }) => (isActive ? 'active' : '')}>
-              📋 JD Matcher
+              JD Matcher
             </NavLink>
           </li>
           <li>
             <NavLink to="/job-market" className={({ isActive }) => (isActive ? 'active' : '')}>
-              📊 Market & Salary
+              Market & Salary
             </NavLink>
           </li>
           <li>
             <NavLink to="/sandbox" className={({ isActive }) => (isActive ? 'active' : '')}>
-              💻 Code Sandbox
+              Code Sandbox
             </NavLink>
           </li>
           <li>
             <NavLink to="/planner" className={({ isActive }) => (isActive ? 'active' : '')}>
-              📅 Study Planner
+              Study Planner
             </NavLink>
           </li>
         </ul>
@@ -76,27 +76,29 @@ function Nav() {
                   gap: '0.5rem',
                   padding: '0.3rem 0.75rem',
                   borderRadius: 999,
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid var(--border-subtle)',
+                  background: 'var(--bg-surface)',
+                  border: 'var(--border-main)',
+                  boxShadow: 'var(--shadow-sm)',
                 }}
               >
                 <div
                   style={{
-                    width: 26,
-                    height: 26,
+                    width: 24,
+                    height: 24,
                     borderRadius: '50%',
-                    background: 'var(--gradient-hero)',
-                    color: '#fff',
+                    background: 'var(--accent-lime)',
+                    border: '1px solid #131311',
+                    color: '#131311',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
                   }}
                 >
                   {userInitial}
                 </div>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 500 }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 700 }}>
                   {displayName}
                 </span>
               </div>
@@ -105,28 +107,21 @@ function Nav() {
                 onClick={signOut}
                 title="Sign out"
                 style={{
-                  background: 'transparent',
-                  border: '1px solid var(--border-subtle)',
+                  background: 'var(--bg-surface)',
+                  border: 'var(--border-main)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '0.4rem 0.65rem',
-                  color: 'var(--text-muted)',
+                  padding: '0.35rem 0.65rem',
+                  color: 'var(--text-secondary)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.35rem',
                   fontSize: '0.82rem',
-                  transition: 'var(--transition)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = 'var(--accent-pink)'
-                  e.currentTarget.style.borderColor = 'rgba(252, 129, 129, 0.4)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = 'var(--text-muted)'
-                  e.currentTarget.style.borderColor = 'var(--border-subtle)'
+                  fontWeight: 600,
+                  boxShadow: 'var(--shadow-sm)',
                 }}
               >
-                <LogOut size={15} />
+                <LogOut size={14} />
                 <span>Logout</span>
               </button>
             </div>
@@ -134,7 +129,7 @@ function Nav() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <button
                 onClick={() => openAuthModal('login')}
-                className="btn btn-secondary"
+                className="btn btn-outline"
                 style={{
                   padding: '0.45rem 1rem',
                   fontSize: '0.86rem',
@@ -155,7 +150,7 @@ function Nav() {
                   fontSize: '0.86rem',
                 }}
               >
-                Sign Up
+                Get Started
               </button>
             </div>
           )}
@@ -185,14 +180,23 @@ export default function App() {
           <AuthModal />
           <footer
             style={{
-              borderTop: '1px solid var(--border-subtle)',
-              padding: '1.5rem 2rem',
+              background: 'var(--bg-surface)',
+              borderTop: 'var(--border-main)',
+              padding: '2rem 1.5rem',
               textAlign: 'center',
-              color: 'var(--text-muted)',
-              fontSize: '0.82rem',
+              color: 'var(--text-secondary)',
+              fontSize: '0.85rem',
             }}
           >
-            SkillGap AI — ML-Powered Career Readiness Platform · Random Forest Model · 90%+ Accuracy
+            <div style={{ maxWidth: 1240, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                <span style={{ background: 'var(--accent-lime)', padding: '2px 8px', borderRadius: 4, border: 'var(--border-main)' }}>SkillGap AI</span>
+                <span>— Precision Career Roadmaps for Engineers</span>
+              </div>
+              <div>
+                Random Forest ML Model · 128+ Technical Skills · Zero Fluff
+              </div>
+            </div>
           </footer>
         </div>
       </AuthProvider>

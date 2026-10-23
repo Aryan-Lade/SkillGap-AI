@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { Calendar, TrendingUp } from 'lucide-react'
 
 export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
-  // Generate realistic weekly study data anchored by the student's completed skills
-  // Mon through Sun
   const todayIdx = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1 // 0=Mon, 6=Sun
 
   const baseHours = [
@@ -16,14 +14,13 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
     completedSkillsCount > 0 ? 3.0 : 1.0,
   ]
 
-  // Factor in actual completed skills to scale active hours
   const scale = Math.max(0.7, Math.min(2.0, 0.8 + completedSkillsCount * 0.15))
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   const activityData = days.map((day, i) => {
     const val = Number((baseHours[i] * scale).toFixed(1))
     return {
       day,
-      hours: i <= todayIdx ? val : Number((val * 0.4).toFixed(1)), // projected for future days
+      hours: i <= todayIdx ? val : Number((val * 0.4).toFixed(1)),
       isToday: i === todayIdx,
     }
   })
@@ -38,9 +35,10 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
     <div
       style={{
         padding: '1.4rem',
-        borderRadius: 'var(--radius-md)',
-        background: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid var(--border-subtle)',
+        borderRadius: '10px',
+        background: '#ffffff',
+        border: '1.5px solid #131311',
+        boxShadow: '2.5px 2.5px 0px #131311',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -50,20 +48,20 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-            <Calendar size={16} color="var(--accent-blue)" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.92rem', fontWeight: 800, color: '#131311' }}>
+            <Calendar size={16} />
             Weekly Learning Activity
           </div>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '0.78rem', color: '#80807c' }}>
             Estimated study investment over the past 7 days
           </span>
         </div>
 
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--accent-blue)', fontFamily: 'var(--font-display)' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#131311', fontFamily: 'var(--font-display)' }}>
             {totalWeeklyHours} hrs
           </div>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '0.72rem', color: '#52524e', fontWeight: 700 }}>
             Avg {dailyAverage}h / day
           </span>
         </div>
@@ -77,11 +75,11 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
         gap: '0.5rem',
         height: 120,
         paddingTop: '1rem',
-        borderBottom: '1px solid var(--border-subtle)',
+        borderBottom: '1.5px solid #131311',
         paddingBottom: '0.5rem',
         position: 'relative',
       }}>
-        {activityData.map((d, i) => {
+        {activityData.map((d) => {
           const heightPct = Math.round((d.hours / maxHours) * 100)
           const isHovered = hoveredDay === d.day
 
@@ -106,16 +104,16 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
                 <div style={{
                   position: 'absolute',
                   top: -28,
-                  background: '#1a2035',
-                  border: '1px solid var(--border-glow)',
+                  background: '#131311',
+                  border: '1px solid #131311',
                   borderRadius: 4,
                   padding: '0.15rem 0.45rem',
                   fontSize: '0.72rem',
-                  fontWeight: 600,
-                  color: '#ffffff',
+                  fontWeight: 800,
+                  color: 'var(--accent-lime)',
                   whiteSpace: 'nowrap',
                   zIndex: 10,
-                  boxShadow: 'var(--shadow-card)',
+                  boxShadow: '1.5px 1.5px 0px #131311',
                 }}>
                   {d.hours} hrs
                 </div>
@@ -130,13 +128,14 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
                   minHeight: 8,
                   borderRadius: '4px 4px 0 0',
                   background: d.isToday
-                    ? 'var(--gradient-hero)'
+                    ? 'var(--accent-lime)'
                     : isHovered
-                    ? 'rgba(99, 179, 237, 0.5)'
-                    : 'rgba(99, 179, 237, 0.22)',
-                  border: d.isToday ? '1px solid var(--accent-blue)' : 'none',
-                  boxShadow: d.isToday ? '0 0 12px rgba(99, 179, 237, 0.4)' : 'none',
-                  transition: 'height 0.4s ease, background 0.2s',
+                    ? '#d6d5cb'
+                    : '#eae9e0',
+                  border: '1.5px solid #131311',
+                  borderBottom: 'none',
+                  boxShadow: d.isToday ? '1px -1px 0px #131311' : 'none',
+                  transition: 'height 0.3s ease, background 0.15s',
                 }}
               />
             </div>
@@ -144,40 +143,27 @@ export default function WeeklyActivityChart({ completedSkillsCount = 0 }) {
         })}
       </div>
 
-      {/* Days Labels */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', marginTop: '0.5rem' }}>
+      {/* X-Axis Day Labels */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '0.5rem',
+        padding: '0 0.25rem',
+      }}>
         {activityData.map((d) => (
-          <div
+          <span
             key={d.day}
             style={{
-              flex: 1,
-              textAlign: 'center',
               fontSize: '0.72rem',
-              fontWeight: d.isToday ? 700 : 500,
-              color: d.isToday ? 'var(--accent-blue)' : 'var(--text-muted)',
+              fontWeight: d.isToday ? 800 : 600,
+              color: d.isToday ? '#131311' : '#80807c',
+              textAlign: 'center',
+              flex: 1,
             }}
           >
             {d.day}
-            {d.isToday && <span style={{ display: 'block', fontSize: '0.6rem', color: 'var(--accent-blue)' }}>Today</span>}
-          </div>
+          </span>
         ))}
-      </div>
-
-      {/* Motivational Footnote */}
-      <div style={{
-        marginTop: '1rem',
-        padding: '0.5rem 0.75rem',
-        borderRadius: 'var(--radius-sm)',
-        background: 'rgba(104, 211, 145, 0.06)',
-        border: '1px solid rgba(104, 211, 145, 0.2)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.45rem',
-        fontSize: '0.76rem',
-        color: 'var(--accent-green)',
-      }}>
-        <TrendingUp size={14} />
-        Consistent 45 min/day pace closes your skill gap 2.4x faster.
       </div>
     </div>
   )

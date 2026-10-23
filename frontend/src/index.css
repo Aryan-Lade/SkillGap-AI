@@ -506,9 +506,87 @@ input, select, textarea {
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .main-content { padding: 1rem; }
   .nav { padding: 0 1rem; }
+  .progress-top-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 @media (max-width: 600px) {
   .grid-3 { grid-template-columns: 1fr; }
   .nav-links { display: none; }
+  .roadmap-section-focal,
+  .progress-tracker-focal {
+    padding: 1.25rem !important;
+  }
 }
+
+/* Roadmap & Progress Interactive Enhancements */
+.node-pulse {
+  animation: nodeGlowPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes nodeGlowPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 179, 237, 0.45);
+    border-color: rgba(99, 179, 237, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 24px 6px rgba(99, 179, 237, 0.35);
+    border-color: rgba(183, 148, 244, 0.85);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 179, 237, 0.45);
+    border-color: rgba(99, 179, 237, 0.9);
+  }
+}
+
+.roadmap-node-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.roadmap-node-card:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 3px;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton Loading Shimmer */
+.skeleton-box {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Accessibility: Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .node-pulse {
+    animation: none !important;
+  }
+}
+

@@ -251,12 +251,12 @@ export default function AccountModal() {
                   borderRadius: '999px',
                   fontSize: '0.72rem',
                   fontWeight: 800,
-                  background: isDemo ? '#fef3c7' : '#f1fccf',
+                  background: '#f1fccf',
                   border: '1px solid #131311',
                   color: '#131311',
                 }}
               >
-                {isDemo ? '⚡ Demo Student Account' : '✓ Verified Member'}
+                ✓ Verified Member
               </span>
             </div>
           </div>

@@ -109,10 +109,10 @@ export default function ResumeUploadSection({ onApplyProfile }) {
     <div
       style={{
         marginBottom: '1.5rem',
-        borderRadius: '16px',
-        border: '1px solid rgba(99, 102, 241, 0.35)',
-        background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.45) 0%, rgba(15, 23, 42, 0.6) 100%)',
-        backdropFilter: 'blur(12px)',
+        borderRadius: '12px',
+        border: 'var(--border-main)',
+        background: 'var(--bg-surface)',
+        boxShadow: 'var(--shadow-sm)',
         overflow: 'hidden',
       }}
     >
@@ -126,55 +126,57 @@ export default function ResumeUploadSection({ onApplyProfile }) {
           padding: '1rem 1.25rem',
           cursor: 'pointer',
           userSelect: 'none',
+          background: 'var(--bg-surface)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+              width: 36,
+              height: 36,
+              borderRadius: '8px',
+              background: 'var(--accent-lime)',
+              border: 'var(--border-main)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff',
-              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.35)',
+              color: '#131311',
+              boxShadow: '2px 2px 0px #131311',
             }}
           >
-            <Sparkles size={20} />
+            <Sparkles size={18} />
           </div>
           <div>
-            <div style={{ fontWeight: 600, fontSize: '0.98rem', color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ fontWeight: 800, fontSize: '0.96rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               Autofill Profile with AI Resume Parser
               <span
                 style={{
                   fontSize: '0.7rem',
-                  fontWeight: 700,
+                  fontWeight: 800,
                   textTransform: 'uppercase',
                   padding: '2px 8px',
                   borderRadius: '999px',
-                  background: 'rgba(168, 85, 247, 0.25)',
-                  color: '#c084fc',
-                  border: '1px solid rgba(168, 85, 247, 0.4)',
+                  background: 'var(--accent-lime)',
+                  color: '#131311',
+                  border: '1px solid #131311',
                 }}
               >
-                New Feature
+                1-Click Autofill
               </span>
             </div>
-            <div style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
               Upload your PDF/TXT resume or paste text to instantly detect skills & role matches
             </div>
           </div>
         </div>
-        <div style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+        <div style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </div>
       </div>
 
       {/* Collapsible Body */}
       {isOpen && (
-        <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', borderTop: 'var(--border-main)', background: 'var(--bg-surface-secondary)' }}>
           {/* Tab Selector */}
           <div style={{ display: 'flex', gap: '0.5rem', margin: '1rem 0 1rem 0' }}>
             <button
@@ -184,17 +186,17 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                 flex: 1,
                 padding: '0.55rem 0.75rem',
                 borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'upload' ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.04)',
-                color: activeTab === 'upload' ? '#a5b4fc' : '#94a3b8',
-                fontWeight: activeTab === 'upload' ? 600 : 400,
+                border: 'var(--border-main)',
+                background: activeTab === 'upload' ? 'var(--accent-lime)' : 'var(--bg-surface)',
+                color: 'var(--text-primary)',
+                fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
                 fontSize: '0.88rem',
-                transition: 'all 0.2s',
+                boxShadow: activeTab === 'upload' ? 'var(--shadow-sm)' : 'none',
               }}
             >
               <UploadCloud size={16} /> Upload PDF / File
@@ -206,17 +208,17 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                 flex: 1,
                 padding: '0.55rem 0.75rem',
                 borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'paste' ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.04)',
-                color: activeTab === 'paste' ? '#a5b4fc' : '#94a3b8',
-                fontWeight: activeTab === 'paste' ? 600 : 400,
+                border: 'var(--border-main)',
+                background: activeTab === 'paste' ? 'var(--accent-lime)' : 'var(--bg-surface)',
+                color: 'var(--text-primary)',
+                fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
                 fontSize: '0.88rem',
-                transition: 'all 0.2s',
+                boxShadow: activeTab === 'paste' ? 'var(--shadow-sm)' : 'none',
               }}
             >
               <FileText size={16} /> Paste Resume Text
@@ -230,12 +232,12 @@ export default function ResumeUploadSection({ onApplyProfile }) {
               onDrop={handleFileDrop}
               onClick={() => fileInputRef.current?.click()}
               style={{
-                border: '2px dashed rgba(99, 102, 241, 0.4)',
-                borderRadius: '12px',
+                border: '2px dashed #131311',
+                borderRadius: '10px',
                 padding: '1.75rem 1rem',
                 textAlign: 'center',
                 cursor: 'pointer',
-                background: 'rgba(15, 23, 42, 0.4)',
+                background: 'var(--bg-surface)',
                 transition: 'border-color 0.2s',
               }}
             >
@@ -246,11 +248,11 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                 style={{ display: 'none' }}
                 onChange={(e) => e.target.files?.[0] && validateAndSetFile(e.target.files[0])}
               />
-              <UploadCloud size={36} color="#818cf8" style={{ margin: '0 auto 0.5rem auto' }} />
-              <div style={{ color: '#f1f5f9', fontWeight: 500, fontSize: '0.92rem' }}>
+              <UploadCloud size={36} color="#131311" style={{ margin: '0 auto 0.5rem auto' }} />
+              <div style={{ color: 'var(--text-primary)', fontWeight: 700, fontSize: '0.92rem' }}>
                 {file ? file.name : 'Click to select or drag and drop your resume'}
               </div>
-              <div style={{ color: '#64748b', fontSize: '0.78rem', marginTop: '0.25rem' }}>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: '0.25rem' }}>
                 Supports PDF, TXT, or Markdown (up to 10MB)
               </div>
             </div>
@@ -261,17 +263,11 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                 onChange={(e) => setPastedText(e.target.value)}
                 placeholder="Paste your resume content, LinkedIn bio, or list of projects/skills here..."
                 rows={5}
+                className="form-input"
                 style={{
-                  width: '100%',
-                  background: 'rgba(15, 23, 42, 0.5)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  borderRadius: '10px',
-                  color: '#f8fafc',
-                  padding: '0.75rem',
-                  fontSize: '0.88rem',
+                  background: 'var(--bg-surface)',
                   fontFamily: 'inherit',
                   resize: 'vertical',
-                  boxSizing: 'border-box',
                 }}
               />
             </div>
@@ -283,19 +279,8 @@ export default function ResumeUploadSection({ onApplyProfile }) {
               type="button"
               onClick={handleParse}
               disabled={loading || (activeTab === 'upload' && !file) || (activeTab === 'paste' && !pastedText.trim())}
+              className="btn btn-primary"
               style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '0.6rem 1.25rem',
-                fontSize: '0.88rem',
-                fontWeight: 600,
-                cursor: loading ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)',
                 opacity: loading || (activeTab === 'upload' && !file) || (activeTab === 'paste' && !pastedText.trim()) ? 0.6 : 1,
               }}
             >
@@ -305,8 +290,8 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                     style={{
                       width: 14,
                       height: 14,
-                      border: '2px solid rgba(255,255,255,0.3)',
-                      borderTopColor: '#fff',
+                      border: '2px solid rgba(0,0,0,0.3)',
+                      borderTopColor: '#000',
                       borderRadius: '50%',
                       animation: 'spin 0.8s linear infinite',
                     }}
@@ -328,9 +313,9 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                 marginTop: '0.85rem',
                 padding: '0.75rem 1rem',
                 borderRadius: '8px',
-                background: 'rgba(239, 68, 68, 0.12)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: '#fca5a5',
+                background: '#fee2e2',
+                border: 'var(--border-main)',
+                color: '#b91c1c',
                 fontSize: '0.85rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -348,23 +333,26 @@ export default function ResumeUploadSection({ onApplyProfile }) {
               style={{
                 marginTop: '1.25rem',
                 padding: '1.25rem',
-                borderRadius: '12px',
-                background: 'rgba(15, 23, 42, 0.75)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
+                borderRadius: '10px',
+                background: 'var(--bg-surface)',
+                border: 'var(--border-main)',
+                boxShadow: 'var(--shadow-sm)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <CheckCircle2 size={18} color="#4ade80" />
-                  <span style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.95rem' }}>
+                  <CheckCircle2 size={18} color="#16a34a" />
+                  <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     Resume Successfully Analyzed
                   </span>
                 </div>
                 <span
                   style={{
                     fontSize: '0.75rem',
-                    background: 'rgba(59, 130, 246, 0.2)',
-                    color: '#93c5fd',
+                    fontWeight: 700,
+                    background: 'var(--accent-lime)',
+                    border: '1px solid #131311',
+                    color: '#131311',
                     padding: '2px 8px',
                     borderRadius: '6px',
                   }}
@@ -374,14 +362,14 @@ export default function ResumeUploadSection({ onApplyProfile }) {
               </div>
 
               {parsedResult.summary && (
-                <p style={{ color: '#94a3b8', fontSize: '0.84rem', margin: '0 0 1rem 0', lineHeight: 1.45 }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', margin: '0 0 1rem 0', lineHeight: 1.45 }}>
                   {parsedResult.summary}
                 </p>
               )}
 
               {/* Recommended Role Selector */}
               <div style={{ marginBottom: '1rem' }}>
-                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1', marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
                   Recommended Role Match:
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -395,15 +383,16 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                         style={{
                           padding: '0.4rem 0.75rem',
                           borderRadius: '8px',
-                          border: isSelected ? '1px solid #818cf8' : '1px solid rgba(255, 255, 255, 0.1)',
-                          background: isSelected ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.03)',
-                          color: isSelected ? '#a5b4fc' : '#94a3b8',
+                          border: 'var(--border-main)',
+                          background: isSelected ? 'var(--accent-lime)' : 'var(--bg-surface)',
+                          color: 'var(--text-primary)',
                           fontSize: '0.82rem',
-                          fontWeight: isSelected ? 600 : 400,
+                          fontWeight: isSelected ? 800 : 500,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
                           gap: '0.4rem',
+                          boxShadow: isSelected ? 'var(--shadow-sm)' : 'none',
                         }}
                       >
                         <Briefcase size={13} />
@@ -413,11 +402,12 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                             fontSize: '0.72rem',
                             padding: '1px 5px',
                             borderRadius: '4px',
-                            background: isSelected ? 'rgba(99, 102, 241, 0.4)' : 'rgba(255, 255, 255, 0.08)',
-                            color: isSelected ? '#fff' : '#cbd5e1',
+                            background: isSelected ? '#131311' : 'var(--bg-surface-secondary)',
+                            color: isSelected ? '#fff' : '#131311',
+                            fontWeight: 700,
                           }}
                         >
-                          {r.match_percentage}% match
+                          {r.match_percentage}%
                         </span>
                       </button>
                     )
@@ -428,10 +418,10 @@ export default function ResumeUploadSection({ onApplyProfile }) {
               {/* Detected Skills */}
               <div style={{ marginBottom: '1.25rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                  <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#cbd5e1' }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                     Detected Skills ({selectedSkills.length}):
                   </div>
-                  <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Click skill to include/exclude</span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Click to include/exclude</span>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', maxHeight: '160px', overflowY: 'auto' }}>
                   {(parsedResult.extracted_skills || []).map((skill) => {
@@ -444,10 +434,11 @@ export default function ResumeUploadSection({ onApplyProfile }) {
                         style={{
                           padding: '0.25rem 0.6rem',
                           borderRadius: '6px',
-                          border: isChecked ? '1px solid rgba(52, 211, 153, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)',
-                          background: isChecked ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                          color: isChecked ? '#6ee7b7' : '#64748b',
+                          border: isChecked ? '1px solid #16a34a' : '1px solid #cbd5e1',
+                          background: isChecked ? '#dcfce7' : 'var(--bg-surface-secondary)',
+                          color: isChecked ? '#15803d' : '#64748b',
                           fontSize: '0.78rem',
+                          fontWeight: 600,
                           cursor: 'pointer',
                           textDecoration: isChecked ? 'none' : 'line-through',
                         }}
@@ -463,21 +454,11 @@ export default function ResumeUploadSection({ onApplyProfile }) {
               <button
                 type="button"
                 onClick={handleApply}
+                className="btn btn-primary"
                 style={{
                   width: '100%',
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '8px',
                   padding: '0.65rem 1rem',
                   fontSize: '0.9rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                  boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)',
                 }}
               >
                 ✨ Apply to Profile Form <ArrowRight size={16} />

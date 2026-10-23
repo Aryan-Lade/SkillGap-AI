@@ -43,4 +43,8 @@ export const getRoleMarketData = (roleName) =>
 
 export const estimateSalaryBoost = (payload) => api.post('/market/estimate-salary', payload)
 
+export const getSandboxChallenges = () => api.get('/sandbox/challenges')
+
+export const runSandboxCode = (payload) => api.post('/sandbox/run', payload)
+
 export default api

@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Explore from './pages/Explore'
 import JobDescriptionAnalyzer from './pages/JobDescriptionAnalyzer'
 import JobMarketInsights from './pages/JobMarketInsights'
+import CodeSandbox from './pages/CodeSandbox'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import AuthModal from './components/auth/AuthModal'
 import { LogIn, LogOut, User as UserIcon } from 'lucide-react'
@@ -49,6 +50,11 @@ function Nav() {
           <li>
             <NavLink to="/job-market" className={({ isActive }) => (isActive ? 'active' : '')}>
               📊 Market & Salary
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/sandbox" className={({ isActive }) => (isActive ? 'active' : '')}>
+              💻 Code Sandbox
             </NavLink>
           </li>
         </ul>
@@ -166,6 +172,7 @@ export default function App() {
               <Route path="/explore" element={<Explore />} />
               <Route path="/job-analyzer" element={<JobDescriptionAnalyzer />} />
               <Route path="/job-market" element={<JobMarketInsights />} />
+              <Route path="/sandbox" element={<CodeSandbox />} />
             </Routes>
           </main>
           <AuthModal />

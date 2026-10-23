@@ -1,12 +1,10 @@
 -- ==============================================================================
--- SkillGap AI - Supabase Database Setup & Authentication Migration
+-- SkillGap AI - Supabase Database Setup & Authentication
 -- Project: https://mhxkftnldxziqhydyfbf.supabase.co
--- Run this script in your Supabase SQL Editor:
--- https://supabase.com/dashboard/project/mhxkftnldxziqhydyfbf/sql/new
 -- ==============================================================================
 
 -- 1. PROFILES TABLE
--- Automatically stores user info when signing up with Email or Google (Gmail).
+-- Stores public user info automatically when someone registers via Email or Google (Gmail).
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     email TEXT,
@@ -38,7 +36,7 @@ CREATE POLICY "Users can update their own profile"
 
 
 -- 2. AUTOMATIC USER TRIGGER
--- Automatically copies new auth.users (Email & Google OAuth) to public.profiles
+-- Automatically copies new auth.users (Email & Google OAuth) into public.profiles
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -72,7 +70,6 @@ BEGIN
 END;
 $$;
 
--- Trigger execution on auth.users insert
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
@@ -81,7 +78,7 @@ CREATE TRIGGER on_auth_user_created
 
 
 -- 3. USER PROGRESS TABLE
--- Stores completed skills and learning roadmap milestones synced to cloud
+-- Persists completed roadmap skills and milestones to Supabase cloud
 CREATE TABLE IF NOT EXISTS public.user_progress (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -91,7 +88,6 @@ CREATE TABLE IF NOT EXISTS public.user_progress (
     CONSTRAINT unique_user_role_progress UNIQUE (user_id, target_role)
 );
 
--- Enable Row Level Security
 ALTER TABLE public.user_progress ENABLE ROW LEVEL SECURITY;
 
 -- User Progress Policies
@@ -112,12 +108,11 @@ CREATE POLICY "Users can update their own progress"
 
 
 -- 4. STORAGE BUCKET: invoices
--- Configures the invoices bucket specified in your Supabase configuration
+-- Configures the invoices bucket from your configuration
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('invoices', 'invoices', false)
 ON CONFLICT (id) DO NOTHING;
 
--- Storage Policies for invoices bucket
 DROP POLICY IF EXISTS "Authenticated users can upload invoices" ON storage.objects;
 CREATE POLICY "Authenticated users can upload invoices"
     ON storage.objects FOR INSERT

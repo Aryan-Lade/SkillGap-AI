@@ -34,4 +34,6 @@ export const parseResumeFile = (formData) =>
 
 export const parseResumeText = (payload) => api.post('/resume/parse-text', payload)
 
+export const analyzeJobDescription = (payload) => api.post('/jd/analyze', payload)
+
 export default api

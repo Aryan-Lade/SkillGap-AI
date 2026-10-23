@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Explore from './pages/Explore'
+import JobDescriptionAnalyzer from './pages/JobDescriptionAnalyzer'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import AuthModal from './components/auth/AuthModal'
 import { LogIn, LogOut, User as UserIcon } from 'lucide-react'
@@ -37,6 +38,11 @@ function Nav() {
           <li>
             <NavLink to="/explore" className={({ isActive }) => (isActive ? 'active' : '')}>
               🔍 Explore
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/job-analyzer" className={({ isActive }) => (isActive ? 'active' : '')}>
+              📋 JD Matcher
             </NavLink>
           </li>
         </ul>
@@ -152,6 +158,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/explore" element={<Explore />} />
+              <Route path="/job-analyzer" element={<JobDescriptionAnalyzer />} />
             </Routes>
           </main>
           <AuthModal />

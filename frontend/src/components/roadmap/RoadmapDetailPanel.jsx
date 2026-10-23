@@ -5,13 +5,12 @@ import {
   PlayCircle,
   ExternalLink,
   BookOpen,
-  GraduationCap,
   Video,
+  FileCode,
+  Sparkles,
   Clock,
   Award,
   ListChecks,
-  Compass,
-  Sparkles,
   ShieldCheck,
 } from 'lucide-react'
 
@@ -29,27 +28,23 @@ export default function RoadmapDetailPanel({
   const isCompleted = status === 'completed'
   const isInProgress = status === 'in-progress'
 
-  // Handle ESC key to close
+  // Auto-scroll into view smoothly when opened
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose()
+    if (panelRef.current) {
+      panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose])
-
-  if (!skill) return null
+  }, [skill.skill])
 
   const getResourceIcon = (type) => {
     switch (type) {
-      case 'docs':
-        return <BookOpen size={16} color="var(--accent-blue)" />
       case 'course':
-        return <GraduationCap size={16} color="var(--accent-purple)" />
+        return <BookOpen size={16} color="#131311" />
+      case 'docs':
+        return <FileCode size={16} color="#131311" />
       case 'video':
-        return <Video size={16} color="var(--accent-pink)" />
+        return <Video size={16} color="#131311" />
       default:
-        return <ExternalLink size={16} color="var(--accent-teal)" />
+        return <ExternalLink size={16} color="#131311" />
     }
   }
 
@@ -58,12 +53,12 @@ export default function RoadmapDetailPanel({
       ref={panelRef}
       className="roadmap-detail-drawer animate-fadeIn"
       style={{
-        marginTop: '1.25rem',
-        padding: '1.75rem',
-        borderRadius: 'var(--radius-lg)',
-        background: 'linear-gradient(145deg, rgba(13, 18, 33, 0.95) 0%, rgba(8, 11, 20, 0.98) 100%)',
-        border: '1px solid var(--border-glow)',
-        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 179, 237, 0.1)',
+        marginTop: '1.5rem',
+        padding: '2rem',
+        borderRadius: '12px',
+        background: '#ffffff',
+        border: '2px solid #131311',
+        boxShadow: '6px 6px 0px #131311',
         position: 'relative',
       }}
     >
@@ -75,25 +70,18 @@ export default function RoadmapDetailPanel({
           position: 'absolute',
           top: '1.25rem',
           right: '1.25rem',
-          background: 'rgba(255, 255, 255, 0.05)',
-          border: '1px solid var(--border-subtle)',
+          background: '#ffffff',
+          border: '1.5px solid #131311',
           borderRadius: '50%',
           width: 32,
           height: 32,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'var(--text-secondary)',
+          color: '#131311',
           cursor: 'pointer',
-          transition: 'var(--transition)',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
-          e.currentTarget.style.color = 'var(--text-primary)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
-          e.currentTarget.style.color = 'var(--text-secondary)'
+          boxShadow: '1.5px 1.5px 0px #131311',
+          transition: 'all 0.12s ease',
         }}
       >
         <X size={18} />
@@ -101,16 +89,17 @@ export default function RoadmapDetailPanel({
 
       {/* Header Info */}
       <div style={{ marginBottom: '1.5rem', paddingRight: '2.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
           <span style={{
             fontSize: '0.78rem',
-            fontWeight: 700,
+            fontWeight: 800,
             textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            color: 'var(--accent-blue)',
-            background: 'rgba(99, 179, 237, 0.12)',
-            padding: '0.2rem 0.6rem',
-            borderRadius: 999,
+            letterSpacing: '0.04em',
+            color: '#131311',
+            background: 'var(--accent-lime)',
+            border: '1px solid #131311',
+            padding: '0.2rem 0.65rem',
+            borderRadius: '999px',
           }}>
             {skill.stage} Stage
           </span>
@@ -119,10 +108,11 @@ export default function RoadmapDetailPanel({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.35rem',
-            fontSize: '0.78rem',
-            color: 'var(--text-muted)',
+            fontSize: '0.8rem',
+            color: '#52524e',
+            fontWeight: 600,
           }}>
-            <Clock size={14} />
+            <Clock size={14} color="#131311" />
             Est. {skill.hours ? `${skill.hours} hours` : '15 hours'} ({skill.weeks || '2 weeks'})
           </span>
 
@@ -132,8 +122,12 @@ export default function RoadmapDetailPanel({
               alignItems: 'center',
               gap: '0.3rem',
               fontSize: '0.78rem',
-              color: 'var(--accent-orange)',
-              fontWeight: 600,
+              color: '#131311',
+              fontWeight: 800,
+              background: '#ffffff',
+              border: '1px solid #131311',
+              padding: '0.15rem 0.5rem',
+              borderRadius: '999px',
             }}>
               <Award size={14} />
               {(skill.weight * 100).toFixed(0)}% Hiring Weight
@@ -146,12 +140,12 @@ export default function RoadmapDetailPanel({
               alignItems: 'center',
               gap: '0.35rem',
               fontSize: '0.78rem',
-              color: 'var(--accent-green)',
-              background: 'rgba(72, 187, 120, 0.15)',
-              border: '1px solid rgba(72, 187, 120, 0.35)',
-              padding: '0.2rem 0.6rem',
+              color: '#131311',
+              background: 'var(--accent-lime)',
+              border: '1px solid #131311',
+              padding: '0.2rem 0.65rem',
               borderRadius: 999,
-              fontWeight: 700,
+              fontWeight: 800,
             }}>
               <ShieldCheck size={14} />
               Verified Skill ✓
@@ -161,43 +155,44 @@ export default function RoadmapDetailPanel({
 
         <h3 style={{
           fontFamily: 'var(--font-display)',
-          fontSize: '1.6rem',
-          fontWeight: 800,
+          fontSize: '1.85rem',
+          fontWeight: 900,
           letterSpacing: '-0.02em',
-          color: 'var(--text-primary)',
+          color: '#131311',
           margin: '0.35rem 0',
         }}>
           {skill.skill}
         </h3>
 
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.6, marginTop: '0.4rem' }}>
+        <p style={{ color: '#52524e', fontSize: '0.95rem', lineHeight: 1.6, marginTop: '0.4rem' }}>
           {skill.description}
         </p>
 
         {skill.reason && skill.reason !== skill.description && (
           <div style={{
-            marginTop: '0.75rem',
-            padding: '0.75rem 1rem',
-            borderRadius: 'var(--radius-sm)',
-            background: 'rgba(99, 179, 237, 0.07)',
-            borderLeft: '3px solid var(--accent-blue)',
-            fontSize: '0.85rem',
-            color: 'var(--text-secondary)',
+            marginTop: '0.85rem',
+            padding: '0.85rem 1.15rem',
+            borderRadius: '8px',
+            background: 'var(--accent-lime-subtle)',
+            border: '1.5px solid #131311',
+            boxShadow: '2px 2px 0px #131311',
+            fontSize: '0.88rem',
+            color: '#131311',
           }}>
-            <strong style={{ color: 'var(--accent-blue)', marginRight: '0.35rem' }}>Role Fit Insight:</strong>
+            <strong style={{ color: '#131311', marginRight: '0.35rem' }}>⚡ Role Fit Insight:</strong>
             {skill.reason}
           </div>
         )}
       </div>
 
       {/* Grid: Sub-topics & Learning Resources */}
-      <div className="grid-2" style={{ gap: '1.5rem', marginBottom: '1.75rem', alignItems: 'stretch' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '1.75rem', alignItems: 'stretch' }}>
         {/* Sub-topics Section */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-md)',
-          padding: '1.25rem',
+          background: 'var(--bg-surface-secondary)',
+          border: '1.5px solid #131311',
+          borderRadius: '10px',
+          padding: '1.35rem',
           display: 'flex',
           flexDirection: 'column',
         }}>
@@ -205,16 +200,16 @@ export default function RoadmapDetailPanel({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontSize: '0.9rem',
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            marginBottom: '0.9rem',
+            fontSize: '0.95rem',
+            fontWeight: 800,
+            color: '#131311',
+            marginBottom: '1rem',
           }}>
-            <ListChecks size={18} color="var(--accent-blue)" />
+            <ListChecks size={18} />
             Key Sub-topics & Core Concepts
           </div>
 
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.55rem', margin: 0, padding: 0 }}>
+          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem', margin: 0, padding: 0 }}>
             {(skill.subtopics || [
               `Core fundamentals & syntax of ${skill.skill}`,
               `Real-world implementation patterns`,
@@ -226,25 +221,27 @@ export default function RoadmapDetailPanel({
                 style={{
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '0.6rem',
-                  fontSize: '0.86rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.4,
+                  gap: '0.65rem',
+                  fontSize: '0.88rem',
+                  color: '#131311',
+                  lineHeight: 1.45,
                 }}
               >
                 <span style={{
-                  width: 18,
-                  height: 18,
-                  borderRadius: 4,
-                  background: isCompleted ? 'rgba(104, 211, 145, 0.18)' : 'rgba(255, 255, 255, 0.06)',
-                  color: isCompleted ? 'var(--accent-green)' : 'var(--text-muted)',
+                  width: 20,
+                  height: 20,
+                  borderRadius: 6,
+                  background: isCompleted ? 'var(--accent-lime)' : '#ffffff',
+                  border: '1px solid #131311',
+                  color: '#131311',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
                   marginTop: '0.1rem',
                   flexShrink: 0,
+                  boxShadow: '1px 1px 0px #131311',
                 }}>
                   {isCompleted ? '✓' : i + 1}
                 </span>
@@ -256,10 +253,10 @@ export default function RoadmapDetailPanel({
 
         {/* Recommended Resources Section */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-md)',
-          padding: '1.25rem',
+          background: 'var(--bg-surface-secondary)',
+          border: '1.5px solid #131311',
+          borderRadius: '10px',
+          padding: '1.35rem',
           display: 'flex',
           flexDirection: 'column',
         }}>
@@ -267,17 +264,20 @@ export default function RoadmapDetailPanel({
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontSize: '0.9rem',
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            marginBottom: '0.9rem',
+            fontSize: '0.95rem',
+            fontWeight: 800,
+            color: '#131311',
+            marginBottom: '1rem',
           }}>
-            <Compass size={18} color="var(--accent-purple)" />
-            Recommended Learning Resources
+            <BookOpen size={18} />
+            Curated Free Learning Resources
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-            {(skill.resources || []).map((res, i) => (
+            {(skill.resources || [
+              { title: `${skill.skill} Official Documentation & Quickstart`, type: 'docs', platform: 'Official Docs', url: 'https://developer.mozilla.org' },
+              { title: `Complete ${skill.skill} Masterclass & Practice Exercises`, type: 'course', platform: 'freeCodeCamp', url: 'https://freecodecamp.org' },
+            ]).map((res, i) => (
               <a
                 key={i}
                 href={res.url}
@@ -287,30 +287,23 @@ export default function RoadmapDetailPanel({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.7rem 0.85rem',
-                  borderRadius: 'var(--radius-sm)',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid var(--border-subtle)',
-                  color: 'var(--text-primary)',
-                  transition: 'var(--transition)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
-                  e.currentTarget.style.borderColor = 'var(--border-glow)'
-                  e.currentTarget.style.transform = 'translateY(-1px)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
-                  e.currentTarget.style.borderColor = 'var(--border-subtle)'
-                  e.currentTarget.style.transform = 'none'
+                  padding: '0.75rem 0.95rem',
+                  borderRadius: '8px',
+                  background: '#ffffff',
+                  border: '1.5px solid #131311',
+                  color: '#131311',
+                  textDecoration: 'none',
+                  boxShadow: '1.5px 1.5px 0px #131311',
+                  transition: 'all 0.12s ease',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0 }}>
                   <div style={{
                     width: 28,
                     height: 28,
                     borderRadius: 6,
-                    background: 'rgba(255, 255, 255, 0.05)',
+                    background: 'var(--accent-lime)',
+                    border: '1px solid #131311',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -320,21 +313,21 @@ export default function RoadmapDetailPanel({
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
+                      fontSize: '0.86rem',
+                      fontWeight: 800,
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                     }}>
                       {res.title}
                     </div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                    <div style={{ fontSize: '0.72rem', color: '#80807c', fontWeight: 600 }}>
                       {res.platform} · {res.type.toUpperCase()}
                     </div>
                   </div>
                 </div>
 
-                <ExternalLink size={14} color="var(--text-muted)" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />
+                <ExternalLink size={14} color="#131311" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />
               </a>
             ))}
           </div>
@@ -348,16 +341,16 @@ export default function RoadmapDetailPanel({
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: '1rem',
-        borderTop: '1px solid var(--border-subtle)',
-        paddingTop: '1.25rem',
+        borderTop: '1.5px solid #131311',
+        paddingTop: '1.5rem',
       }}>
-        <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: '0.86rem', color: '#52524e', fontWeight: 600 }}>
           {isCompleted ? (
-            <span style={{ color: 'var(--accent-green)', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ color: '#131311', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontWeight: 800 }}>
               <CheckCircle2 size={16} /> Completed! Marking this updates your progress tracker in real-time.
             </span>
           ) : isInProgress ? (
-            <span style={{ color: 'var(--accent-blue)', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ color: '#131311', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontWeight: 800 }}>
               <PlayCircle size={16} /> Currently active in your learning journey.
             </span>
           ) : (
@@ -375,9 +368,8 @@ export default function RoadmapDetailPanel({
                 alignItems: 'center',
                 gap: '0.45rem',
                 fontSize: '0.88rem',
-                background: isVerified ? 'rgba(72, 187, 120, 0.12)' : 'rgba(99, 179, 237, 0.12)',
-                borderColor: isVerified ? 'rgba(72, 187, 120, 0.35)' : 'rgba(99, 179, 237, 0.35)',
-                color: isVerified ? 'var(--accent-green)' : 'var(--accent-blue)',
+                background: isVerified ? 'var(--accent-lime-subtle)' : '#ffffff',
+                color: '#131311',
               }}
             >
               <Sparkles size={15} />
@@ -396,7 +388,7 @@ export default function RoadmapDetailPanel({
                 fontSize: '0.88rem',
               }}
             >
-              <PlayCircle size={16} color="var(--accent-blue)" />
+              <PlayCircle size={16} />
               Set as In Progress
             </button>
           )}
@@ -409,11 +401,9 @@ export default function RoadmapDetailPanel({
               alignItems: 'center',
               gap: '0.5rem',
               fontSize: '0.9rem',
-              background: isCompleted ? 'rgba(255, 255, 255, 0.08)' : undefined,
-              borderColor: isCompleted ? 'rgba(104, 211, 145, 0.3)' : undefined,
             }}
           >
-            <CheckCircle2 size={17} color={isCompleted ? 'var(--accent-green)' : 'currentColor'} />
+            <CheckCircle2 size={17} />
             {isCompleted ? 'Mark as Incomplete' : 'Mark as Complete ✓'}
           </button>
         </div>

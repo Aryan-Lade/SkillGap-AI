@@ -122,29 +122,17 @@ export default function JobDescriptionAnalyzer() {
     <div style={{ maxWidth: 1100, margin: '2rem auto', padding: '0 1rem' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.35rem 1rem',
-            borderRadius: 999,
-            background: 'rgba(99, 102, 241, 0.15)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
-            color: '#a5b4fc',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            marginBottom: '0.75rem',
-          }}
-        >
-          <Sparkles size={16} /> Job Posting Matcher & Bridge Generator
+        <div style={{ marginBottom: '0.75rem' }}>
+          <span className="pill-badge">
+            <Sparkles size={14} color="#c6fd50" /> JOB POSTING MATCHER & BRIDGE GENERATOR
+          </span>
         </div>
-        <h1 style={{ fontSize: '2.3rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 0.5rem 0' }}>
+        <h1 style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 0.5rem 0' }}>
           Custom Job Description Analyzer
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '1.05rem', maxWidth: 650, margin: '0 auto' }}>
-          Paste any job posting from LinkedIn, Indeed, or AngelList to benchmark your current skills,
-          identify gaps, and get an immediate fast-track roadmap.
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: 650, margin: '0 auto' }}>
+          Paste any job posting from LinkedIn, Indeed, or Wellfound to benchmark your current skills,
+          identify critical requirements, and get an immediate fast-track roadmap.
         </p>
       </div>
 

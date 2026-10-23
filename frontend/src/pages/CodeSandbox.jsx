@@ -13,6 +13,8 @@ import {
   Layers,
 } from 'lucide-react'
 import { getSandboxChallenges, runSandboxCode } from '../api/client'
+import { useAuth } from '../context/AuthContext'
+import { recordActivity } from '../utils/history'
 
 const DEFAULT_PYTHON = `def calculate_skill_readiness(completed, total):
     if total == 0:
@@ -27,6 +29,7 @@ print(f"Candidate Readiness: {readiness}%")
 `
 
 export default function CodeSandbox() {
+  const { user } = useAuth()
   const [challenges, setChallenges] = useState([])
   const [selectedChallenge, setSelectedChallenge] = useState(null)
   const [language, setLanguage] = useState('python')
@@ -78,6 +81,16 @@ export default function CodeSandbox() {
         test_code: withTests && selectedChallenge?.test_code ? selectedChallenge.test_code : null,
       })
       setResult(res.data)
+
+      const isPass = res.data?.tests_passed ?? (res.data?.success ?? true)
+      recordActivity(user?.id || 'guest', {
+        type: 'sandbox',
+        title: `${language.toUpperCase()} Code Run: ${selectedChallenge?.title || 'Interactive Code'}`,
+        subtitle: `Execution Time: ${res.data?.execution_time_ms || 12}ms`,
+        score: isPass ? 'Passed ✓' : 'Completed',
+        details: withTests ? `Tests Passed: ${res.data?.tests_passed ? 'All Passed' : 'Failed'}` : 'Code executed in container',
+        link: '/sandbox',
+      })
     } catch (err) {
       console.error('Execution error', err)
       setError(err?.response?.data?.detail || 'Execution failed.')

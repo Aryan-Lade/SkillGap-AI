@@ -15,10 +15,13 @@ import {
   RotateCcw,
 } from 'lucide-react'
 import { generateStudyPlan, exportCalendarIcs } from '../api/client'
+import { useAuth } from '../context/AuthContext'
+import { recordActivity } from '../utils/history'
 
 const DEFAULT_SKILLS = ['Python', 'SQL', 'Docker', 'REST APIs', 'Git']
 
 export default function StudyPlanner() {
+  const { user } = useAuth()
   const [targetRole, setTargetRole] = useState('Full Stack Developer')
   const [hoursPerWeek, setHoursPerWeek] = useState(10)
   const [startDate, setStartDate] = useState(() => new Date().toISOString().split('T')[0])
@@ -45,6 +48,15 @@ export default function StudyPlanner() {
       })
       setPlan(res.data)
       setActiveWeekTab(1)
+
+      recordActivity(user?.id || 'guest', {
+        type: 'planner',
+        title: `${targetRole} Study Schedule`,
+        subtitle: `${hours} hrs/week · ${res.data?.total_weeks || 4} Weeks Plan`,
+        score: `${res.data?.total_hours || (hours * 4)} Total Hrs`,
+        details: `Skills scheduled: ${skills.slice(0, 4).join(', ')}`,
+        link: '/planner',
+      })
     } catch (err) {
       console.error('Failed to generate study plan', err)
     } finally {

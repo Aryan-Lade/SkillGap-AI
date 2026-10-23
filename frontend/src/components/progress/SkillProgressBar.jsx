@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle } from 'lucide-react'
+import { CheckCircle2, Circle, ShieldCheck } from 'lucide-react'
 
 export default function SkillProgressBar({
   skillName,
@@ -6,6 +6,7 @@ export default function SkillProgressBar({
   stage = 'Foundational',
   weight = 0.5,
   isCompleted = false,
+  isVerified = false,
   onToggle = null,
   disabled = false,
 }) {
@@ -81,6 +82,25 @@ export default function SkillProgressBar({
           <span className={`badge ${stageBadgeClass}`} style={{ fontSize: '0.68rem', padding: '0.1rem 0.5rem' }}>
             {stage}
           </span>
+
+          {isVerified && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.2rem',
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                color: 'var(--accent-green)',
+                background: 'rgba(72, 187, 120, 0.15)',
+                padding: '0.1rem 0.45rem',
+                borderRadius: 999,
+              }}
+              title="Verified via AI Assessment Quiz"
+            >
+              <ShieldCheck size={11} /> Verified ✓
+            </span>
+          )}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>

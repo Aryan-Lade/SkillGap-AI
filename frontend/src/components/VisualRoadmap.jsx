@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import RoadmapHeader from './roadmap/RoadmapHeader'
 import RoadmapTimeline from './roadmap/RoadmapTimeline'
 import RoadmapDetailPanel from './roadmap/RoadmapDetailPanel'
+import QuizModal from './quiz/QuizModal'
 import { getSkillDetails } from '../data/skillResources'
 import { Map, Sparkles, Filter } from 'lucide-react'
 
@@ -18,6 +19,31 @@ export default function VisualRoadmap({
   const [activeSkillOverride, setActiveSkillOverride] = useState(null)
   const [selectedSkill, setSelectedSkill] = useState(null)
   const [filter, setFilter] = useState('all')
+  const [activeQuizSkill, setActiveQuizSkill] = useState(null)
+  const [verifiedSkills, setVerifiedSkills] = useState(() => {
+    try {
+      const saved = localStorage.getItem('skillgap_verified_skills')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+
+  const handleSkillVerified = (skillName) => {
+    setVerifiedSkills((prev) => {
+      const updated = Array.from(new Set([...prev, skillName]))
+      try {
+        localStorage.setItem('skillgap_verified_skills', JSON.stringify(updated))
+      } catch (err) {
+        console.error(err)
+      }
+      return updated
+    })
+    // Auto-mark skill as completed if not already marked
+    if (!completedSet.has(skillName)) {
+      toggleSkill(skillName)
+    }
+  }
 
   const completedSet = useMemo(() => {
     if (externalCompletedSkills instanceof Set) return externalCompletedSkills
@@ -139,12 +165,14 @@ export default function VisualRoadmap({
         <RoadmapDetailPanel
           skill={activeSelectedSkill}
           status={activeSelectedSkill.status}
+          isVerified={verifiedSkills.includes(activeSelectedSkill.skill)}
           onClose={() => setSelectedSkill(null)}
           onToggleComplete={(skillName) => toggleSkill(skillName)}
           onStartLearning={(skillName) => {
             setActiveSkillOverride(skillName)
             setSelectedSkill(null)
           }}
+          onOpenQuiz={(skillName) => setActiveQuizSkill(skillName)}
         />
       )}
 
@@ -153,6 +181,7 @@ export default function VisualRoadmap({
         <RoadmapTimeline
           phases={phases}
           selectedSkill={activeSelectedSkill}
+          verifiedSkills={verifiedSkills}
           onSelectSkill={(skill) => {
             if (activeSelectedSkill?.skill === skill.skill) {
               setSelectedSkill(null) // toggle close
@@ -163,6 +192,17 @@ export default function VisualRoadmap({
           filter={filter}
         />
       </div>
+
+      {/* Skill Verification Quiz Modal */}
+      <QuizModal
+        isOpen={Boolean(activeQuizSkill)}
+        skill={activeQuizSkill}
+        role={targetRole}
+        onClose={() => setActiveQuizSkill(null)}
+        onVerified={(verifiedSkillName) => {
+          handleSkillVerified(verifiedSkillName)
+        }}
+      />
     </section>
   )
 }

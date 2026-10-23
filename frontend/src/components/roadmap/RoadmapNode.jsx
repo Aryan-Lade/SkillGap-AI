@@ -1,4 +1,4 @@
-import { CheckCircle2, PlayCircle, ArrowRightCircle, Lock, Clock, Sparkles } from 'lucide-react'
+import { CheckCircle2, PlayCircle, ArrowRightCircle, Lock, Clock, Sparkles, ShieldCheck } from 'lucide-react'
 
 const STAGE_THEMES = {
   Foundational: {
@@ -24,6 +24,7 @@ const STAGE_THEMES = {
 export default function RoadmapNode({
   skill,
   status = 'locked', // 'completed' | 'in-progress' | 'up-next' | 'locked'
+  isVerified = false,
   isSelected = false,
   onSelect,
   index = 1,
@@ -175,6 +176,27 @@ export default function RoadmapNode({
             {statusConfig.icon}
             {statusConfig.label}
           </span>
+
+          {isVerified && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                padding: '0.2rem 0.5rem',
+                borderRadius: 999,
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                background: 'rgba(72, 187, 120, 0.15)',
+                color: 'var(--accent-green)',
+                border: '1px solid rgba(72, 187, 120, 0.4)',
+              }}
+              title="Skill Verified via Assessment Quiz"
+            >
+              <ShieldCheck size={12} />
+              Verified ✓
+            </span>
+          )}
         </div>
 
         <span className={`badge ${theme.badgeClass}`}>

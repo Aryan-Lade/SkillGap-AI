@@ -20,4 +20,11 @@ export const updateProgress = (progressData) => api.post('/progress', progressDa
 export const fetchProgress = (studentId, roleName) =>
   api.get(`/progress/${encodeURIComponent(studentId)}/${encodeURIComponent(roleName)}`)
 
+export const getSkillQuiz = (skill, role = 'Full Stack Developer', level = 'Intermediate') =>
+  api.get(`/quiz/generate`, {
+    params: { skill, role, level },
+  })
+
+export const submitSkillQuiz = (submissionData) => api.post('/quiz/submit', submissionData)
+
 export default api

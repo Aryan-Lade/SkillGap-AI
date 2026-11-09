@@ -273,6 +273,17 @@ curl -X POST http://localhost:8000/api/skillgap \
 
 ---
 
+## 👨‍💻 Contributors
+
+The project was developed by:
+
+- **Aryan Lade**
+- **Tanvir Kanoje**
+- **Mohammad Anas**
+- **Sayyad Rehan**
+
+---
+
 ## 🤝 Contributing
 
 Contributions are what make the open-source community thrive!
